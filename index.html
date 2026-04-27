@@ -8,7 +8,6 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
 <style>
-/* --- עיצוב --- */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --bg:#F0F2F5;--card:#FFFFFF;--dark:#1E293B;--green:#10B981;
@@ -222,7 +221,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--dark);-webk
 
 <script>
 // ==========================================
-// הגדרות FIREBASE - מחובר למסד הנתונים שלך
+// הגדרות FIREBASE
 // ==========================================
 const firebaseConfig = {
   apiKey: "AIzaSyDU7mS3GD8YK3Ee8LXOYF-A0MoCW6Ownus",
@@ -263,7 +262,6 @@ let adminEmail='';
 // מאזין לשרת בזמן אמת (Real-Time Listener)
 // ==========================================
 function loadData(){
-  // המאזין של פיירבייס - כל פעם שמישהו באפליקציה משנה נתון, זה מתעדכן אצל כולם!
   db.collection("users").onSnapshot((snapshot) => {
     let loadedUsers = [];
     snapshot.forEach((doc) => {
@@ -273,18 +271,19 @@ function loadData(){
     const hasAdmin = loadedUsers.some(u => u.id === 'admin');
     users = hasAdmin ? loadedUsers : [ADMIN_USER, ...loadedUsers];
 
-    // בדיקה אם המשתמש מחובר
     const cuId = localStorage.getItem('current_user_id');
     if(cuId){
-      const fresh = users.find(u => u.id === cuId);
-      if(fresh){
-        currentUser = fresh;
-        // עדכון המסכים בזמן אמת
+      if(cuId === 'admin') {
+        currentUser = ADMIN_USER;
         if(document.getElementById('page-admin').classList.contains('active')) renderAdmin();
-        if(document.getElementById('page-home').classList.contains('active')) renderHome();
       } else {
-        // אם המשתמש נמחק מהשרת
-        logout();
+        const fresh = users.find(u => u.id === cuId);
+        if(fresh){
+          currentUser = fresh;
+          if(document.getElementById('page-home').classList.contains('active')) renderHome();
+        } else {
+          logout();
+        }
       }
     }
   });
@@ -340,38 +339,63 @@ function renderRegDeps(){
 }
 
 // ====== AUTH (Firebase) ======
-function handleLogin(){
+async function handleLogin(){
   var id=(document.getElementById('loginId').value||'').trim();
-  var pass=document.getElementById('loginPass').value||'';
-  if(!id||!pass)return showAlert('אנא מלא מספר אישי וסיסמה!');
-  var user=users.find(function(u){return u.id===id&&u.pass===pass});
-  if(!user)return showAlert('שגיאה: פרטים לא נכונים.');
+  var pass=(document.getElementById('loginPass').value||'').trim();
   
-  currentUser=user;
-  localStorage.setItem('current_user_id', user.id);
-  clearInputs();
-  showPage(user.role==='admin'?'admin':'home');
+  if(!id||!pass)return showAlert('אנא מלא מספר אישי וסיסמה!');
+
+  if(id === 'admin' && pass === 'admin') {
+    currentUser = ADMIN_USER;
+    localStorage.setItem('current_user_id', 'admin');
+    clearInputs();
+    showPage('admin');
+    return;
+  }
+
+  try {
+    const docRef = await db.collection("users").doc(id).get();
+    
+    if (docRef.exists) {
+      const user = docRef.data();
+      if (user.pass === pass) {
+        currentUser = user;
+        localStorage.setItem('current_user_id', user.id);
+        clearInputs();
+        showPage('home');
+      } else {
+        showAlert('שגיאה: סיסמה לא נכונה.');
+      }
+    } else {
+      showAlert('שגיאה: מספר אישי לא רשום במערכת.');
+    }
+  } catch (error) {
+    showAlert("שגיאה בחיבור לשרת, בדוק את האינטרנט שלך.");
+  }
 }
 
 async function handleRegister(){
   var id=(document.getElementById('regId').value||'').trim();
   var name=(document.getElementById('regName').value||'').trim();
-  var pass=document.getElementById('regPass').value||'';
+  var pass=(document.getElementById('regPass').value||'').trim();
   var scoreStr=(document.getElementById('regScore').value||'').trim();
   
   if(!id||!name||!pass||!scoreStr)return showAlert('אנא מלא את כל השדות!');
-  if(users.find(function(u){return u.id===id}))return showAlert('המספר האישי '+id+' כבר רשום במערכת!');
   
-  var score=parseInt(scoreStr,10);
-  if(isNaN(score)||score<0)return showAlert('ציון בר-אור חייב להיות מספר חיובי!');
-  
-  var fitness='קל';
-  if(score>=91)fitness='מקצוען';else if(score>=76)fitness='קשה';else if(score>=55)fitness='בינוני';
-  
-  var newUser={id:id,pass:pass,name:name,department:selectedDep,scoreHistory:[score],fitness:fitness,role:'cadet',medical:'כשיר',workouts:{w1:false,w2:false,w3:false},createdAt:new Date().toISOString()};
-
   try {
-    // שמירה בענן של Firebase
+    const docRef = await db.collection("users").doc(id).get();
+    if (docRef.exists) {
+      return showAlert('המספר האישי '+id+' כבר רשום במערכת!');
+    }
+
+    var score=parseInt(scoreStr,10);
+    if(isNaN(score)||score<0)return showAlert('ציון בר-אור חייב להיות מספר חיובי!');
+    
+    var fitness='קל';
+    if(score>=91)fitness='מקצוען';else if(score>=76)fitness='קשה';else if(score>=55)fitness='בינוני';
+    
+    var newUser={id:id,pass:pass,name:name,department:selectedDep,scoreHistory:[score],fitness:fitness,role:'cadet',medical:'כשיר',workouts:{w1:false,w2:false,w3:false},createdAt:new Date().toISOString()};
+
     await db.collection("users").doc(newUser.id).set(newUser);
     currentUser=newUser;
     localStorage.setItem('current_user_id', newUser.id);
@@ -418,7 +442,6 @@ async function toggleWorkout(wid){
     await db.collection("users").doc(currentUser.id).update({
       workouts: currentUser.workouts
     });
-    // התצוגה תתרענן אוטומטית בזכות המאזין של loadData!
   } catch(e) { console.error(e); }
 }
 
@@ -567,7 +590,6 @@ function checkAutoReset(){
 async function performAutoReset(weekKey){
   const cadets = getCadets();
   if(cadets.length > 0) {
-     // פקודת Batch לפיירבייס - מאפסת את כולם יחד בשנייה אחת!
      const batch = db.batch();
      cadets.forEach(c => {
         const ref = db.collection('users').doc(c.id);
@@ -580,10 +602,9 @@ async function performAutoReset(weekKey){
   }
 }
 
-function checkSaturdayBanner(){} // נוטרל כדי לא להעמיס במעבר לענן
+function checkSaturdayBanner(){}
 
 // ====== INIT ======
-// אתחול האפליקציה מתחיל מיד לאחר טעינת הדף וטעינת פיירבייס
 window.onload = function() {
   loadData();
 };
