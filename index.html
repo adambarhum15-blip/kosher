@@ -1,0 +1,114 @@
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
+
+// רשימת המחלקות שהגדרנו
+const DEPARTMENTS = ["שגיא", "חרמון", "גלבוע", "רמון", "כרמל", "תבור", "איתן"];
+
+export default function RegistrationScreen() {
+  const [personalId, setPersonalId] = useState('');
+  const [fullName, setFullName] = useState('');
+  const [password, setPassword] = useState('');
+  const [department, setDepartment] = useState(DEPARTMENTS[0]);
+  const [barOrScore, setBarOrScore] = useState('');
+
+  // פונקציה שמחשבת את רמת הכושר לפי ציון הבר-אור
+  const calculateFitnessLevel = (score) => {
+    const numScore = parseInt(score);
+    if (numScore >= 91) return "מקצוען";
+    if (numScore >= 76) return "קשה";
+    if (numScore >= 55) return "בינוני";
+    return "קל";
+  };
+
+  // הפונקציה שמופעלת בעת לחיצה על "הרשם"
+  const handleRegister = () => {
+    if (!personalId || !fullName || !password || !barOrScore) {
+      Alert.alert("שגיאה", "אנא מלא את כל השדות");
+      return;
+    }
+
+    const fitnessLevel = calculateFitnessLevel(barOrScore);
+
+    // זהו האובייקט שניקח ונשמור ב-Database (Firebase)
+    const newCadetProfile = {
+      personal_id: personalId,
+      full_name: fullName,
+      department: department,
+      fitness_level: fitnessLevel,
+      role: "cadet",
+      weekly_progress: {
+        strength_done: 0,
+        aerobic_done: 0,
+      }
+    };
+
+    // כאן תבוא הפונקציה ששומרת את הנתונים ב-Firebase ויוצרת את המשתמש
+    console.log("פרופיל מוכן לשמירה:", newCadetProfile);
+    Alert.alert("הצלחה", `נרשמת בהצלחה! שובצת לרמת: ${fitnessLevel}`);
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.header}>הרשמה - מחזור ע"ה</Text>
+
+      <TextInput
+        style={styles.input}
+        placeholder="מספר אישי"
+        value={personalId}
+        onChangeText={setPersonalId}
+        keyboardType="numeric"
+      />
+
+      <TextInput
+        style={styles.input}
+        placeholder="שם מלא"
+        value={fullName}
+        onChangeText={setFullName}
+      />
+
+      <TextInput
+        style={styles.input}
+        placeholder="סיסמה"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry // מסתיר את הסיסמה
+      />
+
+      <TextInput
+        style={styles.input}
+        placeholder="ציון בר-אור אחרון (0-100)"
+        value={barOrScore}
+        onChangeText={setBarOrScore}
+        keyboardType="numeric"
+      />
+
+      <Text style={styles.label}>בחר מחלקה:</Text>
+      <View style={styles.pickerContainer}>
+        <Picker
+          selectedValue={department}
+          onValueChange={(itemValue) => setDepartment(itemValue)}
+        >
+          {DEPARTMENTS.map((dep, index) => (
+            <Picker.Item key={index} label={dep} value={dep} />
+          ))}
+        </Picker>
+      </View>
+
+      <TouchableOpacity style={styles.button} onPress={handleRegister}>
+        <Text style={styles.buttonText}>צור משתמש</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
+
+// עיצוב בסיסי (CSS של React Native)
+const styles = StyleSheet.create({
+  container: { flex: 1, padding: 20, justifyContent: 'center', backgroundColor: '#f5f5f5' },
+  header: { fontSize: 24, fontWeight: 'bold', textAlign: 'center', marginBottom: 20, color: '#333' },
+  input: { backgroundColor: '#fff', padding: 15, borderRadius: 8, marginBottom: 15, borderWidth: 1, borderColor: '#ddd', textAlign: 'right' },
+  label: { fontSize: 16, marginBottom: 5, textAlign: 'right' },
+  pickerContainer: { backgroundColor: '#fff', borderWidth: 1, borderColor: '#ddd', borderRadius: 8, marginBottom: 20 },
+  button: { backgroundColor: '#4CAF50', padding: 15, borderRadius: 8, alignItems: 'center' },
+  buttonText: { color: '#fff', fontSize: 18, fontWeight: 'bold' }
+});
