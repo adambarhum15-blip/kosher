@@ -8,7 +8,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
 <style>
-/* --- כל העיצוב שלך נשאר בדיוק אותו דבר --- */
+/* --- עיצוב --- */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --bg:#F0F2F5;--card:#FFFFFF;--dark:#1E293B;--green:#10B981;
@@ -222,15 +222,16 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--dark);-webk
 
 <script>
 // ==========================================
-// הגדרות FIREBASE - חובה למלא את הפרטים שלך כאן
+// הגדרות FIREBASE - מחובר למסד הנתונים שלך
 // ==========================================
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyDU7mS3GD8YK3Ee8LXOYF-A0MoCW6Ownus",
+  authDomain: "kosher-c538e.firebaseapp.com",
+  projectId: "kosher-c538e",
+  storageBucket: "kosher-c538e.firebasestorage.app",
+  messagingSenderId: "68481676327",
+  appId: "1:68481676327:web:9c5541d15de3099c3a0a02",
+  measurementId: "G-BWH5GJC0HZ"
 };
 
 // אתחול השרת
@@ -483,7 +484,7 @@ function confirmDeleteCadet(cadetId,cadetName){
   },'מחק חניך');
 }
 
-// ====== REPORT GENERATION & EMAIL (נשאר זהה לוגית) ======
+// ====== REPORT GENERATION & EMAIL ======
 function getCadets(dep){
   if(dep)return users.filter(function(u){return u.role==='cadet'&&u.department===dep});
   return users.filter(function(u){return u.role==='cadet'});
