@@ -1,114 +1,591 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>כושר מחזור ע"ה</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
+<style>
+/* --- כל העיצוב שלך נשאר בדיוק אותו דבר --- */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F0F2F5;--card:#FFFFFF;--dark:#1E293B;--green:#10B981;
+  --green-light:#ECFDF5;--green-border:#A7F3D0;--gray:#64748B;
+  --gray-light:#E2E8F0;--gray-bg:#CBD5E1;--red:#EF4444;
+  --yellow:#F59E0B;--blue:#3B82F6;--radius:14px;--shadow:0 2px 12px rgba(0,0,0,0.06);
+}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--dark);-webkit-font-smoothing:antialiased}
+.app{max-width:480px;margin:0 auto;height:100dvh;display:flex;flex-direction:column;position:relative;overflow:hidden;background:var(--bg)}
+.page{display:none;flex-direction:column;height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:24px 20px 40px;animation:fadeUp .35s ease both}
+.page.active{display:flex}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.welcome-page{justify-content:center;align-items:center;text-align:center;gap:8px}
+.logo-ring{width:130px;height:130px;border-radius:50%;background:linear-gradient(135deg,var(--green),#059669);display:flex;align-items:center;justify-content:center;margin-bottom:12px;box-shadow:0 8px 32px rgba(16,185,129,.25);animation:pulse 2.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 8px 32px rgba(16,185,129,.25)}50%{box-shadow:0 8px 48px rgba(16,185,129,.4)}}
+.logo-ring svg{width:60px;height:60px;fill:#fff}
+.main-title{font-size:28px;font-weight:900;color:var(--dark);margin-bottom:6px}
+.sub-label{color:var(--gray);font-size:14px;margin-bottom:24px}
+.btn{width:100%;padding:15px;border-radius:var(--radius);font-size:16px;font-weight:700;cursor:pointer;border:none;transition:all .2s;font-family:inherit}
+.btn:active{transform:scale(.97)}
+.btn-solid{background:var(--green);color:#fff;box-shadow:0 4px 14px rgba(16,185,129,.3);margin-bottom:12px}
+.btn-solid:hover{background:#059669}
+.btn-outline{background:transparent;border:2px solid var(--green);color:var(--green)}
+.btn-outline:hover{background:rgba(16,185,129,.06)}
+.btn-danger{background:var(--red);color:#fff;box-shadow:0 4px 14px rgba(239,68,68,.25)}
+.btn-ghost{background:transparent;color:var(--gray);border:1px solid var(--gray-light)}
+.btn-blue{background:var(--blue);color:#fff;box-shadow:0 4px 14px rgba(59,130,246,.3);margin-bottom:12px}
+.btn-blue:hover{background:#2563EB}
+.back-link{display:inline-block;margin-top:16px;color:var(--gray);font-weight:700;cursor:pointer;font-size:14px;transition:color .2s}
+.back-link:hover{color:var(--dark)}
+.input{width:100%;padding:15px 16px;border-radius:var(--radius);border:1.5px solid var(--gray-light);font-size:16px;font-family:inherit;text-align:right;background:var(--card);transition:border-color .2s;margin-bottom:14px;outline:none}
+.input:focus{border-color:var(--green)}
+.input::placeholder{color:#a0aec0}
+.field-label{text-align:right;font-weight:700;margin-bottom:8px;font-size:14px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;justify-content:flex-end}
+.chip{padding:9px 18px;border-radius:24px;font-size:14px;font-weight:600;cursor:pointer;border:1.5px solid var(--gray-light);background:var(--card);transition:all .2s;user-select:none}
+.chip:hover{border-color:var(--gray)}
+.chip.active{background:var(--dark);color:#fff;border-color:var(--dark)}
+.home-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.greeting{font-size:22px;font-weight:700}
+.sub-greeting{color:var(--gray);font-size:14px;margin-top:2px}
+.status-dot{width:20px;height:20px;border-radius:50%;flex-shrink:0}
+.status-dot-sm{width:12px;height:12px;border-radius:50%;flex-shrink:0;margin-left:14px}
+.card{background:var(--card);padding:20px;border-radius:16px;box-shadow:var(--shadow);margin-bottom:16px}
+.card-title{font-weight:700;font-size:15px;margin-bottom:12px}
+.progress-bg{height:10px;background:var(--gray-light);border-radius:6px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--green),#34d399);border-radius:6px;transition:width .5s ease}
+.timer-card{background:linear-gradient(135deg,#0f172a,var(--dark));padding:28px 20px;border-radius:18px;text-align:center;margin-bottom:16px;box-shadow:0 6px 24px rgba(15,23,42,.2)}
+.timer-display{font-size:52px;font-weight:900;color:#fff;letter-spacing:4px;font-variant-numeric:tabular-nums;margin-bottom:16px}
+.timer-btns{display:flex;gap:10px;justify-content:center}
+.timer-btn{padding:11px 26px;border-radius:10px;font-weight:700;font-size:14px;cursor:pointer;border:none;color:#fff;font-family:inherit;transition:all .2s}
+.timer-btn:active{transform:scale(.95)}
+.timer-btn-go{background:var(--green)}
+.timer-btn-reset{background:var(--gray)}
+.section-title{font-size:17px;font-weight:700;margin:14px 0 12px}
+.task-card{display:flex;align-items:center;gap:14px;background:var(--card);padding:16px 18px;border-radius:var(--radius);border:1.5px solid var(--gray-light);margin-bottom:10px;cursor:pointer;transition:all .25s;user-select:none}
+.task-card:hover{border-color:var(--gray-bg)}
+.task-card.done{background:var(--green-light);border-color:var(--green-border)}
+.check-circle{width:26px;height:26px;border-radius:50%;border:2.5px solid var(--gray-bg);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;font-size:13px;color:#fff;font-weight:900}
+.task-card.done .check-circle{background:var(--green);border-color:var(--green)}
+.task-info{flex:1;text-align:right}
+.task-title{font-weight:700;font-size:15px;color:#334155;margin-bottom:2px;transition:all .2s}
+.task-desc{font-size:13px;color:var(--gray);line-height:1.5}
+.task-card.done .task-title{text-decoration:line-through;color:var(--green)}
+.task-card.done .task-desc{text-decoration:line-through;opacity:.6}
+.med-row{display:flex;gap:10px;margin-bottom:22px}
+.med-btn{flex:1;padding:12px;border-radius:10px;text-align:center;font-size:14px;font-weight:600;cursor:pointer;border:1.5px solid var(--gray-light);background:var(--card);transition:all .2s;user-select:none;color:var(--gray)}
+.med-btn:hover{border-color:var(--gray)}
+.med-btn.active{background:var(--dark);color:#fff;border-color:var(--dark)}
+.admin-card{display:flex;align-items:center;gap:12px;background:var(--card);padding:14px 16px;border-radius:var(--radius);border:1px solid #f1f5f9;margin-bottom:10px;box-shadow:var(--shadow);position:relative}
+.admin-info{flex:1;text-align:right}
+.admin-name{font-weight:700;font-size:15px}
+.admin-meta{font-size:13px;color:var(--gray);margin-top:2px}
+.delete-cadet-btn{width:32px;height:32px;border-radius:50%;border:none;background:rgba(239,68,68,.08);color:var(--red);font-size:16px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.delete-cadet-btn:hover{background:rgba(239,68,68,.18)}
+.logout-btn{display:block;width:100%;text-align:center;padding:14px;border-radius:var(--radius);font-weight:700;font-size:15px;cursor:pointer;border:none;background:transparent;color:var(--red);font-family:inherit;margin-top:12px;transition:all .2s}
+.logout-btn:hover{background:rgba(239,68,68,.06)}
+.empty-msg{text-align:center;color:#aaa;margin-top:28px;font-size:15px}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:100;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.show{display:flex}
+.modal-box{background:var(--card);border-radius:20px;padding:28px 24px;max-width:420px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.2);animation:modalUp .3s ease both;max-height:90vh;overflow-y:auto}
+@keyframes modalUp{from{opacity:0;transform:scale(.92) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.modal-title{font-size:18px;font-weight:900;margin-bottom:8px}
+.modal-msg{font-size:14px;color:var(--gray);margin-bottom:20px;line-height:1.6}
+.modal-btns{display:flex;gap:10px;flex-wrap:wrap}
+.modal-btns .btn{flex:1;padding:12px;font-size:14px;min-width:120px}
+.admin-tools{margin-top:24px;padding-top:20px;border-top:2px dashed var(--gray-light)}
+.admin-tools-title{font-size:16px;font-weight:900;margin-bottom:14px;color:var(--dark);display:flex;align-items:center;gap:8px}
+.admin-tools-title svg{width:20px;height:20px;fill:var(--blue)}
+.admin-btn-row{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
+.icon-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:14px;border-radius:var(--radius);font-size:15px;font-weight:700;cursor:pointer;border:none;transition:all .2s;font-family:inherit}
+.icon-btn:active{transform:scale(.97)}
+.icon-btn svg{width:20px;height:20px;flex-shrink:0}
+.icon-btn-blue{background:var(--blue);color:#fff;box-shadow:0 4px 14px rgba(59,130,246,.25)}
+.icon-btn-blue:hover{background:#2563EB}
+.icon-btn-blue svg{fill:#fff}
+.icon-btn-teal{background:#0D9488;color:#fff;box-shadow:0 4px 14px rgba(13,148,136,.25)}
+.icon-btn-teal:hover{background:#0F766E}
+.icon-btn-teal svg{fill:#fff}
+.icon-btn-amber{background:var(--yellow);color:#fff;box-shadow:0 4px 14px rgba(245,158,11,.25)}
+.icon-btn-amber:hover{background:#D97706}
+.icon-btn-amber svg{fill:#fff}
+.report-banner{background:linear-gradient(135deg,#1e40af,#3b82f6);border-radius:16px;padding:20px;margin-bottom:16px;color:#fff;text-align:center;box-shadow:0 6px 24px rgba(59,130,246,.25)}
+.report-banner-title{font-size:16px;font-weight:900;margin-bottom:6px}
+.report-banner-sub{font-size:13px;opacity:.85;margin-bottom:14px}
+.report-banner-btns{display:flex;gap:8px;justify-content:center}
+.report-banner-btn{padding:10px 20px;border-radius:10px;font-weight:700;font-size:13px;cursor:pointer;border:none;font-family:inherit;transition:all .2s}
+.report-banner-btn:active{transform:scale(.95)}
+.report-banner-btn-primary{background:#fff;color:#1e40af}
+.report-banner-btn-secondary{background:rgba(255,255,255,.2);color:#fff}
+.email-input{width:100%;padding:14px 16px;border-radius:var(--radius);border:1.5px solid var(--gray-light);font-size:15px;font-family:inherit;text-align:left;direction:ltr;background:var(--card);margin-bottom:14px;outline:none;transition:border-color .2s}
+.email-input:focus{border-color:var(--blue)}
+.last-report{font-size:12px;color:var(--gray);text-align:center;margin-top:8px}
+.auto-reset-info{font-size:12px;color:var(--blue);text-align:center;margin-top:4px;font-weight:600}
+.cadet-count-badge{display:inline-block;background:var(--dark);color:#fff;font-size:12px;font-weight:700;padding:2px 10px;border-radius:12px;margin-right:6px}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <div class="page welcome-page active" id="page-welcome">
+    <div class="logo-ring"><svg viewBox="0 0 24 24"><path d="M20.57 14.86L22 13.43 20.57 12 17 15.57 8.43 7 12 3.43 10.57 2 9.14 3.43 7.71 2 5.57 4.14 4.14 2.71 2.71 4.14l1.43 1.43L2 7.71l1.43 1.43L2 10.57 3.43 12 7 8.43 15.57 17 12 20.57 13.43 22l1.43-1.43L16.29 22l2.14-2.14 1.43 1.43 1.43-1.43-1.43-1.43L22 16.29z"/></svg></div>
+    <div class="main-title">כושר מחזור ע"ה</div>
+    <div class="sub-label">מערכת מעקב כושר לקורס קצינים</div>
+    <button class="btn btn-solid" onclick="showPage('login')">כניסה</button>
+    <button class="btn btn-outline" onclick="showPage('register')">הרשמה</button>
+  </div>
+  <div class="page" id="page-login" style="justify-content:center;align-items:center;text-align:center">
+    <div class="main-title">כניסה</div>
+    <input class="input" id="loginId" placeholder="מספר אישי" type="text" inputmode="numeric">
+    <input class="input" id="loginPass" placeholder="סיסמה" type="password">
+    <button class="btn btn-solid" onclick="handleLogin()">היכנס</button>
+    <span class="back-link" onclick="clearInputs();showPage('welcome')">חזור אחורה</span>
+  </div>
+  <div class="page" id="page-register">
+    <div class="main-title">הרשמה למערכת</div>
+    <input class="input" id="regId" placeholder="מספר אישי (יהווה שם משתמש)" type="text" inputmode="numeric">
+    <input class="input" id="regName" placeholder="שם מלא">
+    <input class="input" id="regPass" placeholder="סיסמה" type="password">
+    <input class="input" id="regScore" placeholder="ציון בר-אור עדכני" type="text" inputmode="numeric">
+    <div class="field-label">מחלקה:</div>
+    <div class="chips" id="regDepsChips"></div>
+    <button class="btn btn-solid" onclick="handleRegister()">צור פרופיל חניך</button>
+    <div style="text-align:center"><span class="back-link" onclick="clearInputs();showPage('welcome')">ביטול</span></div>
+  </div>
+  <div class="page" id="page-home">
+    <div class="home-header">
+      <div>
+        <div class="greeting" id="homeGreeting"></div>
+        <div class="sub-greeting" id="homeSub"></div>
+      </div>
+      <div class="status-dot" id="homeStatusDot"></div>
+    </div>
+    <div class="card">
+      <div class="card-title" id="progressLabel"></div>
+      <div class="progress-bg"><div class="progress-fill" id="progressFill"></div></div>
+    </div>
+    <div class="timer-card">
+      <div class="timer-display" id="timerDisplay">00:00</div>
+      <div class="timer-btns">
+        <button class="timer-btn timer-btn-go" id="timerToggle" onclick="toggleTimer()">הפעל טיימר</button>
+        <button class="timer-btn timer-btn-reset" onclick="resetTimer()">איפוס</button>
+      </div>
+    </div>
+    <div class="section-title">תכנית אימונים (3 בשבוע)</div>
+    <div id="workoutsList"></div>
+    <div class="section-title">עדכון מצב רפואי (למפקד)</div>
+    <div class="med-row" id="medRow"></div>
+    <button class="logout-btn" onclick="logout()">התנתק ממערכת</button>
+  </div>
+  <div class="page" id="page-admin">
+    <div class="main-title">לוח בקרה למפקדים</div>
+    <div id="reportBanner"></div>
+    <div class="chips" id="adminDepsChips"></div>
+    <div id="adminList"></div>
+    <div class="admin-tools">
+      <div class="admin-tools-title">
+        <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.49.49 0 00-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.49.49 0 00-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6A3.6 3.6 0 1115.6 12 3.6 3.6 0 0112 15.6z"/></svg>
+        כלי ניהול ודוחות
+      </div>
+      <div class="admin-btn-row">
+        <button class="icon-btn icon-btn-blue" onclick="exportDepartmentReport()">
+          <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+          ייצוא דוח מחלקה נוכחית (CSV)
+        </button>
+        <button class="icon-btn icon-btn-teal" onclick="exportAllReport()">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11zm-3-7H9v2h6v-2zm0 4H9v2h6v-2zm-2-8V3.5L18.5 9H13z"/></svg>
+          ייצוא דוח כל המחלקות (CSV)
+        </button>
+        <button class="icon-btn icon-btn-amber" onclick="openEmailModal()">
+          <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+          שלח דוח שבועי למייל
+        </button>
+      </div>
+      <div class="last-report" id="lastReportInfo"></div>
+      <div class="auto-reset-info">⏰ איפוס אוטומטי כל מוצ"ש בשעה 23:59</div>
+    </div>
+    <div style="margin-top:20px">
+      <button class="btn btn-ghost" style="margin-top:10px" onclick="logout()">התנתק (יציאה)</button>
+    </div>
+  </div>
+</div>
+<div class="modal-overlay" id="modal">
+  <div class="modal-box">
+    <div class="modal-title" id="modalTitle"></div>
+    <div class="modal-msg" id="modalMsg"></div>
+    <div id="modalExtra"></div>
+    <div class="modal-btns" id="modalBtns"></div>
+  </div>
+</div>
 
-// רשימת המחלקות שהגדרנו
-const DEPARTMENTS = ["שגיא", "חרמון", "גלבוע", "רמון", "כרמל", "תבור", "איתן"];
+<script>
+// ==========================================
+// הגדרות FIREBASE - חובה למלא את הפרטים שלך כאן
+// ==========================================
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT_ID.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
 
-export default function RegistrationScreen() {
-  const [personalId, setPersonalId] = useState('');
-  const [fullName, setFullName] = useState('');
-  const [password, setPassword] = useState('');
-  const [department, setDepartment] = useState(DEPARTMENTS[0]);
-  const [barOrScore, setBarOrScore] = useState('');
+// אתחול השרת
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
-  // פונקציה שמחשבת את רמת הכושר לפי ציון הבר-אור
-  const calculateFitnessLevel = (score) => {
-    const numScore = parseInt(score);
-    if (numScore >= 91) return "מקצוען";
-    if (numScore >= 76) return "קשה";
-    if (numScore >= 55) return "בינוני";
-    return "קל";
-  };
+// ==========================================
+// משתנים ונתונים
+// ==========================================
+const DEPARTMENTS=["שגיא","חרמון","גלבוע","רמון","כרמל","תבור","איתן"];
+const ADMIN_USER={id:'admin',name:'מפקד ע"ה',pass:'admin',role:'admin',department:'כללי'};
+const TRAINING_PLANS={
+  "קל":[{id:'w1',title:"אימון כוח א'",desc:"3 סטים של 10 שכיבות סמיכה, 2 דקות פלאנק מצטבר."},{id:'w2',title:"אירובי בסיסי",desc:"20 דקות ריצה קלה בקצב אחיד."},{id:'w3',title:"כוח רגליים",desc:"3 סטים של 15 סקוואטים, 10 לאנג'ים לכל רגל."}],
+  "בינוני":[{id:'w1',title:"כוח וסיבולת",desc:"4 סטים: 15 שכיבות סמיכה, 8 מתח, 15 מקבילים."},{id:'w2',title:"אינטרוולים 400",desc:"חימום + 4 פעמים 400 מטר מהיר (דקה מנוחה)."},{id:'w3',title:"אימון פק''לים",desc:"100 בטן, 60 שכיבות סמיכה, 5 דקות פלאנק (סטים של דקה)."}],
+  "קשה":[{id:'w1',title:"כוח מתפרץ",desc:"5 סטים: 20 סמיכה יהלום, 12 מתח רחב, 20 מקבילים."},{id:'w2',title:"אינטרוולים 1000",desc:"3 פעמים 1000 מטר בקצב בר-אור (2 דקות מנוחה)."},{id:'w3',title:"אימון רגליים עצים",desc:"5 סטים: 20 סקוואט קפיצה, 20 מכרעים בהליכה."}],
+  "מקצוען":[{id:'w1',title:"עצימות מקסימלית",desc:"Muscle ups או מתח עם משקל, שכיבות סמיכה יד אחת."},{id:'w2',title:"סימולציית 3000",desc:"ריצת 3 ק''מ ב-95% מאמץ. מדידת זמנים קשוחה."},{id:'w3',title:"אימון קרוספיט",desc:"סיבובים של: 15 מתח, 30 סמיכה, 45 סקוואט (בזמן קצוב)."}]
+};
 
-  // הפונקציה שמופעלת בעת לחיצה על "הרשם"
-  const handleRegister = () => {
-    if (!personalId || !fullName || !password || !barOrScore) {
-      Alert.alert("שגיאה", "אנא מלא את כל השדות");
-      return;
-    }
+let users=[ADMIN_USER];
+let currentUser=null;
+let adminFilter=DEPARTMENTS[0];
+let selectedDep=DEPARTMENTS[0];
+let timerSeconds=0;
+let timerInterval=null;
+let timerActive=false;
+let adminEmail='';
 
-    const fitnessLevel = calculateFitnessLevel(barOrScore);
+// ==========================================
+// מאזין לשרת בזמן אמת (Real-Time Listener)
+// ==========================================
+function loadData(){
+  // המאזין של פיירבייס - כל פעם שמישהו באפליקציה משנה נתון, זה מתעדכן אצל כולם!
+  db.collection("users").onSnapshot((snapshot) => {
+    let loadedUsers = [];
+    snapshot.forEach((doc) => {
+      loadedUsers.push(doc.data());
+    });
+    
+    const hasAdmin = loadedUsers.some(u => u.id === 'admin');
+    users = hasAdmin ? loadedUsers : [ADMIN_USER, ...loadedUsers];
 
-    // זהו האובייקט שניקח ונשמור ב-Database (Firebase)
-    const newCadetProfile = {
-      personal_id: personalId,
-      full_name: fullName,
-      department: department,
-      fitness_level: fitnessLevel,
-      role: "cadet",
-      weekly_progress: {
-        strength_done: 0,
-        aerobic_done: 0,
+    // בדיקה אם המשתמש מחובר
+    const cuId = localStorage.getItem('current_user_id');
+    if(cuId){
+      const fresh = users.find(u => u.id === cuId);
+      if(fresh){
+        currentUser = fresh;
+        // עדכון המסכים בזמן אמת
+        if(document.getElementById('page-admin').classList.contains('active')) renderAdmin();
+        if(document.getElementById('page-home').classList.contains('active')) renderHome();
+      } else {
+        // אם המשתמש נמחק מהשרת
+        logout();
       }
-    };
+    }
+  });
 
-    // כאן תבוא הפונקציה ששומרת את הנתונים ב-Firebase ויוצרת את המשתמש
-    console.log("פרופיל מוכן לשמירה:", newCadetProfile);
-    Alert.alert("הצלחה", `נרשמת בהצלחה! שובצת לרמת: ${fitnessLevel}`);
-  };
+  const em = localStorage.getItem('admin_email');
+  if(em) adminEmail = em;
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.header}>הרשמה - מחזור ע"ה</Text>
-
-      <TextInput
-        style={styles.input}
-        placeholder="מספר אישי"
-        value={personalId}
-        onChangeText={setPersonalId}
-        keyboardType="numeric"
-      />
-
-      <TextInput
-        style={styles.input}
-        placeholder="שם מלא"
-        value={fullName}
-        onChangeText={setFullName}
-      />
-
-      <TextInput
-        style={styles.input}
-        placeholder="סיסמה"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry // מסתיר את הסיסמה
-      />
-
-      <TextInput
-        style={styles.input}
-        placeholder="ציון בר-אור אחרון (0-100)"
-        value={barOrScore}
-        onChangeText={setBarOrScore}
-        keyboardType="numeric"
-      />
-
-      <Text style={styles.label}>בחר מחלקה:</Text>
-      <View style={styles.pickerContainer}>
-        <Picker
-          selectedValue={department}
-          onValueChange={(itemValue) => setDepartment(itemValue)}
-        >
-          {DEPARTMENTS.map((dep, index) => (
-            <Picker.Item key={index} label={dep} value={dep} />
-          ))}
-        </Picker>
-      </View>
-
-      <TouchableOpacity style={styles.button} onPress={handleRegister}>
-        <Text style={styles.buttonText}>צור משתמש</Text>
-      </TouchableOpacity>
-    </View>
-  );
+  checkAutoReset();
+  setInterval(checkAutoReset, 60000);
 }
 
-// עיצוב בסיסי (CSS של React Native)
-const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, justifyContent: 'center', backgroundColor: '#f5f5f5' },
-  header: { fontSize: 24, fontWeight: 'bold', textAlign: 'center', marginBottom: 20, color: '#333' },
-  input: { backgroundColor: '#fff', padding: 15, borderRadius: 8, marginBottom: 15, borderWidth: 1, borderColor: '#ddd', textAlign: 'right' },
-  label: { fontSize: 16, marginBottom: 5, textAlign: 'right' },
-  pickerContainer: { backgroundColor: '#fff', borderWidth: 1, borderColor: '#ddd', borderRadius: 8, marginBottom: 20 },
-  button: { backgroundColor: '#4CAF50', padding: 15, borderRadius: 8, alignItems: 'center' },
-  buttonText: { color: '#fff', fontSize: 18, fontWeight: 'bold' }
-});
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>{p.classList.remove('active');p.style.removeProperty('animation')});
+  const page=document.getElementById('page-'+id);
+  if(page){page.style.animation='none';page.offsetHeight;page.style.removeProperty('animation');page.classList.add('active')}
+  if(id==='home')renderHome();
+  if(id==='admin'){renderAdmin();checkSaturdayBanner()}
+  if(id==='register')renderRegDeps();
+}
+
+function clearInputs(){
+  ['loginId','loginPass','regId','regName','regPass','regScore'].forEach(function(id){var el=document.getElementById(id);if(el)el.value=''});
+  selectedDep=DEPARTMENTS[0];
+}
+
+function showAlert(msg){
+  document.getElementById('modalTitle').textContent='';
+  document.getElementById('modalMsg').textContent=msg;
+  document.getElementById('modalExtra').innerHTML='';
+  document.getElementById('modalBtns').innerHTML='<button class="btn btn-solid" onclick="closeModal()">אישור</button>';
+  document.getElementById('modal').classList.add('show');
+}
+function closeModal(){document.getElementById('modal').classList.remove('show')}
+
+function showConfirm(title,msg,onConfirm,confirmLabel){
+  document.getElementById('modalTitle').textContent=title;
+  document.getElementById('modalMsg').textContent=msg;
+  document.getElementById('modalExtra').innerHTML='';
+  var btns=document.getElementById('modalBtns');
+  btns.innerHTML='<button class="btn btn-ghost" onclick="closeModal()">ביטול</button><button class="btn btn-danger" id="confirmBtn">'+(confirmLabel||'אישור')+'</button>';
+  document.getElementById('confirmBtn').onclick=function(){closeModal();onConfirm()};
+  document.getElementById('modal').classList.add('show');
+}
+
+function medColor(s){return s==='כשיר'?'var(--green)':s==='מוגבל'?'var(--yellow)':'var(--red)'}
+function formatTime(t){return String(Math.floor(t/60)).padStart(2,'0')+':'+String(t%60).padStart(2,'0')}
+function hebrewDate(){return new Date().toLocaleDateString('he-IL',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}
+function shortDate(){var d=new Date();return d.getDate()+'/'+(d.getMonth()+1)+'/'+d.getFullYear()}
+
+function renderRegDeps(){
+  var c=document.getElementById('regDepsChips');
+  c.innerHTML=DEPARTMENTS.map(function(d){return '<div class="chip'+(selectedDep===d?' active':'')+'" onclick="selectedDep=\''+d+'\';renderRegDeps()">'+d+'</div>'}).join('');
+}
+
+// ====== AUTH (Firebase) ======
+function handleLogin(){
+  var id=(document.getElementById('loginId').value||'').trim();
+  var pass=document.getElementById('loginPass').value||'';
+  if(!id||!pass)return showAlert('אנא מלא מספר אישי וסיסמה!');
+  var user=users.find(function(u){return u.id===id&&u.pass===pass});
+  if(!user)return showAlert('שגיאה: פרטים לא נכונים.');
+  
+  currentUser=user;
+  localStorage.setItem('current_user_id', user.id);
+  clearInputs();
+  showPage(user.role==='admin'?'admin':'home');
+}
+
+async function handleRegister(){
+  var id=(document.getElementById('regId').value||'').trim();
+  var name=(document.getElementById('regName').value||'').trim();
+  var pass=document.getElementById('regPass').value||'';
+  var scoreStr=(document.getElementById('regScore').value||'').trim();
+  
+  if(!id||!name||!pass||!scoreStr)return showAlert('אנא מלא את כל השדות!');
+  if(users.find(function(u){return u.id===id}))return showAlert('המספר האישי '+id+' כבר רשום במערכת!');
+  
+  var score=parseInt(scoreStr,10);
+  if(isNaN(score)||score<0)return showAlert('ציון בר-אור חייב להיות מספר חיובי!');
+  
+  var fitness='קל';
+  if(score>=91)fitness='מקצוען';else if(score>=76)fitness='קשה';else if(score>=55)fitness='בינוני';
+  
+  var newUser={id:id,pass:pass,name:name,department:selectedDep,scoreHistory:[score],fitness:fitness,role:'cadet',medical:'כשיר',workouts:{w1:false,w2:false,w3:false},createdAt:new Date().toISOString()};
+
+  try {
+    // שמירה בענן של Firebase
+    await db.collection("users").doc(newUser.id).set(newUser);
+    currentUser=newUser;
+    localStorage.setItem('current_user_id', newUser.id);
+    clearInputs();
+    showPage('home');
+  } catch (error) {
+    showAlert("שגיאה בהתחברות לשרת: " + error.message);
+  }
+}
+
+function logout(){
+  timerActive=false;if(timerInterval)clearInterval(timerInterval);timerInterval=null;timerSeconds=0;
+  currentUser=null;
+  localStorage.removeItem('current_user_id');
+  clearInputs();
+  showPage('welcome');
+}
+
+// ====== TIMER ======
+function toggleTimer(){
+  timerActive=!timerActive;
+  var btn=document.getElementById('timerToggle');
+  if(timerActive){
+    btn.textContent='עצור אימון';
+    timerInterval=setInterval(function(){timerSeconds++;document.getElementById('timerDisplay').textContent=formatTime(timerSeconds)},1000);
+  }else{
+    btn.textContent='הפעל טיימר';
+    if(timerInterval)clearInterval(timerInterval);timerInterval=null;
+  }
+}
+function resetTimer(){
+  timerActive=false;if(timerInterval)clearInterval(timerInterval);timerInterval=null;timerSeconds=0;
+  document.getElementById('timerDisplay').textContent='00:00';
+  document.getElementById('timerToggle').textContent='הפעל טיימר';
+}
+
+// ====== WORKOUTS (Firebase) ======
+async function toggleWorkout(wid){
+  if(!currentUser)return;
+  if(!currentUser.workouts)currentUser.workouts={w1:false,w2:false,w3:false};
+  currentUser.workouts[wid]=!currentUser.workouts[wid];
+  
+  try {
+    await db.collection("users").doc(currentUser.id).update({
+      workouts: currentUser.workouts
+    });
+    // התצוגה תתרענן אוטומטית בזכות המאזין של loadData!
+  } catch(e) { console.error(e); }
+}
+
+async function updateMedical(status){
+  if(!currentUser)return;
+  try {
+    await db.collection("users").doc(currentUser.id).update({
+      medical: status
+    });
+  } catch(e) { console.error(e); }
+}
+
+// ====== RENDER HOME ======
+function renderHome(){
+  if(!currentUser)return;
+  var w=currentUser.workouts||{w1:false,w2:false,w3:false};
+  var done=Object.values(w).filter(function(v){return v===true}).length;
+  var plan=TRAINING_PLANS[currentUser.fitness]||TRAINING_PLANS['קל'];
+  var med=currentUser.medical||'כשיר';
+  document.getElementById('homeGreeting').textContent='שלום, '+currentUser.name;
+  document.getElementById('homeSub').textContent='רמת '+currentUser.fitness+' | מחלקת '+currentUser.department;
+  document.getElementById('homeStatusDot').style.backgroundColor=medColor(med);
+  document.getElementById('progressLabel').textContent='התקדמות שבועית ('+done+'/3)';
+  document.getElementById('progressFill').style.width=Math.round((done/3)*100)+'%';
+  document.getElementById('workoutsList').innerHTML=plan.map(function(item){
+    var isDone=w[item.id]||false;
+    return '<div class="task-card'+(isDone?' done':'')+'" onclick="toggleWorkout(\''+item.id+'\')"><div class="check-circle">'+(isDone?'✓':'')+'</div><div class="task-info"><div class="task-title">'+item.title+'</div><div class="task-desc">'+item.desc+'</div></div></div>';
+  }).join('');
+  document.getElementById('medRow').innerHTML=['כשיר','מוגבל','מושבת'].map(function(s){return '<div class="med-btn'+(med===s?' active':'')+'" onclick="updateMedical(\''+s+'\')">'+s+'</div>'}).join('');
+}
+
+// ====== RENDER ADMIN ======
+function renderAdmin(){
+  var ac=document.getElementById('adminDepsChips');
+  ac.innerHTML=DEPARTMENTS.map(function(d){
+    var count=users.filter(function(u){return u.role==='cadet'&&u.department===d}).length;
+    return '<div class="chip'+(adminFilter===d?' active':'')+'" onclick="adminFilter=\''+d+'\';renderAdmin()">'+d+(count>0?' <span class="cadet-count-badge">'+count+'</span>':'')+'</div>';
+  }).join('');
+  var filtered=users.filter(function(u){return u.role==='cadet'&&u.department===adminFilter});
+  var al=document.getElementById('adminList');
+  if(filtered.length===0){al.innerHTML='<div class="empty-msg">אין נתונים למחלקה זו.</div>'}
+  else{
+    al.innerHTML=filtered.map(function(u){
+      var done=u.workouts?Object.values(u.workouts).filter(function(v){return v===true}).length:0;
+      var med=u.medical||'כשיר';
+      return '<div class="admin-card">'+
+        '<div class="status-dot-sm" style="background:'+medColor(med)+'"></div>'+
+        '<div class="admin-info"><div class="admin-name">'+u.name+' <span style="font-size:12px;color:var(--gray);font-weight:400">('+u.id+')</span></div>'+
+        '<div class="admin-meta">ביצע: '+done+'/3 | רמה: '+(u.fitness||'לא הוגדר')+'</div></div>'+
+        '<button class="delete-cadet-btn" onclick="confirmDeleteCadet(\''+u.id+'\',\''+u.name.replace(/'/g,"\\'")+'\')">✕</button>'+
+        '</div>';
+    }).join('');
+  }
+}
+
+// ====== מחיקת חניך (Firebase) ======
+function confirmDeleteCadet(cadetId,cadetName){
+  showConfirm('מחיקת חניך','האם למחוק את '+cadetName+' ('+cadetId+') מהמערכת?\nפעולה זו לא ניתנת לביטול.', async function(){
+    try {
+      await db.collection('users').doc(cadetId).delete();
+      showAlert(cadetName+' הוסר מהמערכת בהצלחה.');
+    } catch(e) { showAlert("שגיאה במחיקה"); }
+  },'מחק חניך');
+}
+
+// ====== REPORT GENERATION & EMAIL (נשאר זהה לוגית) ======
+function getCadets(dep){
+  if(dep)return users.filter(function(u){return u.role==='cadet'&&u.department===dep});
+  return users.filter(function(u){return u.role==='cadet'});
+}
+
+function buildCSV(cadets,title){
+  var BOM='\uFEFF';
+  var csv=BOM+'דוח כושר שבועי - '+title+' - '+shortDate()+'\n\n';
+  csv+='מחלקה,מס אישי,שם מלא,רמת כושר,ציון בר-אור,אימון 1,אימון 2,אימון 3,סה"כ ביצוע,מצב רפואי\n';
+  cadets.forEach(function(u){
+    var w=u.workouts||{w1:false,w2:false,w3:false};
+    var done=Object.values(w).filter(function(v){return v===true}).length;
+    var lastScore=u.scoreHistory&&u.scoreHistory.length>0?u.scoreHistory[u.scoreHistory.length-1]:'—';
+    csv+=u.department+','+u.id+','+u.name+','+(u.fitness||'—')+','+lastScore+','+(w.w1?'V':'X')+','+(w.w2?'V':'X')+','+(w.w3?'V':'X')+','+done+'/3,'+(u.medical||'כשיר')+'\n';
+  });
+  return csv;
+}
+
+function downloadCSV(csv,filename){
+  var blob=new Blob([csv],{type:'text/csv;charset=utf-8'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');a.href=url;a.download=filename;
+  document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
+}
+
+function exportDepartmentReport(){
+  var cadets=getCadets(adminFilter);
+  if(cadets.length===0)return showAlert('אין חניכים במחלקת '+adminFilter);
+  downloadCSV(buildCSV(cadets,'מחלקת '+adminFilter),'דוח_כושר_'+adminFilter+'_'+shortDate().replace(/\//g,'-')+'.csv');
+}
+
+function exportAllReport(){
+  var cadets=getCadets();
+  if(cadets.length===0)return showAlert('אין חניכים במערכת');
+  downloadCSV(buildCSV(cadets,'כל המחלקות'),'דוח_כושר_כללי_'+shortDate().replace(/\//g,'-')+'.csv');
+}
+
+function buildEmailBody(){
+  var cadets=getCadets();if(cadets.length===0)return '';
+  var body='דוח כושר שבועי — מחזור ע"ה\nתאריך: '+hebrewDate()+'\n\n';
+  DEPARTMENTS.forEach(function(dep){
+    var dc=cadets.filter(function(u){return u.department===dep});
+    if(dc.length===0)return;
+    body+='══════ מחלקת '+dep+' ('+dc.length+' חניכים) ══════\n';
+    dc.forEach(function(u){
+      var w=u.workouts||{w1:false,w2:false,w3:false};
+      var done=Object.values(w).filter(function(v){return v===true}).length;
+      body+='  • '+u.name+' ('+u.id+') — ביצע '+done+'/3 | מצב: '+(u.medical||'כשיר')+'\n';
+    });
+  });
+  return body;
+}
+
+function openEmailModal(){
+  document.getElementById('modalTitle').textContent='שליחת דוח שבועי למייל';
+  document.getElementById('modalMsg').textContent='הזן כתובת מייל לשליחת הדוח.';
+  document.getElementById('modalExtra').innerHTML='<input class="email-input" id="emailInput" type="email" value="'+(adminEmail||'')+'">';
+  document.getElementById('modalBtns').innerHTML='<button class="btn btn-ghost" onclick="closeModal()">ביטול</button><button class="btn btn-blue" onclick="sendEmailReport()">שלח דוח</button>';
+  document.getElementById('modal').classList.add('show');
+}
+
+function sendEmailReport(){
+  var email=document.getElementById('emailInput').value.trim();
+  adminEmail=email;localStorage.setItem('admin_email',email);
+  closeModal();
+  window.open('mailto:'+encodeURIComponent(email)+'?subject='+encodeURIComponent('דוח כושר שבועי')+'&body='+encodeURIComponent(buildEmailBody()),'_blank');
+}
+
+// ====== איפוס שבועי אוטומטי (Firebase Batch Update) ======
+function getWeekKey(){var d=new Date();var jan1=new Date(d.getFullYear(),0,1);var week=Math.ceil(((d-jan1)/86400000+jan1.getDay()+1)/7);return d.getFullYear()+'-W'+week}
+
+function checkAutoReset(){
+  var now=new Date();
+  if(now.getDay()!==6 || now.getHours()!==23 || now.getMinutes()<59) return;
+  var weekKey=getWeekKey();
+  if(localStorage.getItem('last_auto_reset_week')===weekKey) return;
+  performAutoReset(weekKey);
+}
+
+async function performAutoReset(weekKey){
+  const cadets = getCadets();
+  if(cadets.length > 0) {
+     // פקודת Batch לפיירבייס - מאפסת את כולם יחד בשנייה אחת!
+     const batch = db.batch();
+     cadets.forEach(c => {
+        const ref = db.collection('users').doc(c.id);
+        batch.update(ref, { workouts: {w1:false, w2:false, w3:false} });
+     });
+     try {
+       await batch.commit();
+       localStorage.setItem('last_auto_reset_week',weekKey);
+     } catch(e) { console.error("שגיאה באיפוס"); }
+  }
+}
+
+function checkSaturdayBanner(){} // נוטרל כדי לא להעמיס במעבר לענן
+
+// ====== INIT ======
+// אתחול האפליקציה מתחיל מיד לאחר טעינת הדף וטעינת פיירבייס
+window.onload = function() {
+  loadData();
+};
+</script>
+</body>
+</html>
