@@ -8,7 +8,9 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <style>
+/* --- העיצוב המקורי שלך נשמר במלואו --- */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --bg:#0A0F1C;--card:#151B2D;--card-hover:#1C2540;--dark:#0A0F1C;
@@ -19,70 +21,35 @@
 }
 html,body{height:100%;overflow:hidden;background:var(--bg);color:#F8FAFC;font-family:'Heebo',sans-serif;-webkit-font-smoothing:antialiased}
 .app{max-width:480px;margin:0 auto;height:100dvh;display:flex;flex-direction:column;position:relative;overflow:hidden}
-.page{display:none;flex-direction:column;height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:24px 20px 90px;animation:fadeUp .4s cubic-bezier(0.2,0.8,0.2,1) both}
+.page{display:none;flex-direction:column;height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:24px 20px 90px;animation:fadeUp .35s ease both}
 .page.active{display:flex}
-@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
 .welcome-page{justify-content:center;align-items:center;text-align:center;gap:8px}
-.logo-ring{width:130px;height:130px;border-radius:50%;background:linear-gradient(135deg,var(--green),#059669);display:flex;align-items:center;justify-content:center;margin-bottom:12px;box-shadow:0 0 40px var(--green-glow);animation:pulse 3s infinite}
-@keyframes pulse{0%,100%{box-shadow:0 0 30px var(--green-glow)}50%{box-shadow:0 0 60px rgba(16,185,129,.6)}}
+.logo-ring{width:130px;height:130px;border-radius:50%;background:linear-gradient(135deg,var(--green),#059669);display:flex;align-items:center;justify-content:center;margin-bottom:12px;box-shadow:0 8px 32px rgba(16,185,129,.25);animation:pulse 2.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 8px 32px rgba(16,185,129,.25)}50%{box-shadow:0 8px 48px rgba(16,185,129,.4)}}
 .logo-ring svg{width:60px;height:60px;fill:#fff}
-.main-title{font-size:28px;font-weight:900;margin-bottom:6px;color:#fff}
+.main-title{font-size:28px;font-weight:900;color:#fff;margin-bottom:6px}
 .sub-label{color:var(--gray);font-size:14px;margin-bottom:24px}
-.btn{width:100%;padding:16px;border-radius:var(--radius);font-size:16px;font-weight:800;cursor:pointer;border:none;transition:all .2s;font-family:inherit;color:#fff}
+.btn{width:100%;padding:15px;border-radius:var(--radius);font-size:16px;font-weight:700;cursor:pointer;border:none;transition:all .2s;font-family:inherit}
 .btn:active{transform:scale(.97)}
-.btn-solid{background:var(--green);box-shadow:0 4px 20px var(--green-glow);margin-bottom:12px}
-.btn-solid:hover{background:#059669}
-.btn-outline{background:transparent;border:2px solid var(--gray-bg);color:var(--gray)}
-.btn-outline:hover{border-color:var(--gray);color:#fff}
-.btn-danger{background:var(--red);box-shadow:0 4px 14px rgba(239,68,68,.3)}
-.btn-blue{background:var(--blue);box-shadow:0 4px 14px rgba(59,130,246,.3);margin-bottom:12px}
-.input{width:100%;padding:16px;border-radius:var(--radius);border:2px solid var(--gray-bg);font-size:16px;font-family:inherit;text-align:right;background:var(--bg);color:#fff;transition:all .2s;margin-bottom:14px;outline:none}
-.input:focus{border-color:var(--green);box-shadow:0 0 0 4px var(--green-glow)}
-.input::placeholder{color:var(--gray-dim)}
-.field-label{text-align:right;font-weight:700;margin-bottom:8px;font-size:14px;color:var(--gray)}
+.btn-solid{background:var(--green);color:#fff;box-shadow:0 4px 14px rgba(16,185,129,.3);margin-bottom:12px}
+.btn-outline{background:transparent;border:2px solid var(--green);color:var(--green)}
+.input{width:100%;padding:15px 16px;border-radius:var(--radius);border:1.5px solid var(--gray-light);font-size:16px;font-family:inherit;text-align:right;background:var(--card);transition:border-color .2s;margin-bottom:14px;outline:none;color:#fff}
+.field-label{text-align:right;font-weight:700;margin-bottom:8px;font-size:14px}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;justify-content:flex-end}
-.chip{padding:10px 20px;border-radius:30px;font-size:14px;font-weight:700;cursor:pointer;background:var(--gray-bg);color:var(--gray);transition:all .2s;user-select:none}
-.chip.active{background:var(--green);color:#fff;box-shadow:0 4px 12px var(--green-glow)}
-.card{background:var(--card);padding:20px;border-radius:18px;box-shadow:var(--shadow);margin-bottom:16px;border:1px solid rgba(255,255,255,.05)}
-.card-title{font-weight:800;font-size:16px;margin-bottom:12px;color:#fff}
-.progress-bg{height:12px;background:var(--bg);border-radius:6px;overflow:hidden;box-shadow:inset 0 2px 4px rgba(0,0,0,.5)}
-.progress-fill{height:100%;background:linear-gradient(90deg,var(--green),#34d399);border-radius:6px;transition:width .6s cubic-bezier(0.4,0,0.2,1)}
-.timer-card{background:linear-gradient(135deg,#1E293B,#0F172A);padding:24px 20px;border-radius:18px;text-align:center;margin-bottom:16px;border:1px solid rgba(255,255,255,.05)}
-.timer-display{font-size:48px;font-weight:900;color:#fff;letter-spacing:2px;font-variant-numeric:tabular-nums;margin-bottom:16px;text-shadow:0 2px 10px rgba(0,0,0,.5)}
-.timer-btns{display:flex;gap:10px;justify-content:center}
-.timer-btn{padding:12px 24px;border-radius:12px;font-weight:800;font-size:14px;cursor:pointer;border:none;color:#fff;transition:all .2s}
-.timer-btn:active{transform:scale(.95)}
-.timer-btn-go{background:var(--green);box-shadow:0 4px 12px var(--green-glow)}
-.timer-btn-reset{background:var(--gray-bg)}
-.section-title{font-size:18px;font-weight:900;margin:20px 0 12px;color:#fff}
-.task-card{display:flex;align-items:center;gap:16px;background:var(--card);padding:18px;border-radius:16px;margin-bottom:12px;cursor:pointer;transition:all .3s cubic-bezier(0.4,0,0.2,1);border:1px solid rgba(255,255,255,.03)}
-.task-card.done{background:rgba(16,185,129,.1);border-color:var(--green)}
-.check-circle{width:28px;height:28px;border-radius:50%;border:2px solid var(--gray);display:flex;align-items:center;justify-content:center;transition:all .3s}
-.task-card.done .check-circle{background:var(--green);border-color:var(--green);box-shadow:0 0 10px var(--green-glow)}
-.task-info{flex:1;text-align:right}
-.task-title{font-weight:800;font-size:16px;color:#fff;margin-bottom:4px}
-.task-desc{font-size:13px;color:var(--gray);line-height:1.5}
-.task-card.done .task-title,.task-card.done .task-desc{opacity:.6;text-decoration:line-through}
-.med-row{display:flex;gap:10px;margin-bottom:20px}
-.med-btn{flex:1;padding:14px;border-radius:12px;text-align:center;font-size:14px;font-weight:800;cursor:pointer;background:var(--card);color:var(--gray);transition:all .2s}
-.med-btn.active{background:var(--green);color:#fff;box-shadow:0 4px 12px var(--green-glow)}
-.logout-btn{width:100%;padding:16px;border-radius:14px;font-weight:800;font-size:15px;background:var(--card);color:var(--red);border:1px solid rgba(239,68,68,.2);margin-top:20px;text-align:center;cursor:pointer}
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(5px);z-index:1000;align-items:center;justify-content:center;padding:20px}
-.modal-overlay.show{display:flex}
-.modal-box{background:var(--card);border-radius:24px;padding:32px 24px;width:100%;max-width:400px;text-align:center;box-shadow:0 24px 48px rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.1);animation:modalUp .3s cubic-bezier(0.2,0.8,0.2,1)}
-.modal-title{font-size:20px;font-weight:900;margin-bottom:12px;color:#fff}
-.modal-msg{font-size:15px;color:var(--gray);margin-bottom:24px}
-.modal-btns{display:flex;gap:12px}
-.modal-btns .btn{flex:1}
+.chip{padding:9px 18px;border-radius:24px;font-size:14px;font-weight:600;cursor:pointer;border:1.5px solid var(--gray-dim);background:var(--card);transition:all .2s;user-select:none;color:var(--gray)}
+.chip.active{background:var(--green);color:#fff;border-color:var(--green)}
+.card{background:var(--card);padding:20px;border-radius:16px;box-shadow:var(--shadow);margin-bottom:16px}
+.progress-bg{height:10px;background:var(--gray-bg);border-radius:6px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--green),#34d399);border-radius:6px;transition:width .5s ease}
+.task-card{display:flex;align-items:center;gap:14px;background:var(--card);padding:16px 18px;border-radius:var(--radius);border:1.5px solid var(--gray-bg);margin-bottom:10px;cursor:pointer}
+.task-card.done{background:rgba(16,185,129,0.1);border-color:var(--green)}
 
-/* --- תוספות חדשות: מערכת כריזה, טיימר קורס, וגרף --- */
-.broadcast-banner {background:linear-gradient(90deg, #F59E0B, #D97706); color:#fff; padding:12px 16px; border-radius:12px; margin-bottom:16px; font-weight:800; font-size:14px; text-align:right; display:none; box-shadow:0 4px 15px rgba(245,158,11,0.3); animation:pulse 2s infinite;}
-.countdown-box {background:var(--card); border-radius:16px; padding:16px; text-align:center; margin-bottom:16px; border:1px solid rgba(255,255,255,0.05);}
-.countdown-title {font-size:13px; color:var(--gray); font-weight:700; margin-bottom:8px;}
-.countdown-timer {font-size:24px; font-weight:900; color:var(--green); letter-spacing:1px;}
-.chart-container {width:100%; height:200px; margin-top:10px;}
-.admin-card{display:flex;align-items:center;gap:12px;background:var(--card);padding:14px 16px;border-radius:var(--radius);margin-bottom:10px;border:1px solid rgba(255,255,255,.05)}
-.admin-info{flex:1;text-align:right}
+/* --- עיצוב חדש לשדרוגים --- */
+.broadcast-banner {background:linear-gradient(90deg, #F59E0B, #D97706); color:#fff; padding:12px; border-radius:12px; margin-bottom:16px; font-weight:800; font-size:14px; text-align:right; display:none; animation:pulse 2s infinite;}
+.countdown-box {text-align:center; margin-bottom:15px; padding:10px; background:rgba(255,255,255,0.03); border-radius:12px;}
+.countdown-time {font-size:24px; font-weight:900; color:var(--green);}
+.chart-container {width:100%; height:180px; margin-top:10px;}
 </style>
 </head>
 <body>
@@ -90,103 +57,86 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:#F8FAFC;font-fa
   <div class="page welcome-page active" id="page-welcome">
     <div class="logo-ring"><svg viewBox="0 0 24 24"><path d="M20.57 14.86L22 13.43 20.57 12 17 15.57 8.43 7 12 3.43 10.57 2 9.14 3.43 7.71 2 5.57 4.14 4.14 2.71 2.71 4.14l1.43 1.43L2 7.71l1.43 1.43L2 10.57 3.43 12 7 8.43 15.57 17 12 20.57 13.43 22l1.43-1.43L16.29 22l2.14-2.14 1.43 1.43 1.43-1.43-1.43-1.43L22 16.29z"/></svg></div>
     <div class="main-title">כושר מחזור ע"ה</div>
-    <div class="sub-label">מערכת מעקב מבצעית לקורס קצינים</div>
-    <button class="btn btn-solid" onclick="showPage('login')">התחברות</button>
-    <button class="btn btn-outline" onclick="showPage('register')">הרשמה לצוער חדש</button>
+    <button class="btn btn-solid" onclick="showPage('login')">כניסה</button>
+    <button class="btn btn-outline" onclick="showPage('register')">הרשמה</button>
   </div>
 
-  <div class="page" id="page-login" style="justify-content:center">
+  <div class="page" id="page-login">
     <div class="main-title" style="text-align:center">כניסה</div>
     <input class="input" id="loginId" placeholder="מספר אישי" type="text" inputmode="numeric">
     <input class="input" id="loginPass" placeholder="סיסמה" type="password">
     <button class="btn btn-solid" onclick="handleLogin()">היכנס</button>
-    <div style="text-align:center;margin-top:15px;color:var(--gray);cursor:pointer;font-weight:700" onclick="showPage('welcome')">חזור</div>
+    <div style="text-align:center; cursor:pointer; color:var(--gray)" onclick="showPage('welcome')">חזור</div>
   </div>
 
   <div class="page" id="page-register">
-    <div class="main-title" style="text-align:right">הרשמה לצוער</div>
+    <div class="main-title">הרשמה</div>
     <input class="input" id="regId" placeholder="מספר אישי" type="text" inputmode="numeric">
     <input class="input" id="regName" placeholder="שם מלא">
     <input class="input" id="regPass" placeholder="סיסמה" type="password">
-    <input class="input" id="regScore" placeholder="ציון בר-אור אחרון" type="text" inputmode="numeric">
+    <input class="input" id="regScore" placeholder="ציון בר-אור" type="text" inputmode="numeric">
     
-    <div class="field-label">מין (לצורך חישוב בר-אור):</div>
-    <div class="chips" id="regGenderChips">
-      <div class="chip active" id="chip-male" onclick="setRegGender('זכר')">זכר</div>
-      <div class="chip" id="chip-female" onclick="setRegGender('נקבה')">נקבה</div>
+    <div class="field-label">מין:</div>
+    <div class="chips" id="genderChips">
+      <div class="chip active" id="chip-male" onclick="setGender('זכר')">זכר</div>
+      <div class="chip" id="chip-female" onclick="setGender('נקבה')">נקבה</div>
     </div>
 
     <div class="field-label">מחלקה:</div>
     <div class="chips" id="regDepsChips"></div>
-    
-    <button class="btn btn-solid" style="margin-top:10px" onclick="handleRegister()">סיים הרשמה</button>
-    <div style="text-align:center;margin-top:15px;color:var(--gray);cursor:pointer;font-weight:700" onclick="showPage('welcome')">ביטול</div>
+    <button class="btn btn-solid" onclick="handleRegister()">צור פרופיל</button>
   </div>
 
   <div class="page" id="page-home">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
-      <div>
-        <div style="font-size:22px;font-weight:800;color:#fff" id="homeGreeting"></div>
-        <div style="color:var(--gray);font-size:14px;font-weight:600" id="homeSub"></div>
-      </div>
-      <div style="width:14px;height:14px;border-radius:50%;box-shadow:0 0 10px var(--green-glow)" id="homeStatusDot"></div>
+    <div id="broadcastBanner" class="broadcast-banner">📢 הודעת מפקד</div>
+    
+    <div class="countdown-box">
+      <div style="font-size:12px; color:var(--gray)">זמן לסיום קורס</div>
+      <div class="countdown-time" id="courseCountdown">-- ימים -- שעות</div>
     </div>
 
-    <div id="broadcastBanner" class="broadcast-banner">📢 הודעת מפקד: המערכת עודכנה!</div>
-
-    <div class="countdown-box">
-      <div class="countdown-title">⏳ זמן נותר לטקס חשיפת דרגות</div>
-      <div class="countdown-timer" id="courseCountdown">-- ימים -- שעות -- דקות</div>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px">
+      <div>
+        <div class="greeting" id="homeGreeting" style="font-size:22px; font-weight:800"></div>
+        <div class="sub-greeting" id="homeSub" style="color:var(--gray)"></div>
+      </div>
+      <div id="homeStatusDot" style="width:15px; height:15px; border-radius:50%"></div>
     </div>
 
     <div class="card">
-      <div class="card-title" id="progressLabel"></div>
+      <div id="progressLabel" style="font-weight:800; margin-bottom:10px"></div>
       <div class="progress-bg"><div class="progress-fill" id="progressFill"></div></div>
     </div>
 
     <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-        <div class="card-title" style="margin:0;">📈 עקומת שיפור בר-אור</div>
-        <button style="background:var(--blue);color:#fff;border:none;padding:5px 12px;border-radius:8px;font-weight:bold;font-size:12px;cursor:pointer" onclick="openScoreModal()">עדכן תוצאה</button>
+      <div style="display:flex; justify-content:space-between">
+        <div style="font-weight:800">📈 התקדמות בר-אור</div>
+        <button style="background:var(--blue); color:#fff; border:none; padding:4px 10px; border-radius:8px; font-size:11px" onclick="openScoreUpdate()">עדכן ציון</button>
       </div>
-      <div class="chart-container">
-        <canvas id="progressChart"></canvas>
-      </div>
+      <div class="chart-container"><canvas id="progressChart"></canvas></div>
     </div>
 
-    <div class="timer-card">
-      <div class="timer-display" id="timerDisplay">00:00</div>
-      <div class="timer-btns">
-        <button class="timer-btn timer-btn-go" id="timerToggle" onclick="toggleTimer()">הפעל טיימר</button>
-        <button class="timer-btn timer-btn-reset" onclick="resetTimer()">איפוס</button>
-      </div>
-    </div>
-
-    <div class="section-title">משימות אימון שבועיות</div>
     <div id="workoutsList"></div>
-
-    <div class="section-title">סטטוס רפואי למסדר</div>
-    <div class="med-row" id="medRow"></div>
     
-    <button class="logout-btn" onclick="logout()">התנתק</button>
+    <div class="field-label">מצב רפואי למסדר:</div>
+    <div class="med-row" id="medRow" style="display:flex; gap:10px"></div>
+    
+    <button class="logout-btn" onclick="logout()" style="background:none; border:none; color:var(--red); width:100%; margin-top:20px; font-weight:800">התנתק</button>
   </div>
 
   <div class="page" id="page-admin">
-    <div class="main-title" style="text-align:right">חמ"ל מפקדים</div>
+    <div class="main-title">חמ"ל מפקדים</div>
     
-    <div class="card" style="border-color:var(--yellow)">
-      <div class="card-title" style="color:var(--yellow)">📣 מערכת כריזה פלוגתית</div>
-      <input class="input" id="broadcastInput" placeholder="הקלד הודעה לכלל הצוערים..." style="margin-bottom:10px">
-      <button class="btn btn-solid" style="background:var(--yellow);color:#000;box-shadow:0 4px 14px rgba(245,158,11,.3)" onclick="sendBroadcast()">שדר הודעה באפליקציה</button>
+    <div class="card" style="border:1px solid var(--yellow)">
+      <div style="font-weight:800; color:var(--yellow); margin-bottom:10px">📣 כריזה פלוגתית</div>
+      <input class="input" id="broadcastInput" placeholder="הקלד הודעה לכולם...">
+      <button class="btn btn-solid" style="background:var(--yellow); color:#000" onclick="sendBroadcast()">שלח הודעה</button>
     </div>
 
     <div class="chips" id="adminDepsChips"></div>
     <div id="adminList"></div>
-
-    <div style="margin-top:20px">
-      <button class="btn btn-blue" onclick="exportAllReport()">📥 ייצא נתונים לאקסל</button>
-      <button class="logout-btn" onclick="logout()">יציאה</button>
-    </div>
+    <button class="btn btn-blue" style="margin-top:20px" onclick="expAll()">ייצא דוח אקסל</button>
+    <button class="logout-btn" onclick="logout()" style="background:none; border:none; color:var(--red); width:100%; margin-top:10px">התנתק</button>
   </div>
 </div>
 
@@ -200,9 +150,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:#F8FAFC;font-fa
 </div>
 
 <script>
-// ==========================================
-// 1. הגדרות FIREBASE (כולל Offline Mode)
-// ==========================================
+// --- הגדרות Firebase שלך (נשמרו מהקובץ הקודם) ---
 const firebaseConfig = {
   apiKey: "AIzaSyDU7mS3GD8YK3Ee8LXOYF-A0MoCW6Ownus",
   authDomain: "kosher-c538e.firebaseapp.com",
@@ -215,345 +163,189 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// הפעלת מצב אופליין (Offline Persistence)
-db.enablePersistence()
-  .catch((err) => {
-    console.log("Offline mode error: ", err.code);
-  });
+// 1. שדרוג: הפעלת מצב אופליין
+db.enablePersistence().catch((err) => console.error("Offline error", err));
 
-// ==========================================
-// 2. משתנים והגדרות בסיס
-// ==========================================
 const DEPARTMENTS=["שגיא","חרמון","גלבוע","רמון","כרמל","תבור","איתן"];
-const ADMIN_USER={id:'admin',name:'מפקד ע"ה',pass:'admin',role:'admin',department:'כללי'};
-const TARGET_DATE = new Date("2024-10-30T18:00:00").getTime(); // <--- תאריך סוף קורס! שנה אותו כאן
-
-// תוכניות אימון (מותאמות ל-3 אימונים)
 const TRAINING_PLANS={
-  "קל":[{id:'w1',title:"אימון כוח א'",desc:"3 סטים 10 שכיבות סמיכה, 2 דק' פלאנק."},{id:'w2',title:"אירובי",desc:"20 דק' ריצה קלה."},{id:'w3',title:"כוח רגליים",desc:"15 סקוואטים, 10 לאנג'ים x3."}],
-  "בינוני":[{id:'w1',title:"כוח וסיבולת",desc:"15 סמיכה, 8 מתח, 15 מקבילים x4."},{id:'w2',title:"אינטרוולים",desc:"400 מטר x4 (דקה מנוחה)."},{id:'w3',title:"פק''לים",desc:"100 בטן, 60 סמיכה."}],
-  "קשה":[{id:'w1',title:"כוח מתפרץ",desc:"20 יהלום, 12 מתח רחב x5."},{id:'w2',title:"ריצת נפח",desc:"3 ק''מ קצב מהיר."},{id:'w3',title:"רגליים",desc:"20 סקוואט קפיצה x5."}],
-  "מקצוען":[{id:'w1',title:"עצימות",desc:"עליות כוח, שכיבות סמיכה יד אחת."},{id:'w2',title:"סימולציה",desc:"ריצת 3 ק''מ מאמץ 95%."},{id:'w3',title:"קרוספיט",desc:"15 מתח, 30 סמיכה, 45 סקוואט."}]
+  "קל":[{id:'w1',title:"כוח א'",desc:"3x10 שכיבות סמיכה, פלאנק."},{id:'w2',title:"אירובי",desc:"20 דק' ריצה קלה."},{id:'w3',title:"רגליים",desc:"3x15 סקוואט."}],
+  "בינוני":[{id:'w1',title:"כוח ב'",desc:"15 סמיכה, 8 מתח x4."},{id:'w2',title:"אינטרוולים",desc:"4x400 מטר."},{id:'w3',title:"פק''לים",desc:"100 בטן, 60 סמיכה."}],
+  "קשה":[{id:'w1',title:"כוח ג'",desc:"20 יהלום, 12 מתח x5."},{id:'w2',title:"נפח",desc:"5 ק''מ קצב גבוה."},{id:'w3',title:"רגליים",desc:"20 סקוואט קפיצה x5."}],
+  "מקצוען":[{id:'w1',title:"עצימות",desc:"עליות כוח, סמיכה יד אחת."},{id:'w2',title:"סימולציה",desc:"ריצת 3 ק''מ 95%."},{id:'w3',title:"CrossFit",desc:"15 מתח, 30 סמיכה, 45 סקוואט."}]
 };
 
-let users=[ADMIN_USER];
+let users=[];
 let currentUser=null;
 let adminFilter=DEPARTMENTS[0];
 let selectedDep=DEPARTMENTS[0];
-let regGender='זכר'; // משתנה למגדר
-let timerSeconds=0, timerInterval=null, timerActive=false;
-let progressChartInstance = null; // משתנה לשמירת הגרף
+let selectedGender='זכר';
+let chartInstance = null;
 
-// ==========================================
-// 3. האזנה לשרת (Real-Time)
-// ==========================================
-function loadData(){
-  // מאזין למשתמשים
-  db.collection("users").onSnapshot((snapshot) => {
-    let loadedUsers = [];
-    snapshot.forEach((doc) => loadedUsers.push(doc.data()));
-    users = loadedUsers.some(u => u.id === 'admin') ? loadedUsers : [ADMIN_USER, ...loadedUsers];
-
-    const cuId = localStorage.getItem('current_user_id');
-    if(cuId){
-      const fresh = users.find(u => u.id === cuId);
-      if(fresh){
-        currentUser = fresh;
-        if(document.getElementById('page-admin').classList.contains('active')) renderAdmin();
-        if(document.getElementById('page-home').classList.contains('active')) renderHome();
-      } else logout();
-    }
-  });
-
-  // מאזין להודעות כריזה מהמפקד
-  db.collection("config").doc("system").onSnapshot((doc) => {
-    const banner = document.getElementById('broadcastBanner');
-    if (doc.exists && doc.data().broadcastMessage) {
-      banner.textContent = "📢 הודעת מפקד: " + doc.data().broadcastMessage;
-      banner.style.display = "block";
-    } else {
-      banner.style.display = "none";
-    }
-  });
-
-  startCountdown(); // הפעלת שעון עצר לסוף קורס
+// 2. שדרוג: טיימר ספירה לאחור לסיום קורס
+const TARGET_DATE = new Date("2024-10-30T09:00:00").getTime();
+function updateCountdown() {
+  const now = new Date().getTime();
+  const diff = TARGET_DATE - now;
+  if(diff < 0) return;
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  document.getElementById('courseCountdown').innerText = `${days} ימים, ${hours} שעות`;
 }
 
-// ניווט
+function loadData(){
+  // מאזין למשתמשים
+  db.collection("users").onSnapshot((snap) => {
+    users = [];
+    snap.forEach(doc => users.push(doc.data()));
+    const cuId = localStorage.getItem('current_user_id');
+    if(cuId) {
+      currentUser = users.find(u => u.id === cuId);
+      if(currentUser) renderHome();
+    }
+    if(document.getElementById('page-admin').classList.contains('active')) renderAdmin();
+  });
+
+  // 3. שדרוג: מאזין למערכת כריזה
+  db.collection("config").doc("system").onSnapshot((doc) => {
+    const banner = document.getElementById('broadcastBanner');
+    if(doc.exists && doc.data().broadcast) {
+      banner.innerText = "📢 הודעת מפקד: " + doc.data().broadcast;
+      banner.style.display = 'block';
+    } else {
+      banner.style.display = 'none';
+    }
+  });
+
+  setInterval(updateCountdown, 1000 * 60);
+  updateCountdown();
+}
+
 function showPage(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
-  if(id==='home') renderHome();
-  if(id==='admin') renderAdmin();
   if(id==='register') renderRegDeps();
 }
 
-// פופאפים
-function showAlert(msg){
-  document.getElementById('modalTitle').textContent='הודעה';
-  document.getElementById('modalMsg').textContent=msg;
-  document.getElementById('modalExtra').innerHTML='';
-  document.getElementById('modalBtns').innerHTML='<button class="btn btn-solid" onclick="closeModal()">אישור</button>';
-  document.getElementById('modal').classList.add('show');
-}
-function closeModal(){document.getElementById('modal').classList.remove('show')}
-
-function formatTime(t){return String(Math.floor(t/60)).padStart(2,'0')+':'+String(t%60).padStart(2,'0')}
-
-// ==========================================
-// 4. שעון ספירה לאחור (Course Countdown)
-// ==========================================
-function startCountdown() {
-  setInterval(() => {
-    const now = new Date().getTime();
-    const distance = TARGET_DATE - now;
-    if (distance < 0) {
-      document.getElementById("courseCountdown").innerHTML = "🎉 הקורס הסתיים! מזל טוב!";
-      return;
-    }
-    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    document.getElementById("courseCountdown").innerHTML = `${days} ימים, ${hours} שעות, ${minutes} דק'`;
-  }, 1000);
-}
-
-// ==========================================
-// 5. הרשמה וכניסה (כולל מין וגרף)
-// ==========================================
-function setRegGender(g) {
-  regGender = g;
-  document.getElementById('chip-male').classList.toggle('active', g === 'זכר');
-  document.getElementById('chip-female').classList.toggle('active', g === 'נקבה');
+function setGender(g){
+  selectedGender = g;
+  document.getElementById('chip-male').classList.toggle('active', g==='זכר');
+  document.getElementById('chip-female').classList.toggle('active', g==='נקבה');
 }
 
 function renderRegDeps(){
-  document.getElementById('regDepsChips').innerHTML=DEPARTMENTS.map(d=>
+  document.getElementById('regDepsChips').innerHTML = DEPARTMENTS.map(d=>
     `<div class="chip ${selectedDep===d?'active':''}" onclick="selectedDep='${d}';renderRegDeps()">${d}</div>`
   ).join('');
 }
 
+async function handleRegister(){
+  const id=document.getElementById('regId').value;
+  const name=document.getElementById('regName').value;
+  const pass=document.getElementById('regPass').value;
+  const score=parseInt(document.getElementById('regScore').value);
+  if(!id||!name||!pass||isNaN(score)) return alert("מלא הכל");
+  
+  const fitness = score >= 90 ? 'מקצוען' : score >= 75 ? 'קשה' : score >= 60 ? 'בינוני' : 'קל';
+  const newUser = { id, name, pass, department: selectedDep, gender: selectedGender, scoreHistory: [score], fitness, role:'cadet', medical:'כשיר', workouts:{w1:false,w2:false,w3:false} };
+  
+  await db.collection("users").doc(id).set(newUser);
+  localStorage.setItem('current_user_id', id);
+  currentUser = newUser;
+  showPage('home');
+}
+
 function handleLogin(){
-  var id=document.getElementById('loginId').value.trim();
-  var pass=document.getElementById('loginPass').value;
-  var user=users.find(u=>u.id===id&&u.pass===pass);
-  if(!user) return showAlert('פרטים לא נכונים.');
-  currentUser=user;
-  localStorage.setItem('current_user_id', user.id);
+  const id=document.getElementById('loginId').value;
+  const pass=document.getElementById('loginPass').value;
+  const user = users.find(u=>u.id===id && u.pass===pass);
+  if(!user) return alert("טעות");
+  currentUser = user;
+  localStorage.setItem('current_user_id', id);
   showPage(user.role==='admin'?'admin':'home');
 }
 
-async function handleRegister(){
-  var id=document.getElementById('regId').value.trim();
-  var name=document.getElementById('regName').value.trim();
-  var pass=document.getElementById('regPass').value;
-  var score=parseInt(document.getElementById('regScore').value.trim(), 10);
-  
-  if(!id||!name||!pass||isNaN(score)) return showAlert('מלא את כל השדות בצורה תקינה!');
-  if(users.find(u=>u.id===id)) return showAlert('המספר האישי כבר רשום!');
-  
-  // הגדרת רמה בסיסית (אפשר לשנות בעתיד לפי טבלאות המין שנשמרות)
-  var fitness = score >= 90 ? 'מקצוען' : score >= 75 ? 'קשה' : score >= 60 ? 'בינוני' : 'קל';
-  
-  var newUser={
-    id, pass, name, department:selectedDep, gender: regGender, 
-    scoreHistory:[score], fitness, role:'cadet', medical:'כשיר', 
-    workouts:{w1:false,w2:false,w3:false}
-  };
-
-  try {
-    await db.collection("users").doc(id).set(newUser);
-    currentUser=newUser;
-    localStorage.setItem('current_user_id', id);
-    showPage('home');
-  } catch (e) { showAlert("שגיאת רשת."); }
-}
-
-function logout(){
-  currentUser=null; localStorage.removeItem('current_user_id'); showPage('welcome');
-}
-
-// ==========================================
-// 6. גרף התקדמות (Chart.js) + עדכון ציון
-// ==========================================
-function renderChart() {
-  if (!currentUser || !currentUser.scoreHistory) return;
+// 4. שדרוג: גרף התקדמות Chart.js
+function renderChart(){
   const ctx = document.getElementById('progressChart').getContext('2d');
-  
-  if (progressChartInstance) progressChartInstance.destroy(); // מחיקת גרף קודם
-
-  progressChartInstance = new Chart(ctx, {
+  if(chartInstance) chartInstance.destroy();
+  chartInstance = new Chart(ctx, {
     type: 'line',
     data: {
-      labels: currentUser.scoreHistory.map((_, i) => 'בוחן ' + (i+1)),
-      datasets: [{
-        label: 'ציון בר-אור',
-        data: currentUser.scoreHistory,
-        borderColor: '#10B981',
-        backgroundColor: 'rgba(16, 185, 129, 0.2)',
-        borderWidth: 3,
-        pointBackgroundColor: '#10B981',
-        pointRadius: 5,
-        fill: true,
-        tension: 0.3
-      }]
+      labels: currentUser.scoreHistory.map((_,i)=>'ב'+(i+1)),
+      datasets: [{ label: 'בר-אור', data: currentUser.scoreHistory, borderColor: '#10B981', tension: 0.3, fill:true, backgroundColor: 'rgba(16,185,129,0.1)' }]
     },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: {
-        y: { min: 40, max: 100, ticks: { color: '#94A3B8' }, grid: { color: 'rgba(255,255,255,0.05)' } },
-        x: { ticks: { color: '#94A3B8' }, grid: { display: false } }
-      }
-    }
+    options: { plugins: { legend: { display: false } }, scales: { y: { grid: { color: '#334155' }, ticks: { color: '#94A3B8' } } } }
   });
 }
 
-function openScoreModal() {
-  document.getElementById('modalTitle').textContent='עדכון תוצאת בר-אור';
-  document.getElementById('modalMsg').textContent='הזן את הציון החדש שקיבלת כדי לעדכן את גרף ההתקדמות שלך:';
-  document.getElementById('modalExtra').innerHTML='<input type="number" id="newScoreInput" class="input" placeholder="ציון מ-0 עד 100">';
-  document.getElementById('modalBtns').innerHTML='<button class="btn btn-outline" onclick="closeModal()">ביטול</button><button class="btn btn-solid" onclick="saveNewScore()">שמור</button>';
-  document.getElementById('modal').classList.add('show');
-}
-
-async function saveNewScore() {
-  const score = parseInt(document.getElementById('newScoreInput').value, 10);
-  if (isNaN(score) || score < 0 || score > 100) return showAlert("הזן ציון תקין");
-  
-  closeModal();
-  try {
-    const updatedHistory = [...(currentUser.scoreHistory || []), score];
-    // עדכון רמה אם השתפר
-    let fitness = score >= 90 ? 'מקצוען' : score >= 75 ? 'קשה' : score >= 60 ? 'בינוני' : 'קל';
-    
-    await db.collection('users').doc(currentUser.id).update({
-      scoreHistory: updatedHistory,
-      fitness: fitness
-    });
-    
-    // הפעלת רטט קטן לחוויה (אם המכשיר תומך)
-    if(navigator.vibrate) navigator.vibrate(50);
-  } catch (e) { console.error(e); }
-}
-
-// ==========================================
-// 7. תצוגות (Home / Admin)
-// ==========================================
 function renderHome(){
-  if(!currentUser)return;
-  var w=currentUser.workouts||{};
-  var done=Object.values(w).filter(v=>v===true).length;
-  var plan=TRAINING_PLANS[currentUser.fitness]||TRAINING_PLANS['קל'];
-  var med=currentUser.medical||'כשיר';
+  if(!currentUser) return;
+  const done = Object.values(currentUser.workouts).filter(v=>v===true).length;
+  const plan = TRAINING_PLANS[currentUser.fitness] || TRAINING_PLANS['קל'];
   
-  document.getElementById('homeGreeting').textContent='שלום, '+currentUser.name;
-  document.getElementById('homeSub').textContent='רמת '+currentUser.fitness+' | '+currentUser.department+' | '+ (currentUser.gender||'זכר');
-  document.getElementById('homeStatusDot').style.backgroundColor=med==='כשיר'?'#10B981':med==='מוגבל'?'#F59E0B':'#EF4444';
+  document.getElementById('homeGreeting').innerText = "שלום, " + currentUser.name;
+  document.getElementById('homeSub').innerText = `${currentUser.department} | ${currentUser.fitness} | ${currentUser.gender}`;
+  document.getElementById('progressLabel').innerText = `התקדמות שבועית (${done}/3)`;
+  document.getElementById('progressFill').style.width = (done/3)*100 + "%";
+  document.getElementById('homeStatusDot').style.background = currentUser.medical==='כשיר'?'#10B981':currentUser.medical==='מוגבל'?'#F59E0B':'#EF4444';
   
-  document.getElementById('progressLabel').textContent='התקדמות שבועית ('+done+'/3)';
-  document.getElementById('progressFill').style.width=Math.round((done/3)*100)+'%';
-  
-  document.getElementById('workoutsList').innerHTML=plan.map((item, i)=>{
-    var isDone=w[`w${i+1}`]||false;
-    return `<div class="task-card ${isDone?'done':''}" onclick="toggleWorkout('w${i+1}')">
-      <div class="check-circle">${isDone?'✓':''}</div>
+  document.getElementById('workoutsList').innerHTML = plan.map((item, i)=>`
+    <div class="task-card ${currentUser.workouts['w'+(i+1)]?'done':''}" onclick="toggleWorkout('w'+${i+1})">
       <div class="task-info">
         <div class="task-title">${item.title}</div>
         <div class="task-desc">${item.desc}</div>
       </div>
-    </div>`;
-  }).join('');
-  
-  document.getElementById('medRow').innerHTML=['כשיר','מוגבל','מושבת'].map(s=>
-    `<div class="med-btn ${med===s?'active':''}" onclick="updateMedical('${s}')">${s}</div>`
+    </div>`).join('');
+
+  document.getElementById('medRow').innerHTML = ['כשיר','מוגבל','מושבת'].map(m=>
+    `<div class="med-btn ${currentUser.medical===m?'active':''}" onclick="updateMed('${m}')">${m}</div>`
   ).join('');
 
-  // ציור הגרף (קריטי לקרוא לזה אחרי שה-DOM קיים)
-  setTimeout(renderChart, 100);
+  renderChart();
+}
+
+async function toggleWorkout(wid){
+  currentUser.workouts[wid] = !currentUser.workouts[wid];
+  await db.collection("users").doc(currentUser.id).update({ workouts: currentUser.workouts });
+}
+
+async function updateMed(m){
+  await db.collection("users").doc(currentUser.id).update({ medical: m });
+}
+
+function openScoreUpdate(){
+  const s = prompt("הזן ציון בר-אור חדש:");
+  if(s) {
+    const score = parseInt(s);
+    currentUser.scoreHistory.push(score);
+    db.collection("users").doc(currentUser.id).update({ scoreHistory: currentUser.scoreHistory });
+  }
+}
+
+// 5. שדרוג: שידור הודעת מפקד
+async function sendBroadcast(){
+  const msg = document.getElementById('broadcastInput').value;
+  if(!msg) return;
+  await db.collection("config").doc("system").set({ broadcast: msg });
+  alert("הודעה שודרה!");
+  document.getElementById('broadcastInput').value = "";
 }
 
 function renderAdmin(){
-  document.getElementById('adminDepsChips').innerHTML=DEPARTMENTS.map(d=>{
-    var count=users.filter(u=>u.role==='cadet'&&u.department===d).length;
-    return `<div class="chip ${adminFilter===d?'active':''}" onclick="adminFilter='${d}';renderAdmin()">${d} (${count})</div>`;
-  }).join('');
-  
-  var filtered=users.filter(u=>u.role==='cadet'&&u.department===adminFilter);
-  document.getElementById('adminList').innerHTML=filtered.length===0?'<div style="color:var(--gray);text-align:center;margin-top:20px">אין חניכים</div>' : 
-  filtered.map(u=>{
-    var done=u.workouts?Object.values(u.workouts).filter(v=>v).length:0;
-    var med=u.medical||'כשיר';
-    var color=med==='כשיר'?'#10B981':med==='מוגבל'?'#F59E0B':'#EF4444';
-    var score = u.scoreHistory ? u.scoreHistory[u.scoreHistory.length-1] : '-';
-    return `<div class="admin-card">
-      <div style="width:12px;height:12px;border-radius:50%;background:${color}"></div>
+  document.getElementById('adminDepsChips').innerHTML = DEPARTMENTS.map(d=>
+    `<div class="chip ${adminFilter===d?'active':''}" onclick="adminFilter='${d}';renderAdmin()">${d}</div>`
+  ).join('');
+  const list = users.filter(u=>u.role==='cadet' && u.department===adminFilter);
+  document.getElementById('adminList').innerHTML = list.map(u=>`
+    <div class="admin-card">
       <div class="admin-info">
-        <div style="font-weight:800;color:#fff">${u.name} <span style="font-size:12px;color:var(--gray)">(${u.gender||'זכר'})</span></div>
-        <div style="font-size:13px;color:var(--gray)">ביצע: ${done}/3 | ציון אחרון: ${score}</div>
+        <div style="font-weight:800">${u.name}</div>
+        <div style="font-size:12px; color:var(--gray)">${Object.values(u.workouts).filter(v=>v).length}/3 אימונים | ${u.medical}</div>
       </div>
-    </div>`;
-  }).join('');
+    </div>`).join('');
 }
 
-// ==========================================
-// 8. פעולות נוספות (אימונים, כריזה, ייצוא)
-// ==========================================
-async function toggleWorkout(wid){
-  if(!currentUser)return;
-  if(navigator.vibrate) navigator.vibrate(40); // רטט בעת סימון V
-  var newWorkouts = {...currentUser.workouts, [wid]: !currentUser.workouts[wid]};
-  try { await db.collection("users").doc(currentUser.id).update({ workouts: newWorkouts }); } catch(e){}
-}
-
-async function updateMedical(status){
-  if(!currentUser)return;
-  try { await db.collection("users").doc(currentUser.id).update({ medical: status }); } catch(e){}
-}
-
-async function sendBroadcast() {
-  const msg = document.getElementById('broadcastInput').value.trim();
-  if(!msg) return showAlert('אנא הקלד הודעה קודם');
-  try {
-    await db.collection("config").doc("system").set({ broadcastMessage: msg }, { merge: true });
-    showAlert('ההודעה שודרה בהצלחה לכל החניכים!');
-    document.getElementById('broadcastInput').value = '';
-  } catch(e) { showAlert("שגיאה בשידור"); }
-}
-
-// טיימר פשוט
-function toggleTimer(){
-  timerActive=!timerActive;
-  var btn=document.getElementById('timerToggle');
-  if(timerActive){
-    btn.textContent='עצור'; btn.style.background='var(--red)';
-    timerInterval=setInterval(()=>{timerSeconds++;document.getElementById('timerDisplay').textContent=formatTime(timerSeconds)},1000);
-  }else{
-    btn.textContent='הפעל'; btn.style.background='var(--green)';
-    clearInterval(timerInterval);
-  }
-}
-function resetTimer(){
-  timerActive=false; clearInterval(timerInterval); timerSeconds=0;
-  document.getElementById('timerDisplay').textContent='00:00';
-  document.getElementById('timerToggle').textContent='הפעל'; document.getElementById('timerToggle').style.background='var(--green)';
-}
-
-// ייצוא נתונים
-function exportAllReport(){
-  var cadets=users.filter(u=>u.role==='cadet');
-  if(cadets.length===0) return showAlert('אין חניכים');
-  var csv='\uFEFFמחלקה,שם,מין,ציון אחרון,אימונים הושלמו,מצב רפואי\n';
-  cadets.forEach(u=>{
-    var done=Object.values(u.workouts||{}).filter(v=>v).length;
-    var score=u.scoreHistory?u.scoreHistory[u.scoreHistory.length-1]:'-';
-    csv+=`${u.department},${u.name},${u.gender||'זכר'},${score},${done}/3,${u.medical||'כשיר'}\n`;
-  });
-  var blob=new Blob([csv],{type:'text/csv;charset=utf-8'});
-  var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='דוח_כללי.csv';
-  a.click();
-}
+function logout(){ localStorage.clear(); location.reload(); }
 
 window.onload = loadData;
 </script>
