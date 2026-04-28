@@ -213,8 +213,56 @@ body{font-family:'Heebo',sans-serif;color:#fff;-webkit-font-smoothing:antialiase
 .report-banner-btn{padding:10px 20px;border-radius:10px;font-weight:700;font-size:13px;cursor:pointer;border:none;font-family:inherit}
 .report-banner-btn-primary{background:#fff;color:#1e40af}
 .report-banner-btn-secondary{background:rgba(255,255,255,.2);color:#fff}
-</style>
 
+/* === CONFETTI (100% completion celebration) === */
+.confetti-container{position:fixed;inset:0;pointer-events:none;z-index:1000;overflow:hidden;display:none}
+.confetti-container.show{display:block}
+.confetti-piece{position:absolute;width:10px;height:10px;top:-20px;animation:confettiFall linear forwards}
+@keyframes confettiFall{
+0%{transform:translateY(0) rotate(0deg);opacity:1}
+100%{transform:translateY(100vh) rotate(720deg);opacity:0}
+}
+.completion-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:999;display:none;align-items:center;justify-content:center;backdrop-filter:blur(8px);animation:fadeIn .3s ease both}
+.completion-overlay.show{display:flex}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.completion-card{text-align:center;padding:40px 30px;animation:popIn .6s cubic-bezier(.34,1.56,.64,1) both}
+@keyframes popIn{from{opacity:0;transform:scale(.5) rotate(-10deg)}to{opacity:1;transform:scale(1) rotate(0)}}
+.completion-emoji{font-size:80px;margin-bottom:20px;animation:bounce 1s ease-in-out infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-15px)}}
+.completion-title{font-size:32px;font-weight:900;color:#fff;margin-bottom:12px;text-shadow:0 4px 20px var(–green-glow)}
+.completion-subtitle{font-size:16px;color:rgba(255,255,255,.85);margin-bottom:24px}
+.completion-streak{font-size:18px;color:var(–yellow);font-weight:800;margin-bottom:28px}
+.completion-btn{padding:14px 32px;background:var(–green);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:800;cursor:pointer;font-family:inherit;box-shadow:0 8px 24px var(–green-glow)}
+
+/* === PAGE TRANSITIONS - Slide animations === */
+@keyframes slideInRight{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
+@keyframes slideInLeft{from{opacity:0;transform:translateX(-40px)}to{opacity:1;transform:translateX(0)}}
+.page.slide-right{animation:slideInRight .35s cubic-bezier(.4,0,.2,1) both!important}
+.page.slide-left{animation:slideInLeft .35s cubic-bezier(.4,0,.2,1) both!important}
+
+/* === STREAK BADGE === */
+.streak-badge{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;border-radius:12px;font-weight:800;font-size:12px;box-shadow:0 2px 8px rgba(245,158,11,.4);animation:streakPulse 2s ease-in-out infinite}
+@keyframes streakPulse{0%,100%{box-shadow:0 2px 8px rgba(245,158,11,.4)}50%{box-shadow:0 4px 16px rgba(245,158,11,.7)}}
+.motivation-text{font-size:13px;color:var(–green);font-weight:700;margin-top:6px;animation:fadeIn .5s ease both}
+
+/* === DONUT CHARTS for admin === */
+.donut-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.donut-card{background:var(–card);border-radius:14px;padding:14px 10px;text-align:center;border:1px solid rgba(255,255,255,.05);box-shadow:var(–shadow)}
+.donut-svg{width:80px;height:80px;display:block;margin:0 auto 8px}
+.donut-bg{fill:none;stroke:rgba(255,255,255,.08);stroke-width:8}
+.donut-fg{fill:none;stroke-width:8;stroke-linecap:round;transform:rotate(-90deg);transform-origin:center;transition:stroke-dashoffset .8s ease}
+.donut-text{font-size:18px;font-weight:900;fill:#fff;text-anchor:middle;dominant-baseline:central}
+.donut-label{font-size:11px;color:var(–gray);font-weight:700;line-height:1.3}
+.donut-card-name{font-size:14px;font-weight:800;color:var(–green);margin-top:4px}
+
+/* === QUICK FILTER BUTTON === */
+.quick-filter-row{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.quick-filter-btn{padding:10px 16px;border-radius:12px;border:1.5px solid rgba(148,163,184,.4);background:rgba(15,23,42,.7);color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:6px;transition:all .2s}
+.quick-filter-btn:hover{border-color:var(–green)}
+.quick-filter-btn.active{background:var(–red);border-color:var(–red);box-shadow:0 4px 12px rgba(239,68,68,.3)}
+.quick-filter-btn.active-amber{background:var(–yellow);border-color:var(–yellow);color:#fff}
+
+</style>
 </head>
 <body>
 
@@ -287,6 +335,7 @@ body{font-family:'Heebo',sans-serif;color:#fff;-webkit-font-smoothing:antialiase
       <div class="progress-count" id="hCount">0/3</div>
     </div>
     <div class="progress-bg"><div class="progress-fill" id="hFill"></div></div>
+    <div class="motivation-text" id="motivationMsg" style="display:none;text-align:center"></div>
   </div>
 </div>
 
@@ -359,27 +408,89 @@ body{font-family:'Heebo',sans-serif;color:#fff;-webkit-font-smoothing:antialiase
     </div>
   </div>
 
-  <!-- BOTTOM NAV (only for cadets) -->
+  <!-- TIMER & TOOLS PAGE -->
+
+  <div class="page" id="page-timer">
+    <div class="main-title" style="font-size:22px;margin-bottom:8px;color:#fff">⏱️ טיימר וכלים</div>
+    <div style="color:var(--gray);font-size:13px;margin-bottom:20px">שעון עצר לאימונים ועוד</div>
+
+```
+<div class="timer-card" style="margin-bottom:20px">
+  <div class="timer-display" id="tDisp2">00:00</div>
+  <div class="timer-btns">
+    <button class="timer-btn timer-btn-go" id="tBtn2" onclick="tToggle2()">הפעל טיימר</button>
+    <button class="timer-btn timer-btn-reset" onclick="tReset2()">איפוס</button>
+  </div>
+</div>
+
+<!-- שעוני מנוחה מהירים -->
+<div style="font-size:14px;font-weight:800;color:var(--gray);margin:16px 0 12px;text-transform:uppercase;letter-spacing:1px">⚡ טיימר מנוחה מהיר</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px">
+  <button class="quick-filter-btn" style="justify-content:center" onclick="quickRest(30)">30ש'</button>
+  <button class="quick-filter-btn" style="justify-content:center" onclick="quickRest(60)">60ש'</button>
+  <button class="quick-filter-btn" style="justify-content:center" onclick="quickRest(90)">90ש'</button>
+  <button class="quick-filter-btn" style="justify-content:center" onclick="quickRest(120)">2 דקות</button>
+  <button class="quick-filter-btn" style="justify-content:center" onclick="quickRest(180)">3 דקות</button>
+  <button class="quick-filter-btn" style="justify-content:center" onclick="quickRest(300)">5 דקות</button>
+</div>
+
+<div id="restCountdown" style="display:none;background:linear-gradient(135deg,#1e40af,#3b82f6);padding:24px;border-radius:16px;text-align:center;margin-bottom:16px">
+  <div style="color:rgba(255,255,255,.8);font-size:14px;font-weight:700;margin-bottom:8px">מנוחה</div>
+  <div id="restTime" style="font-size:48px;font-weight:900;color:#fff;font-variant-numeric:tabular-nums"></div>
+  <button onclick="cancelRest()" style="margin-top:12px;padding:8px 20px;background:rgba(255,255,255,.2);color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-family:inherit">ביטול</button>
+</div>
+```
+
+  </div>
+
+  <!-- KNOWLEDGE HUB PAGE (tabs for workouts/nutrition/tips) -->
+
+  <div class="page" id="page-knowledge">
+    <div class="main-title" style="font-size:22px;margin-bottom:14px;color:#fff">💡 ידע מקצועי</div>
+
+```
+<!-- Knowledge tabs -->
+<div style="display:flex;gap:8px;margin-bottom:20px;background:var(--card);padding:6px;border-radius:14px">
+  <button class="knowledge-tab active" data-tab="workouts" onclick="setKnowledgeTab('workouts')" style="flex:1;padding:10px;border:none;background:var(--green);color:#fff;border-radius:10px;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit;transition:all .2s">💪 אימונים</button>
+  <button class="knowledge-tab" data-tab="nutrition" onclick="setKnowledgeTab('nutrition')" style="flex:1;padding:10px;border:none;background:transparent;color:var(--gray);border-radius:10px;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit;transition:all .2s">🥗 תזונה</button>
+  <button class="knowledge-tab" data-tab="tips" onclick="setKnowledgeTab('tips')" style="flex:1;padding:10px;border:none;background:transparent;color:var(--gray);border-radius:10px;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit;transition:all .2s">💡 טיפים</button>
+</div>
+
+<div id="knowledgeContent"></div>
+```
+
+  </div>
+
+  <!-- BOTTOM NAV (3 tabs as per request) -->
 
   <div class="bottom-nav" id="bottomNav" style="display:none">
     <button class="nav-item active" data-page="home" onclick="navTo('home')">
       <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-      <span>בית</span>
+      <span>האימונים שלי</span>
     </button>
-    <button class="nav-item" data-page="workouts" onclick="navTo('workouts')">
-      <svg viewBox="0 0 24 24"><path d="M20.57 14.86L22 13.43 20.57 12 17 15.57 8.43 7 12 3.43 10.57 2 9.14 3.43 7.71 2 5.57 4.14 4.14 2.71 2.71 4.14l1.43 1.43L2 7.71l1.43 1.43L2 10.57 3.43 12 7 8.43 15.57 17 12 20.57 13.43 22l1.43-1.43L16.29 22l2.14-2.14 1.43 1.43 1.43-1.43-1.43-1.43L22 16.29z"/></svg>
-      <span>אימונים</span>
+    <button class="nav-item" data-page="timer" onclick="navTo('timer')">
+      <svg viewBox="0 0 24 24"><path d="M15 1H9v2h6V1zm-4 13h2V8h-2v6zm8.03-6.61l1.42-1.42c-.43-.51-.9-.99-1.41-1.41l-1.42 1.42C16.07 4.74 14.12 4 12 4c-4.97 0-9 4.03-9 9s4.02 9 9 9 9-4.03 9-9c0-2.12-.74-4.07-1.97-5.61zM12 20c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg>
+      <span>טיימר וכלים</span>
     </button>
-    <button class="nav-item" data-page="nutrition" onclick="navTo('nutrition')">
-      <svg viewBox="0 0 24 24"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/></svg>
-      <span>תזונה</span>
-    </button>
-    <button class="nav-item" data-page="tips" onclick="navTo('tips')">
+    <button class="nav-item" data-page="knowledge" onclick="navTo('knowledge')">
       <svg viewBox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></svg>
-      <span>טיפים</span>
+      <span>ידע מקצועי</span>
     </button>
   </div>
 </div>
+
+<!-- Completion celebration overlay -->
+
+<div class="completion-overlay" id="completionOverlay">
+  <div class="completion-card">
+    <div class="completion-emoji">🏆</div>
+    <div class="completion-title">משימה הושלמה!</div>
+    <div class="completion-subtitle">סיימת את 3 האימונים השבוע 💪</div>
+    <div class="completion-streak" id="completionStreak"></div>
+    <button class="completion-btn" onclick="closeCompletion()">המשך</button>
+  </div>
+</div>
+<div class="confetti-container" id="confettiContainer"></div>
 
 <div class="modal-overlay" id="modal"><div class="modal-box"><div class="modal-title" id="mT"></div><div class="modal-msg" id="mM"></div><div id="mE"></div><div class="modal-btns" id="mB"></div></div></div>
 
@@ -606,6 +717,7 @@ var WORKOUT_PROGRAMS={
 
 var db=null,fbOK=false,users=[ADMIN],cur=null,aFil=DEPS[0],sDep=DEPS[0],tSec=0,tInt=null,tOn=false,adEmail='';
 var currentSubPage='home';
+var adminMedFilter=null; // null = show all, 'מוגבל' or 'מושבת' = filter
 
 // === FIREBASE ===
 function initFB(){
@@ -686,18 +798,37 @@ function showVid(s){
     setTimeout(tryPlay,500);
   }
 }
+// === Page navigation order for slide direction ===
+var PAGE_ORDER=['home','timer','knowledge'];
+var lastPageId=null;
+
 function go(id){
-  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active')});
-  var pg=document.getElementById('page-'+id);if(pg)pg.classList.add('active');
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active','slide-right','slide-left')});
+  var pg=document.getElementById('page-'+id);
+  if(pg){
+    // Determine slide direction based on RTL navigation
+    var navPages=['home','timer','knowledge'];
+    if(lastPageId&&navPages.indexOf(id)>=0&&navPages.indexOf(lastPageId)>=0){
+      var oldIdx=PAGE_ORDER.indexOf(lastPageId);
+      var newIdx=PAGE_ORDER.indexOf(id);
+      // RTL: moving right in array = slide from left, moving left = slide from right
+      pg.classList.add(newIdx>oldIdx?'slide-left':'slide-right');
+    }
+    pg.classList.add('active');
+    lastPageId=id;
+  }
   showVid(['welcome','login','register'].indexOf(id)!==-1);
-  // Bottom nav: מוצג עבור כל משתמש מחובר (חוץ ממשתמש 'admin' הראשי) בדפי החניך
-  var navPages=['home','workouts','nutrition','tips'];
+  // Bottom nav for cadets/promoted admins (not main admin)
+  var navPages=['home','timer','knowledge'];
   document.getElementById('bottomNav').style.display=(cur&&cur.id!==ADMIN_ID&&navPages.indexOf(id)>=0)?'flex':'none';
   if(navPages.indexOf(id)>=0){
     document.querySelectorAll('.nav-item').forEach(function(n){n.classList.toggle('active',n.dataset.page===id)});
     currentSubPage=id;
   }
   if(id==='home')rHome();
+  if(id==='timer')rTimerPage();
+  if(id==='knowledge')rKnowledge();
+  // Legacy pages (still functional, accessed via knowledge tabs)
   if(id==='workouts')rWorkouts();
   if(id==='nutrition')rNutrition();
   if(id==='tips')rTips();
@@ -778,6 +909,200 @@ function doReg(){
 }
 function doLogout(){tOn=false;if(tInt)clearInterval(tInt);tInt=null;tSec=0;cur=null;saveCurL();clr();go('welcome')}
 
+
+// === HAPTIC FEEDBACK (vibration) ===
+function haptic(pattern){
+  if(navigator.vibrate){navigator.vibrate(pattern||[40])}
+}
+function hapticSuccess(){haptic([60,30,60])}
+function hapticHeavy(){haptic([80])}
+function hapticLight(){haptic([20])}
+
+// === CONFETTI ===
+function fireConfetti(){
+  var container=document.getElementById('confettiContainer');
+  container.innerHTML='';
+  container.classList.add('show');
+  var colors=['#10B981','#F59E0B','#3B82F6','#EF4444','#A855F7','#EC4899','#FFFFFF'];
+  for(var i=0;i<80;i++){
+    var c=document.createElement('div');
+    c.className='confetti-piece';
+    c.style.left=Math.random()*100+'%';
+    c.style.background=colors[Math.floor(Math.random()*colors.length)];
+    c.style.animationDuration=(2+Math.random()*2)+'s';
+    c.style.animationDelay=Math.random()*0.5+'s';
+    c.style.borderRadius=Math.random()>0.5?'50%':'0';
+    c.style.transform='rotate('+Math.random()*360+'deg)';
+    container.appendChild(c);
+  }
+  setTimeout(function(){container.classList.remove('show');container.innerHTML=''},5000);
+}
+
+function showCompletion(streakWeeks){
+  fireConfetti();
+  hapticSuccess();
+  setTimeout(hapticSuccess,200);
+  setTimeout(hapticSuccess,400);
+  var streakEl=document.getElementById('completionStreak');
+  if(streakWeeks>=1){
+    streakEl.innerHTML='🔥 '+streakWeeks+' '+(streakWeeks===1?'שבוע':'שבועות')+' רצוף!';
+  }else{
+    streakEl.textContent='';
+  }
+  document.getElementById('completionOverlay').classList.add('show');
+}
+function closeCompletion(){
+  document.getElementById('completionOverlay').classList.remove('show');
+}
+
+// === STREAK SYSTEM ===
+function getCurrentWeekStr(){
+  var d=new Date();
+  var firstDay=new Date(d.getFullYear(),0,1);
+  var pastDays=Math.floor((d-firstDay)/86400000);
+  var weekNum=Math.ceil((pastDays+firstDay.getDay()+1)/7);
+  return d.getFullYear()+'-W'+weekNum;
+}
+function updateStreak(user){
+  if(!user.streakData)user.streakData={count:0,lastWeek:null};
+  var thisWeek=getCurrentWeekStr();
+  var lastWeek=user.streakData.lastWeek;
+  if(lastWeek===thisWeek){
+    // Already counted this week
+    return user.streakData.count;
+  }
+  // Calculate previous week string
+  var d=new Date();
+  d.setDate(d.getDate()-7);
+  var prevYear=d.getFullYear();
+  var firstDay=new Date(prevYear,0,1);
+  var pastDays=Math.floor((d-firstDay)/86400000);
+  var prevWeekNum=Math.ceil((pastDays+firstDay.getDay()+1)/7);
+  var prevWeek=prevYear+'-W'+prevWeekNum;
+  
+  if(lastWeek===prevWeek){
+    user.streakData.count++;
+  }else if(!lastWeek){
+    user.streakData.count=1;
+  }else{
+    user.streakData.count=1; // restart
+  }
+  user.streakData.lastWeek=thisWeek;
+  return user.streakData.count;
+}
+
+// === MOTIVATION MESSAGES ===
+function getMotivationMsg(done,total){
+  if(done===0)return 'שבוע חדש, יעד חדש. צא לדרך! 💪';
+  if(done===1&&total===3)return 'התחלה טובה, אל תעצור עכשיו! 🔥';
+  if(done===2&&total===3)return 'עוד מאמץ אחד קטן ואתה שם! ⚡';
+  if(done===total)return 'משימה הושלמה השבוע! 🏆';
+  return '';
+}
+
+// === KNOWLEDGE TAB ===
+var currentKnowledgeTab='workouts';
+function setKnowledgeTab(tab){
+  currentKnowledgeTab=tab;
+  hapticLight();
+  document.querySelectorAll('.knowledge-tab').forEach(function(b){
+    if(b.dataset.tab===tab){
+      b.style.background='var(--green)';
+      b.style.color='#fff';
+    }else{
+      b.style.background='transparent';
+      b.style.color='var(--gray)';
+    }
+  });
+  rKnowledge();
+}
+function rKnowledge(){
+  var c=document.getElementById('knowledgeContent');
+  if(currentKnowledgeTab==='workouts'){
+    if(!cur)return;
+    var prog=WORKOUT_PROGRAMS[cur.fitness]||WORKOUT_PROGRAMS['קל'];
+    var html='<div style="color:var(--gray);font-size:13px;margin-bottom:16px">'+prog.level+' • '+prog.description+'</div>';
+    prog.workouts.forEach(function(workout){
+      html+='<div style="margin-bottom:24px">';
+      html+='<div style="font-size:17px;font-weight:900;color:#fff;margin-bottom:8px">'+workout.title+'</div>';
+      workout.muscleGroups.forEach(function(mg){html+='<span style="display:inline-block;padding:4px 10px;background:rgba(16,185,129,.15);color:var(--green);border-radius:8px;font-size:12px;font-weight:700;margin-left:6px;margin-bottom:10px">'+mg+'</span>'});
+      html+='<div style="height:8px"></div>';
+      workout.exercises.forEach(function(ex){
+        html+='<div class="exercise-card">';
+        html+='<div class="exercise-img"><img src="'+ex.img+'" onerror="this.style.display=\'none\';this.parentElement.innerHTML+=\'<div class=&quot;exercise-img-fallback&quot;>💪</div>\'" alt="'+ex.name+'"></div>';
+        html+='<div class="exercise-content">';
+        html+='<div class="exercise-title">'+ex.name+'</div>';
+        html+='<div class="exercise-stats">';
+        html+='<div class="exercise-stat">'+ex.sets+' סטים</div>';
+        html+='<div class="exercise-stat">'+ex.reps+' חזרות</div>';
+        if(ex.rest!=='-')html+='<div class="exercise-stat">מנוחה: '+ex.rest+'</div>';
+        html+='</div>';
+        html+='<div class="exercise-desc">'+ex.desc+'</div>';
+        html+='</div></div>';
+      });
+      html+='</div>';
+    });
+    c.innerHTML=html;
+  }else if(currentKnowledgeTab==='nutrition'){
+    var dayPlan=NUTRITION_PLANS[getDayIdx()%NUTRITION_PLANS.length];
+    c.innerHTML='<div style="color:var(--gray);font-size:13px;margin-bottom:16px">תפריט מותאם לאימוני קורס קצינים</div>'+dayPlan.map(function(meal){
+      var macros=meal.macros.map(function(m){return '<div class="macro"><strong>'+m.v+'</strong> '+m.l+'</div>'}).join('');
+      return '<div class="meal-card"><div class="meal-icon">'+meal.icon+'</div><div class="meal-content"><div class="meal-time">'+meal.time+'</div><div class="meal-title">'+meal.title+'</div><div class="meal-desc">'+meal.desc+'</div><div class="meal-macros">'+macros+'</div></div></div>';
+    }).join('');
+  }else if(currentKnowledgeTab==='tips'){
+    var dayIdx=getDayIdx();
+    var todayTips=[];for(var i=0;i<5;i++)todayTips.push(TIPS[(dayIdx+i)%TIPS.length]);
+    var html='<div class="daily-tip-card"><div class="daily-tip-header"><div class="daily-tip-icon">'+todayTips[0].icon+'</div><div class="daily-tip-title">טיפ היום: '+todayTips[0].title+'</div></div><div class="daily-tip-text">'+todayTips[0].text+'</div></div>';
+    html+='<div style="font-size:14px;color:var(--gray);margin-bottom:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px">📚 טיפים נוספים להיום</div>';
+    for(var i=1;i<todayTips.length;i++){
+      html+='<div class="daily-tip-card" style="background:var(--card);border:1px solid rgba(255,255,255,.05)"><div class="daily-tip-header"><div class="daily-tip-icon">'+todayTips[i].icon+'</div><div class="daily-tip-title">'+todayTips[i].title+'</div></div><div class="daily-tip-text">'+todayTips[i].text+'</div></div>';
+    }
+    c.innerHTML=html;
+  }
+}
+
+// === SECONDARY TIMER (on timer page) ===
+var t2Sec=0,t2Int=null,t2On=false;
+function tToggle2(){
+  hapticLight();
+  t2On=!t2On;
+  var b=document.getElementById('tBtn2');
+  if(t2On){b.textContent='עצור';t2Int=setInterval(function(){t2Sec++;document.getElementById('tDisp2').textContent=ft(t2Sec)},1000)}
+  else{b.textContent='הפעל טיימר';if(t2Int)clearInterval(t2Int);t2Int=null}
+}
+function tReset2(){t2On=false;if(t2Int)clearInterval(t2Int);t2Int=null;t2Sec=0;document.getElementById('tDisp2').textContent='00:00';document.getElementById('tBtn2').textContent='הפעל טיימר';hapticLight()}
+function rTimerPage(){
+  document.getElementById('tDisp2').textContent=ft(t2Sec);
+  document.getElementById('tBtn2').textContent=t2On?'עצור':'הפעל טיימר';
+}
+
+// === REST TIMER ===
+var restInt=null,restRemaining=0;
+function quickRest(seconds){
+  hapticLight();
+  if(restInt)clearInterval(restInt);
+  restRemaining=seconds;
+  document.getElementById('restCountdown').style.display='block';
+  document.getElementById('restTime').textContent=ft(restRemaining);
+  restInt=setInterval(function(){
+    restRemaining--;
+    document.getElementById('restTime').textContent=ft(restRemaining);
+    if(restRemaining<=0){
+      clearInterval(restInt);restInt=null;
+      document.getElementById('restCountdown').style.display='none';
+      hapticSuccess();
+      // Audio beep + heavy haptic
+      try{var ctx=new (window.AudioContext||window.webkitAudioContext)();var osc=ctx.createOscillator();var g=ctx.createGain();osc.connect(g);g.connect(ctx.destination);osc.frequency.value=880;g.gain.value=.3;osc.start();setTimeout(function(){osc.stop();ctx.close()},300)}catch(e){}
+    }
+  },1000);
+}
+function cancelRest(){
+  if(restInt)clearInterval(restInt);restInt=null;
+  document.getElementById('restCountdown').style.display='none';
+  hapticLight();
+}
+
+
 // === SEQUENTIAL WORKOUTS ===
 // אימון 2 נפתח רק אחרי שאימון 1 הושלם, וכן הלאה
 function getNextWorkoutId(workouts){
@@ -790,16 +1115,28 @@ function getNextWorkoutId(workouts){
 function markWorkoutDone(wid){
   if(!cur)return;
   if(!cur.workouts)cur.workouts={w1:false,w2:false,w3:false};
-  // וידוא שאי אפשר לדלג - רק האימון הבא בתור ניתן לסימון
   var nextId=getNextWorkoutId(cur.workouts);
   if(wid!==nextId){
+    hapticHeavy();
     return alert2('עליך להשלים את האימונים בסדר. סיים אימון '+(nextId==='w1'?'1':nextId==='w2'?'2':'3')+' קודם.');
   }
   cur.workouts[wid]=true;
-  saveU(cur);saveCurL();rHome();
+  // Haptic feedback for confirmation
+  hapticHeavy();
+  
+  // Check if completed all 3 workouts
+  var dn=Object.values(cur.workouts).filter(function(v){return v===true}).length;
+  if(dn===3){
+    // 🎉 Update streak and show celebration
+    var streakCount=updateStreak(cur);
+    saveU(cur);saveCurL();rHome();
+    setTimeout(function(){showCompletion(streakCount)},400);
+  }else{
+    saveU(cur);saveCurL();rHome();
+  }
 }
 
-function setMed(s){if(!cur)return;cur.medical=s;saveU(cur);saveCurL();rHome()}
+function setMed(s){if(!cur)return;hapticLight();cur.medical=s;saveU(cur);saveCurL();rHome()}
 
 // === RENDER HOME (Dashboard) ===
 function rHome(){
@@ -809,7 +1146,13 @@ function rHome(){
   var med=cur.medical||'כשיר';
   var nextId=getNextWorkoutId(w);
   
-  document.getElementById('hName').textContent=cur.name;
+  // Build name with streak badge if applicable
+  var nameHtml=cur.name;
+  var streak=(cur.streakData&&cur.streakData.count)?cur.streakData.count:0;
+  if(streak>=1){
+    nameHtml+=' <span class="streak-badge">🔥 '+streak+'</span>';
+  }
+  document.getElementById('hName').innerHTML=nameHtml;
   document.getElementById('hFitness').textContent=cur.fitness;
   document.getElementById('hDept').textContent='מחלקת '+cur.department;
   document.getElementById('hDot').style.backgroundColor=mc(med);
@@ -817,6 +1160,14 @@ function rHome(){
   document.getElementById('hStatus').textContent=med;
   document.getElementById('hCount').textContent=dn+'/3';
   document.getElementById('hFill').style.width=Math.round((dn/3)*100)+'%';
+  
+  // Motivation message
+  var motivEl=document.getElementById('motivationMsg');
+  if(motivEl){
+    var msg=getMotivationMsg(dn,3);
+    if(msg){motivEl.textContent=msg;motivEl.style.display='block'}
+    else{motivEl.style.display='none'}
+  }
   
   // הצגת כפתור "עבור ללוח מנהל" אם המשתמש הוא מנהל
   document.getElementById('adminSwitchBtn').style.display=(cur.role==='admin')?'flex':'none';
@@ -924,12 +1275,86 @@ function rTips(){
 }
 
 // === ADMIN ===
+
+function toggleMedFilter(status){
+  hapticLight();
+  if(adminMedFilter===status){adminMedFilter=null}
+  else{adminMedFilter=status}
+  rAdmin();
+}
+
+function calcStats(){
+  var cd=getCd();
+  if(!cd.length)return {total:0,fitPct:0,donePct:0,topDept:'—',topDeptPct:0};
+  var total=cd.length;
+  var fit=cd.filter(function(u){return (u.medical||'כשיר')==='כשיר'}).length;
+  var done=cd.filter(function(u){var w=u.workouts||{};return Object.values(w).filter(function(v){return v===true}).length===3}).length;
+  // best department
+  var byDept={};
+  cd.forEach(function(u){
+    if(!byDept[u.department])byDept[u.department]={total:0,done:0};
+    byDept[u.department].total++;
+    var w=u.workouts||{};
+    if(Object.values(w).filter(function(v){return v===true}).length===3)byDept[u.department].done++;
+  });
+  var topDept='—',topPct=0;
+  Object.keys(byDept).forEach(function(d){
+    var pct=byDept[d].total?(byDept[d].done/byDept[d].total*100):0;
+    if(pct>topPct){topPct=pct;topDept=d}
+  });
+  return {
+    total:total,
+    fitPct:Math.round(fit/total*100),
+    donePct:Math.round(done/total*100),
+    topDept:topDept,
+    topDeptPct:Math.round(topPct)
+  };
+}
+
+function donutSvg(pct,color){
+  var r=32,c=2*Math.PI*r;
+  var offset=c-(pct/100)*c;
+  return '<svg class="donut-svg" viewBox="0 0 80 80">'+
+    '<circle class="donut-bg" cx="40" cy="40" r="'+r+'"/>'+
+    '<circle class="donut-fg" cx="40" cy="40" r="'+r+'" stroke="'+color+'" stroke-dasharray="'+c+'" stroke-dashoffset="'+offset+'"/>'+
+    '<text class="donut-text" x="40" y="40">'+pct+'%</text>'+
+    '</svg>';
+}
+
 function rAdmin(){
   // הצגת כפתור "לתצוגת חניך" רק אם המשתמש המחובר הוא חניך עם הרשאת מנהל (לא ה-admin הראשי)
   document.getElementById('cadetSwitchBtn').style.display=(cur&&cur.id!==ADMIN_ID&&cur.role==='admin')?'block':'none';
+  
+  // 📊 Donut charts: render or update stats panel
+  var stats=calcStats();
+  var statsHtml='';
+  if(stats.total>0){
+    statsHtml='<div class="donut-row">';
+    statsHtml+='<div class="donut-card">'+donutSvg(stats.fitPct,'#10B981')+'<div class="donut-label">אחוז כשירות</div></div>';
+    statsHtml+='<div class="donut-card">'+donutSvg(stats.donePct,'#3B82F6')+'<div class="donut-label">ביצוע פלוגתי</div></div>';
+    statsHtml+='<div class="donut-card">'+donutSvg(stats.topDeptPct,'#F59E0B')+'<div class="donut-label">מובילה</div><div class="donut-card-name">'+stats.topDept+'</div></div>';
+    statsHtml+='</div>';
+    statsHtml+='<div class="quick-filter-row">';
+    statsHtml+='<button class="quick-filter-btn'+(adminMedFilter==='מוגבל'?' active-amber':'')+'" onclick="toggleMedFilter(\'מוגבל\')">⚠️ הצג מוגבלים</button>';
+    statsHtml+='<button class="quick-filter-btn'+(adminMedFilter==='מושבת'?' active':'')+'" onclick="toggleMedFilter(\'מושבת\')">🚫 הצג מושבתים</button>';
+    if(adminMedFilter){statsHtml+='<button class="quick-filter-btn" onclick="toggleMedFilter(\''+adminMedFilter+'\')">✕ נקה סינון</button>'}
+    statsHtml+='</div>';
+  }
+  var sp=document.getElementById('adminStatsPanel');
+  if(!sp){
+    var rb=document.getElementById('rBanner');
+    if(rb){rb.insertAdjacentHTML('afterend','<div id="adminStatsPanel">'+statsHtml+'</div>')}
+  }else{
+    sp.innerHTML=statsHtml;
+  }
+  
   document.getElementById('aChips').innerHTML=DEPS.map(function(d){var c=users.filter(function(u){return u.id!==ADMIN_ID;}).filter(function(u){return u.department===d}).length;return '<div class="chip'+(aFil===d?' active':'')+'" onclick="aFil=\''+d+'\';rAdmin()">'+d+(c?' <span class="badge">'+c+'</span>':'')+'</div>'}).join('');
   // מציג גם חניכים וגם משתמשים שקיבלו הרשאת מנהל (אבל לא את משתמש ה-admin הראשי)
   var fl=users.filter(function(u){return u.id!==ADMIN_ID&&u.department===aFil});
+  // החלת סינון רפואי אם קיים
+  if(adminMedFilter){
+    fl=fl.filter(function(u){return (u.medical||'כשיר')===adminMedFilter});
+  }
   var al=document.getElementById('aList');
   if(!fl.length){al.innerHTML='<div class="empty-msg">אין נתונים למחלקה זו.</div>'}
   else{al.innerHTML=fl.map(function(u){
@@ -937,13 +1362,15 @@ function rAdmin(){
     var med=u.medical||'כשיר';
     var isAdmin=u.role==='admin';
     var adminBadge=isAdmin?'<span style="display:inline-block;padding:2px 8px;background:var(--blue);color:#fff;border-radius:8px;font-size:10px;font-weight:800;margin-right:6px">👑 מנהל</span>':'';
+    var streak=(u.streakData&&u.streakData.count)?u.streakData.count:0;
+    var streakBadge=streak>=1?'<span class="streak-badge" style="margin-right:6px">🔥 '+streak+'</span>':'';
     var promoteBtn=isAdmin
       ? '<button class="del-btn" style="background:rgba(245,158,11,.2);color:var(--yellow);font-size:14px" title="הסר הרשאת מנהל" onclick="togglePromote(\''+u.id+'\',\''+u.name.replace(/'/g,"\\'")+'\',false)">⬇</button>'
       : '<button class="del-btn" style="background:rgba(59,130,246,.2);color:var(--blue);font-size:14px" title="הפוך למנהל" onclick="togglePromote(\''+u.id+'\',\''+u.name.replace(/'/g,"\\'")+'\',true)">👑</button>';
     return '<div class="admin-card">'+
       '<div style="width:12px;height:12px;border-radius:50%;background:'+mc(med)+'"></div>'+
       '<div class="admin-info">'+
-        '<div class="admin-name">'+adminBadge+u.name+' <span style="font-size:12px;color:var(--gray);font-weight:400">('+u.id+')</span></div>'+
+        '<div class="admin-name">'+adminBadge+streakBadge+u.name+' <span style="font-size:12px;color:var(--gray);font-weight:400">('+u.id+')</span></div>'+
         '<div class="admin-meta">ביצע: '+dn+'/3 | רמה: '+(u.fitness||'—')+'</div>'+
       '</div>'+
       promoteBtn+
