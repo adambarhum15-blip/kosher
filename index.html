@@ -240,7 +240,7 @@ body{font-family:'Heebo',sans-serif;color:#fff;-webkit-font-smoothing:antialiase
   <div class="page video-bg-page" id="page-login" style="justify-content:center;align-items:center;text-align:center">
     <div class="logo-ring" style="width:90px;height:90px"><img id="logoImg2" alt="לוגו"></div>
     <div class="main-title">כניסה</div>
-    <input class="input" id="loginId" placeholder="מספר אישי" inputmode="numeric">
+    <input class="input" id="loginId" placeholder="מספר אישי / שם משתמש" autocomplete="username">
     <input class="input" id="loginPass" placeholder="סיסמה" type="password">
     <button class="btn btn-solid" onclick="doLogin()">היכנס</button>
     <span class="back-link" onclick="clr();go('welcome')">חזור אחורה</span>
@@ -613,14 +613,19 @@ function loadFB(){
     var ap=document.querySelector('.page.active');if(ap){var pid=ap.id.replace('page-','');if(pid==='home')rHome();if(pid==='admin')rAdmin();if(pid==='workouts')rWorkouts();if(pid==='nutrition')rNutrition();if(pid==='tips')rTips()}
     hideLo();
   },function(){fbOK=false;fbDot('red');loadLocal();hideLo()});
-  var cu=localStorage.getItem('current_user');
-  if(cu){cur=JSON.parse(cu);go(cur.role==='admin'?'admin':'home')}
+  // אין כניסה אוטומטית - תמיד מתחילים במסך הפתיחה
+  cur=null;
+  try{localStorage.removeItem('current_user')}catch(e){}
   adEmail=localStorage.getItem('admin_email')||'';
+  go('welcome');
 }
 function loadLocal(){
   try{var s=localStorage.getItem('users_db');if(s){var p=JSON.parse(s);users=p.some(function(u){return u.id==='admin'})?p:[ADMIN].concat(p)}
-  var cu=localStorage.getItem('current_user');if(cu){cur=JSON.parse(cu);go(cur.role==='admin'?'admin':'home')}
-  adEmail=localStorage.getItem('admin_email')||''}catch(e){}
+  // אין כניסה אוטומטית - תמיד מתחילים במסך הפתיחה
+  cur=null;
+  localStorage.removeItem('current_user');
+  adEmail=localStorage.getItem('admin_email')||'';
+  go('welcome')}catch(e){}
 }
 function saveU(u){if(fbOK&&db)db.collection('users').doc(u.id).set(u).catch(function(){});users=users.map(function(x){return x.id===u.id?u:x});try{localStorage.setItem('users_db',JSON.stringify(users))}catch(e){}}
 function addU(u){users.push(u);if(fbOK&&db)db.collection('users').doc(u.id).set(u).catch(function(){});try{localStorage.setItem('users_db',JSON.stringify(users))}catch(e){}}
