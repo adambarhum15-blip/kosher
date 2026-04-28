@@ -622,19 +622,27 @@ function hideLo(){var l=document.getElementById('lo');l.classList.add('hide');se
 function loadFB(){
   db.collection('users').onSnapshot(function(snap){
     var a=[];snap.forEach(function(d){a.push(d.data())});
-    // ניקוי: הסר משתמשי admin ישנים (id='admin' או 'שרון קבסה המלך' עם תווי יוניקוד)
-    var oldAdmins=a.filter(function(u){return u.role==='admin'&&u.id!==ADMIN_ID&&(u.id==='admin'||u.id==='שרון קבסה המלך')});
-    oldAdmins.forEach(function(u){
-      try{db.collection('users').doc(u.id).delete().catch(function(){})}catch(e){}
-    });
-    a=a.filter(function(u){return !(u.role==='admin'&&u.id!==ADMIN_ID&&(u.id==='admin'||u.id==='שרון קבסה המלך'))});
-    // הוספת מנהל ראשי אם לא קיים
-    if(!a.some(function(u){return u.id===ADMIN_ID})){
+    // ניקוי בטוח: רק אם יש כפילות של מנהל הראשי — מחק את הישנים, אבל לא נוגע במשתמש המחובר
+    var hasMainAdmin=a.some(function(u){return u.id===ADMIN_ID});
+    if(hasMainAdmin){
+      // יש כבר אדמין ראשי - אפשר למחוק אדמינים ישנים שהם בדיוק 'admin' (לא חניכים שהוסמכו!)
+      var legacyAdmins=a.filter(function(u){return u.id==='admin'&&u.id!==ADMIN_ID&&(!cur||cur.id!==u.id)});
+      legacyAdmins.forEach(function(u){
+        try{db.collection('users').doc(u.id).delete().catch(function(){})}catch(e){}
+      });
+      a=a.filter(function(u){return u.id!=='admin'||u.id===ADMIN_ID});
+    } else {
+      // אין אדמין ראשי - הוסף אותו
       try{db.collection('users').doc(ADMIN_ID).set(ADMIN).catch(function(){})}catch(e){}
       a.unshift(ADMIN);
     }
     users=a;try{localStorage.setItem('users_db',JSON.stringify(users))}catch(e){}
-    if(cur&&cur.role==='cadet'){var f=users.find(function(u){return u.id===cur.id});if(f){cur=f;saveCurL()}else{cur=null;saveCurL();go('welcome')}}
+    // סנכרון המשתמש המחובר עם הנתונים העדכניים
+    if(cur){
+      var f=users.find(function(u){return u.id===cur.id});
+      if(f){cur=f;saveCurL()}
+      else if(cur.id!==ADMIN_ID){cur=null;saveCurL();go('welcome')}
+    }
     var ap=document.querySelector('.page.active');if(ap){var pid=ap.id.replace('page-','');if(pid==='home')rHome();if(pid==='admin')rAdmin();if(pid==='workouts')rWorkouts();if(pid==='nutrition')rNutrition();if(pid==='tips')rTips()}
     hideLo();
   },function(){fbOK=false;fbDot('red');loadLocal();hideLo()});
@@ -642,8 +650,7 @@ function loadFB(){
   cur=null;
   try{localStorage.removeItem('current_user')}catch(e){}
   adEmail=localStorage.getItem('admin_email')||'';
-  // וידוא שמשתמש ה-ADMIN תמיד קיים במאגר המקומי גם לפני קבלת תגובה מ-Firebase
-  if(!users.some(function(u){return u.id===ADMIN_ID})){users=[ADMIN].concat(users.filter(function(u){return u.role!=='admin'||(u.id!=='admin'&&u.id!=='שרון קבסה המלך')}))}
+  if(!users.some(function(u){return u.id===ADMIN_ID})){users=[ADMIN].concat(users.filter(function(u){return u.id!==ADMIN_ID}))}
   go('welcome');
 }
 function loadLocal(){
@@ -717,39 +724,47 @@ function doLogin(){
   var ps=(document.getElementById('loginPass').value||'').trim();
   if(!id||!ps)return alert2('אנא מלא שם משתמש וסיסמה!');
   
-  // נירמול: הסרת רווחים מיותרים בין מילים (להפוך "שרון  קבסה   המלך" ל-"שרון קבסה המלך")
-  var normalize=function(s){return s.replace(/\s+/g,' ').trim()};
+  // נירמול: הסרת רווחים מיותרים בין מילים
+  var normalize=function(s){return (s||'').replace(/\s+/g,' ').trim()};
   var idNorm=normalize(id);
   var psNorm=normalize(ps);
-  var adminPassNorm=normalize(ADMIN.pass);
   
   // בדיקה ראשונה: התאמה למשתמש המנהל הראשי (תמיד עובד גם אם Firebase לא נטען)
-  // מקבל את שם המנהל בכמה צורות לכניסה
   var adminNamesNorm=ADMIN_LOGIN_NAMES.map(normalize);
+  var adminPassNorm=normalize(ADMIN.pass);
   if(adminNamesNorm.indexOf(idNorm)>=0 && psNorm===adminPassNorm){
     cur=ADMIN;
-    // וידוא שהאדמין נשמר במסד הנתונים
     if(!users.some(function(u){return u.id===ADMIN_ID})){
       users.unshift(ADMIN);
       try{localStorage.setItem('users_db',JSON.stringify(users))}catch(e){}
     }
     if(fbOK&&db){try{db.collection('users').doc(ADMIN_ID).set(ADMIN).catch(function(){})}catch(e){}}
-    saveCurL();
-    clr();
-    go('admin');
+    saveCurL();clr();go('admin');
     return;
   }
   
-  // בדיקה שנייה: חיפוש במאגר המשתמשים (לפי id או לפי שם, עם נירמול)
+  // בדיקה שנייה: חיפוש במאגר המשתמשים — לפי id, name, או שם משפחה+פרטי
   var u=users.find(function(x){
     var xId=normalize(x.id||'');
     var xName=normalize(x.name||'');
     var xPass=normalize(x.pass||'');
     return (xId===idNorm||xName===idNorm)&&xPass===psNorm;
   });
-  if(!u)return alert2('פרטים לא נכונים.\n\nלכניסת מנהל:\nשם משתמש: שרון קבסה המלך\nסיסמה: שרון קבסה המלך');
+  
+  if(!u){
+    // הודעת שגיאה מפורטת לעזרה באבחון
+    var msg='פרטים לא נכונים.\n\n';
+    msg+='נסה עם הפרטים הבאים:\n';
+    msg+='• שם משתמש: שרון קבסה המלך\n';
+    msg+='• סיסמה: שרון קבסה המלך\n\n';
+    msg+='אם זו הכניסה הראשונה — וודא שהאתר נטען לחלוטין (אינדיקטור ירוק בפינה שמאל-עליונה).';
+    return alert2(msg);
+  }
+  
   cur=u;saveCurL();clr();
-  go(u.id===ADMIN_ID?'admin':'home');
+  // 🎯 שינוי חשוב: כל משתמש עם role='admin' הולך ישר לדף מנהל (גם חניך שקיבל הרשאה)
+  // משתמש עם role='cadet' הולך לדף הבית הרגיל
+  go(u.role==='admin'?'admin':'home');
 }
 function doReg(){
   var id=(document.getElementById('regId').value||'').trim(),nm=(document.getElementById('regName').value||'').trim(),ps=document.getElementById('regPass').value||'',sc=(document.getElementById('regScore').value||'').trim();
