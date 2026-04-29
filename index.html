@@ -301,8 +301,9 @@ body{font-family:'Heebo',sans-serif;color:#fff;-webkit-font-smoothing:antialiase
 @keyframes liveDot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
 
 /* === INSTALL PROMPT === */
-.install-prompt{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(150%);width:calc(100% - 32px);max-width:448px;background:linear-gradient(135deg,#10B981,#059669);border-radius:20px;padding:18px 20px;box-shadow:0 12px 40px rgba(16,185,129,.5);z-index:90;transition:transform .5s cubic-bezier(.34,1.56,.64,1);display:flex;align-items:center;gap:14px}
-.install-prompt.show{transform:translateX(-50%) translateY(0)}
+.install-prompt{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(200%);width:calc(100% - 24px);max-width:456px;background:linear-gradient(135deg,#10B981,#059669);border-radius:18px;padding:16px 18px;box-shadow:0 12px 40px rgba(16,185,129,.5);z-index:90;transition:transform .5s cubic-bezier(.34,1.56,.64,1);display:none;align-items:center;gap:12px;visibility:hidden}
+.install-prompt.show{transform:translateX(-50%) translateY(0);display:flex;visibility:visible}
+
 .install-icon{font-size:36px;flex-shrink:0}
 .install-text{flex:1;color:#fff}
 .install-title{font-weight:900;font-size:15px;margin-bottom:2px}
@@ -403,10 +404,7 @@ body.day-mode .toggle-switch{background:#CBD5E1}
 .chart-empty{text-align:center;padding:24px 12px;color:var(–gray);font-size:13px}
 
 /* === GENDER PILLS === */
-.gender-row{display:flex;gap:8px;margin-bottom:14px}
-.gender-pill{flex:1;padding:14px;border-radius:14px;border:1.5px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:#fff;font-weight:800;font-size:14px;cursor:pointer;font-family:inherit;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px}
-.gender-pill:hover{border-color:var(–green)}
-.gender-pill.active{background:var(–green);border-color:var(–green);box-shadow:0 4px 14px var(–green-glow)}
+/* gender styles removed */
 
 /* === BROADCAST EDITOR (admin) === */
 .bc-editor{background:linear-gradient(135deg,#7c2d12,#9a3412);padding:18px;border-radius:16px;margin-bottom:16px;border:1px solid rgba(220,38,38,.3)}
@@ -540,16 +538,13 @@ body.day-mode .countdown-input{background:#F8FAFC;color:#0F172A;border-color:#CB
     <input class="input" id="regId" placeholder="מספר אישי" inputmode="numeric">
     <input class="input" id="regName" placeholder="שם מלא">
     <input class="input" id="regPass" placeholder="סיסמה" type="password">
+    <input class="input" id="regScore" placeholder="ציון בר-אור עדכני (מספר)" inputmode="numeric">
 
 ```
-<div class="field-label">מין (לחישוב ציון בר-אור נכון):</div>
-<div class="gender-row">
-  <button type="button" class="gender-pill" id="gPillM" onclick="setGender('M')">👨 גבר</button>
-  <button type="button" class="gender-pill" id="gPillF" onclick="setGender('F')">👩 אישה</button>
-</div>
-
-<input class="input" id="regAge" placeholder="גיל" inputmode="numeric">
-<input class="input" id="regBarOr" placeholder="הישג בר-אור (זמן ריצת 2 ק&quot;מ - לדוגמה: 09:30)">
+<div class="field-label" style="margin-top:6px">📊 נתוני פתיחה — מבדקי כושר ראשוניים:</div>
+<input class="input" id="regBarOrTime" placeholder='זמן ריצת בר-אור 2 ק"מ (לדוגמה: 09:30)'>
+<input class="input" id="regPushups" placeholder="מספר שכיבות סמיכה ברצף" inputmode="numeric">
+<input class="input" id="regPullups" placeholder="מספר עליות מתח ברצף" inputmode="numeric">
 
 <div class="field-label">מחלקה:</div>
 <div class="chips" id="regChips"></div>
@@ -597,9 +592,6 @@ body.day-mode .countdown-input{background:#F8FAFC;color:#0F172A;border-color:#CB
     <div class="motivation-text" id="motivationMsg" style="display:none;text-align:center"></div>
   </div>
 </div>
-
-<!-- גרף ציוני בר-אור -->
-<div id="chartHolder"></div>
 
 <!-- כפתור מעבר ללוח מנהל - מוצג רק אם המשתמש הוא מנהל -->
 <button id="adminSwitchBtn" onclick="go('admin')" style="display:none;width:100%;padding:14px;border-radius:14px;border:none;background:linear-gradient(135deg,#3B82F6,#1e40af);color:#fff;font-size:15px;font-weight:800;font-family:inherit;cursor:pointer;margin-bottom:16px;box-shadow:0 4px 14px rgba(59,130,246,.3);display:flex;align-items:center;justify-content:center;gap:8px">
@@ -852,7 +844,7 @@ body.day-mode .countdown-input{background:#F8FAFC;color:#0F172A;border-color:#CB
 
   <!-- BOTTOM NAV (4 tabs with leaderboard) -->
 
-  <div class="bottom-nav" id="bottomNav" style="display:none">
+  <div class="bottom-nav" id="bottomNav" style="display:none;visibility:hidden">
     <button class="nav-item active" data-page="home" onclick="navTo('home')">
       <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
       <span>בית</span>
@@ -1350,12 +1342,14 @@ var deferredPrompt=null;
 window.addEventListener('beforeinstallprompt',function(e){
   e.preventDefault();
   deferredPrompt=e;
-  // Show our custom prompt after 5 seconds (only if user is logged in as cadet)
+  // Show our custom prompt after 8 seconds (only if user is logged in as cadet AND on home page)
   setTimeout(function(){
-    if(cur&&cur.id!==ADMIN_ID&&!localStorage.getItem('install_dismissed')){
+    var ap=document.querySelector('.page.active');
+    var pid=ap?ap.id.replace('page-',''):'';
+    if(cur&&cur.id!==ADMIN_ID&&pid==='home'&&!localStorage.getItem('install_dismissed')){
       document.getElementById('installPrompt').classList.add('show');
     }
-  },5000);
+  },8000);
 });
 
 function triggerInstall(){
@@ -1469,9 +1463,9 @@ function calcBarOrScore(timeStr,gender){
 
 // קביעת רמת אימון לפי ניקוד
 function calcFitnessFromScore(score){
-  if(score>=46)return 'מקצוען';
-  if(score>=40)return 'קשה';
-  if(score>=33)return 'בינוני';
+  if(score>=91)return 'מקצוען';
+  if(score>=76)return 'קשה';
+  if(score>=55)return 'בינוני';
   return 'קל';
 }
 
@@ -1670,33 +1664,14 @@ function renderScoreChart(){
 }
 
 function addScorePrompt(){
-  hapticLight();
-  if(!cur)return;
-  document.getElementById('mT').textContent='הוסף ציון בר-אור חדש';
-  document.getElementById('mM').textContent='הזן את זמן ריצת 2 ק"מ העדכני שלך:';
-  document.getElementById('mE').innerHTML=
-    '<input class="email-input" id="newBarOrInput" type="text" placeholder="לדוגמה: 09:30" value="" style="direction:ltr;text-align:center;font-size:18px;font-weight:800">'+
-    '<div style="font-size:12px;color:var(--gray);margin-bottom:6px;text-align:right">פורמט: דקות:שניות (mm:ss)</div>';
-  document.getElementById('mB').innerHTML='<button class="btn btn-ghost" onclick="clsM()">ביטול</button><button class="btn btn-solid" onclick="saveNewScore()">שמור</button>';
-  document.getElementById('modal').classList.add('show');
-  setTimeout(function(){var el=document.getElementById('newBarOrInput');if(el)el.focus()},200);
+  // Redirect to the new measurement modal
+  openLogMeasurement();
 }
 
 function saveNewScore(){
-  var t=(document.getElementById('newBarOrInput').value||'').trim();
-  if(!t)return alert2('הזן זמן');
-  var gender=cur.gender||'M';
-  var score=calcBarOrScore(t,gender);
-  if(score===null)return alert2('זמן לא תקין. השתמש בפורמט mm:ss (לדוגמה: 09:30)');
-  if(!cur.scoreHistory)cur.scoreHistory=[];
-  cur.scoreHistory.push(score);
-  // עדכון רמת אימון לפי הציון החדש
-  cur.fitness=calcFitnessFromScore(score);
-  cur.barOrTime=t;
-  saveU(cur);saveCurL();
-  clsM();hapticSuccess();
-  alert2('ציון חדש נשמר: '+score+'\nרמת אימונים: '+cur.fitness);
-  rHome();
+  // Legacy function — kept for backwards compatibility, redirects to new flow
+  clsM();
+  setTimeout(openLogMeasurement,200);
 }
 
 // ============================================================
@@ -2007,29 +1982,192 @@ function startCountdownTicker(){
 // ============================================================
 var progressChart=null;
 
+
+// === Metric helpers ===
+function timeStrToSec(s){
+  if(!s)return null;
+  var m=String(s).trim().match(/^(\d{1,2}):(\d{1,2})$/);
+  if(!m)return null;
+  return parseInt(m[1],10)*60+parseInt(m[2],10);
+}
+function secToTimeStr(sec){
+  if(typeof sec!=='number')return sec;
+  var m=Math.floor(sec/60),s=sec%60;
+  return m+':'+String(s).padStart(2,'0');
+}
+
+function getMetricData(metric){
+  if(!cur)return [];
+  if(metric==='score'){
+    var hist=cur.scoreHistory||[];
+    return hist.map(function(v,i){return {value:v,date:null,label:'מבדק '+(i+1)}});
+  }
+  if(metric==='barOr'){
+    var hist=cur.barOrHistory||[];
+    return hist.map(function(p){
+      var sec=timeStrToSec(p.time);
+      if(sec===null)return null;
+      return {value:sec,date:p.date,label:p.time};
+    }).filter(function(x){return x!==null});
+  }
+  if(metric==='pushups'){
+    var hist=cur.pushupsHistory||[];
+    return hist.map(function(p){return {value:p.count,date:p.date,label:p.count}});
+  }
+  if(metric==='pullups'){
+    var hist=cur.pullupsHistory||[];
+    return hist.map(function(p){return {value:p.count,date:p.date,label:p.count}});
+  }
+  return [];
+}
+
+function setChartMetric(m){
+  hapticLight();
+  currentChartMetric=m;
+  renderProgressChart();
+}
+
+// === Log new measurement modal ===
+function openLogMeasurement(){
+  hapticLight();
+  document.getElementById('mT').textContent='📊 הזן מבדק חדש';
+  document.getElementById('mM').textContent='הזן את הנתונים הנוכחיים שלך. אין צורך למלא את כולם — רק מה שעשית.';
+  document.getElementById('mE').innerHTML=
+    '<input class="email-input" id="logScore" placeholder="ציון בר-אור חדש (0-100)" inputmode="numeric" style="direction:rtl;text-align:right">'+
+    '<input class="email-input" id="logBarOr" placeholder=\'זמן ריצת 2 ק"מ (לדוגמה: 09:30)\' style="direction:rtl;text-align:right">'+
+    '<input class="email-input" id="logPushups" placeholder="שכיבות סמיכה ברצף" inputmode="numeric" style="direction:rtl;text-align:right">'+
+    '<input class="email-input" id="logPullups" placeholder="עליות מתח ברצף" inputmode="numeric" style="direction:rtl;text-align:right">';
+  document.getElementById('mB').innerHTML=
+    '<button class="btn btn-ghost" onclick="clsM()">ביטול</button>'+
+    '<button class="btn btn-solid" onclick="saveLogMeasurement()" style="margin-bottom:0">שמור</button>';
+  document.getElementById('modal').classList.add('show');
+}
+
+function saveLogMeasurement(){
+  if(!cur)return;
+  var scoreStr=(document.getElementById('logScore').value||'').trim();
+  var barOrTime=(document.getElementById('logBarOr').value||'').trim();
+  var pushupsStr=(document.getElementById('logPushups').value||'').trim();
+  var pullupsStr=(document.getElementById('logPullups').value||'').trim();
+  
+  if(!scoreStr&&!barOrTime&&!pushupsStr&&!pullupsStr){
+    return alert2('אנא הזן לפחות נתון אחד');
+  }
+  
+  var today=new Date().toISOString().split('T')[0];
+  var changes=[];
+  
+  if(scoreStr){
+    var score=parseInt(scoreStr,10);
+    if(isNaN(score)||score<0||score>100)return alert2('ציון בר-אור חייב להיות מספר בין 0 ל-100');
+    if(!cur.scoreHistory)cur.scoreHistory=[];
+    cur.scoreHistory.push(score);
+    cur.fitness=calcFitnessFromScore(score);
+    changes.push('ציון: '+score+' (רמה: '+cur.fitness+')');
+  }
+  
+  if(barOrTime){
+    if(timeStrToSec(barOrTime)===null)return alert2('זמן בר-אור לא תקין. פורמט: mm:ss (לדוגמה 09:30)');
+    if(!cur.barOrHistory)cur.barOrHistory=[];
+    cur.barOrHistory.push({date:today,time:barOrTime});
+    changes.push('זמן ריצה: '+barOrTime);
+  }
+  
+  if(pushupsStr){
+    var p=parseInt(pushupsStr,10);
+    if(isNaN(p)||p<0)return alert2('מספר שכיבות לא תקין');
+    if(!cur.pushupsHistory)cur.pushupsHistory=[];
+    cur.pushupsHistory.push({date:today,count:p});
+    changes.push('שכיבות: '+p);
+  }
+  
+  if(pullupsStr){
+    var p=parseInt(pullupsStr,10);
+    if(isNaN(p)||p<0)return alert2('מספר עליות מתח לא תקין');
+    if(!cur.pullupsHistory)cur.pullupsHistory=[];
+    cur.pullupsHistory.push({date:today,count:p});
+    changes.push('מתח: '+p);
+  }
+  
+  saveU(cur);saveCurL();
+  hapticSuccess();
+  clsM();
+  setTimeout(function(){
+    alert2('המבדק נשמר! 💪\n\n'+changes.join('\n')+'\n\nהגרף יציג את ההתקדמות שלך.');
+    rHome();
+  },300);
+}
+
+
+var currentChartMetric='score'; // 'score' | 'pushups' | 'pullups' | 'barOr'
+
 function renderProgressChart(){
   var c=document.getElementById('progressChartContainer');
   if(!c||!cur)return;
-  var hist=cur.scoreHistory||[];
-  if(!hist.length){c.innerHTML='';return}
+  
+  // Build stats card with metric tabs + log button
+  var html='<div class="chart-card">';
+  html+='<div class="chart-header">';
+  html+='<div class="chart-title">📈 מגמת השיפור שלי</div>';
+  html+='<button onclick="openLogMeasurement()" style="background:var(--green);color:#fff;border:none;padding:8px 14px;border-radius:10px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:4px"><span style="font-size:16px;line-height:1">＋</span><span>מבדק חדש</span></button>';
+  html+='</div>';
+  
+  // Metric tabs
+  html+='<div style="display:flex;gap:6px;background:rgba(255,255,255,.04);padding:4px;border-radius:10px;margin-bottom:14px;overflow-x:auto">';
+  var metrics=[
+    {key:'score',label:'ציון',icon:'🏆'},
+    {key:'barOr',label:'ריצה',icon:'🏃'},
+    {key:'pushups',label:'סמיכה',icon:'💪'},
+    {key:'pullups',label:'מתח',icon:'🤸'}
+  ];
+  metrics.forEach(function(m){
+    var active=(currentChartMetric===m.key);
+    html+='<button onclick="setChartMetric(\''+m.key+'\')" style="flex:1;padding:8px 6px;border:none;background:'+(active?'var(--green)':'transparent')+';color:'+(active?'#fff':'var(--gray)')+';border-radius:8px;font-weight:800;font-size:12px;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .2s">'+m.icon+' '+m.label+'</button>';
+  });
+  html+='</div>';
+  
+  // Get data based on selected metric
+  var dataPoints=getMetricData(currentChartMetric);
+  
+  if(!dataPoints.length){
+    html+='<div class="chart-empty">לא נרשמו עדיין מבדקים<br><small style="opacity:.7">לחץ על "מבדק חדש" כדי להתחיל לעקוב</small></div>';
+    html+='</div>';
+    c.innerHTML=html;
+    return;
+  }
   
   // Calculate stats
-  var current=hist[hist.length-1];
-  var first=hist[0];
-  var best=Math.max.apply(null,hist);
-  var improvement=current-first;
-  var improvementColor=improvement>0?'#10B981':improvement<0?'#EF4444':'#94A3B8';
-  var improvementSign=improvement>0?'+':'';
+  var values=dataPoints.map(function(p){return p.value});
+  var current=values[values.length-1];
+  var first=values[0];
+  var best,improvement,improvementSign;
   
-  c.innerHTML='<div class="chart-card">'+
-    '<div class="chart-header"><div class="chart-title">📈 התקדמות בר-אור</div></div>'+
-    '<div class="chart-stats">'+
-      '<div class="chart-stat"><div class="chart-stat-val">'+current+'</div><div class="chart-stat-lbl">נוכחי</div></div>'+
-      '<div class="chart-stat"><div class="chart-stat-val">'+best+'</div><div class="chart-stat-lbl">שיא</div></div>'+
-      '<div class="chart-stat"><div class="chart-stat-val" style="color:'+improvementColor+'">'+improvementSign+improvement+'</div><div class="chart-stat-lbl">שיפור</div></div>'+
-    '</div>'+
-    '<div class="chart-canvas-wrap"><canvas id="progressCanvas"></canvas></div>'+
+  // For Bar-Or time, lower is better; for everything else, higher is better
+  if(currentChartMetric==='barOr'){
+    best=Math.min.apply(null,values);
+    improvement=first-current; // positive = faster (improvement)
+    improvementSign=improvement>0?'-':improvement<0?'+':'';
+    var displayCurrent=secToTimeStr(current);
+    var displayBest=secToTimeStr(best);
+    var displayImp=Math.abs(improvement)+' שניות';
+  }else{
+    best=Math.max.apply(null,values);
+    improvement=current-first;
+    improvementSign=improvement>0?'+':'';
+    var displayCurrent=current;
+    var displayBest=best;
+    var displayImp=improvementSign+improvement;
+  }
+  var improvementColor=improvement>0?'#10B981':improvement<0?'#EF4444':'#94A3B8';
+  
+  html+='<div class="chart-stats">'+
+    '<div class="chart-stat"><div class="chart-stat-val">'+displayCurrent+'</div><div class="chart-stat-lbl">נוכחי</div></div>'+
+    '<div class="chart-stat"><div class="chart-stat-val">'+displayBest+'</div><div class="chart-stat-lbl">שיא</div></div>'+
+    '<div class="chart-stat"><div class="chart-stat-val" style="color:'+improvementColor+'">'+displayImp+'</div><div class="chart-stat-lbl">שיפור</div></div>'+
   '</div>';
+  html+='<div class="chart-canvas-wrap"><canvas id="progressCanvas"></canvas></div>';
+  html+='</div>';
+  c.innerHTML=html;
   
   // Wait a tick for canvas to be in DOM
   setTimeout(function(){
@@ -2037,7 +2175,14 @@ function renderProgressChart(){
     if(!canvas||typeof Chart==='undefined')return;
     if(progressChart){try{progressChart.destroy()}catch(e){}}
     var ctx=canvas.getContext('2d');
-    var labels=hist.map(function(_,i){return 'מבדק '+(i+1)});
+    var labels=dataPoints.map(function(p,i){
+      if(p.date){
+        var d=new Date(p.date);
+        return d.getDate()+'/'+(d.getMonth()+1);
+      }
+      return 'מבדק '+(i+1);
+    });
+    var hist=values; // for compatibility with chart code below
     var isDayMode=document.body.classList.contains('day-mode');
     var textColor=isDayMode?'#0F172A':'#94A3B8';
     var gridColor=isDayMode?'rgba(0,0,0,.05)':'rgba(255,255,255,.05)';
@@ -2081,7 +2226,12 @@ function renderProgressChart(){
             borderWidth:1,
             displayColors:false,
             callbacks:{
-              label:function(ctx){return 'ציון: '+ctx.parsed.y}
+              label:function(ctx){
+                if(currentChartMetric==='barOr')return 'זמן: '+secToTimeStr(ctx.parsed.y);
+                if(currentChartMetric==='pushups')return 'שכיבות: '+ctx.parsed.y;
+                if(currentChartMetric==='pullups')return 'מתח: '+ctx.parsed.y;
+                return 'ציון: '+ctx.parsed.y;
+              }
             }
           }
         },
@@ -2207,10 +2357,18 @@ function go(id){
     lastPageId=id;
   }
   showVid(['welcome','login','register'].indexOf(id)!==-1);
+  // Hide install prompt on auth pages and admin
+  var authPages=['welcome','login','register','admin'];
+  if(authPages.indexOf(id)>=0){
+    var ip=document.getElementById('installPrompt');
+    if(ip)ip.classList.remove('show');
+  }
   var navPages=['home','leaderboard','timer','knowledge'];
   // Bottom nav: show on nav pages AND settings page (which is reached from leaderboard)
   var showNav=cur&&cur.id!==ADMIN_ID&&(navPages.indexOf(id)>=0||id==='settings');
-  document.getElementById('bottomNav').style.display=showNav?'flex':'none';
+  var bnEl=document.getElementById('bottomNav');
+  bnEl.style.display=showNav?'flex':'none';
+  bnEl.style.visibility=showNav?'visible':'hidden';
   if(navPages.indexOf(id)>=0){
     document.querySelectorAll('.nav-item').forEach(function(n){n.classList.toggle('active',n.dataset.page===id)});
     currentSubPage=id;
@@ -2232,11 +2390,8 @@ function go(id){
 function navTo(id){go(id)}
 
 function clr(){
-  ['loginId','loginPass','regId','regName','regPass','regScore','regAge','regBarOr'].forEach(function(i){var e=document.getElementById(i);if(e)e.value=''});
+  ['loginId','loginPass','regId','regName','regPass','regScore','regBarOrTime','regPushups','regPullups'].forEach(function(i){var e=document.getElementById(i);if(e)e.value=''});
   sDep=DEPS[0];
-  regGender=null;
-  var gM=document.getElementById('gPillM');if(gM)gM.classList.remove('active');
-  var gF=document.getElementById('gPillF');if(gF)gF.classList.remove('active');
 }
 function alert2(m){document.getElementById('mT').textContent='';document.getElementById('mM').textContent=m;document.getElementById('mE').innerHTML='';document.getElementById('mB').innerHTML='<button class="btn btn-solid" onclick="clsM()">אישור</button>';document.getElementById('modal').classList.add('show')}
 function clsM(){document.getElementById('modal').classList.remove('show')}
@@ -2283,13 +2438,8 @@ function doLogin(){
   });
   
   if(!u){
-    // הודעת שגיאה מפורטת לעזרה באבחון
-    var msg='פרטים לא נכונים.\n\n';
-    msg+='נסה עם הפרטים הבאים:\n';
-    msg+='• שם משתמש: שרון קבסה המלך\n';
-    msg+='• סיסמה: שרון קבסה המלך\n\n';
-    msg+='אם זו הכניסה הראשונה — וודא שהאתר נטען לחלוטין (אינדיקטור ירוק בפינה שמאל-עליונה).';
-    return alert2(msg);
+    hapticHeavy();
+    return alert2('פרטים לא נכונים.\n\nאנא ודא שהזנת את המספר האישי והסיסמה שלך כפי שנרשמת.\n\nאם שכחת את הסיסמה — פנה למפקד הישיר שלך.');
   }
   
   cur=u;saveCurL();clr();
@@ -2301,46 +2451,43 @@ function doReg(){
   var id=(document.getElementById('regId').value||'').trim();
   var nm=(document.getElementById('regName').value||'').trim();
   var ps=document.getElementById('regPass').value||'';
-  var ageStr=(document.getElementById('regAge').value||'').trim();
-  var barOrTime=(document.getElementById('regBarOr').value||'').trim();
+  var scoreStr=(document.getElementById('regScore').value||'').trim();
+  var barOrTime=(document.getElementById('regBarOrTime').value||'').trim();
+  var pushupsStr=(document.getElementById('regPushups').value||'').trim();
+  var pullupsStr=(document.getElementById('regPullups').value||'').trim();
   
-  if(!id||!nm||!ps||!ageStr||!barOrTime)return alert2('אנא מלא את כל השדות!');
-  if(!regGender)return alert2('בחר מין (גבר/אישה) — נדרש לחישוב ציון בר-אור');
+  if(!id||!nm||!ps||!scoreStr)return alert2('אנא מלא את כל השדות הבסיסיים: מספר אישי, שם, סיסמה וציון בר-אור');
   
   if(users.find(function(u){return u.id===id}))return alert2('מספר אישי כבר רשום!');
   var nl=nm.toLowerCase();
   if(users.find(function(u){return u.role==='cadet'&&u.name.toLowerCase()===nl&&u.department===sDep}))return alert2('כבר קיים "'+nm+'" במחלקת '+sDep);
   
-  var age=parseInt(ageStr,10);
-  if(isNaN(age)||age<16||age>70)return alert2('גיל לא תקין!');
+  var score=parseInt(scoreStr,10);
+  if(isNaN(score)||score<0||score>100)return alert2('ציון בר-אור חייב להיות מספר בין 0 ל-100!');
   
-  // חישוב ציון בר-אור לפי הזמן והמגדר (טבלאות רשמיות)
-  var score=calcBarOrScore(barOrTime,regGender);
-  if(score===null)return alert2('זמן בר-אור לא תקין!\nנא הזן בפורמט mm:ss (לדוגמה: 09:30)');
-  
+  // קביעת רמת קושי לפי הציון
   var fit=calcFitnessFromScore(score);
+  
+  // נתוני פתיחה (אם הוזנו) — נשמרים כנקודה ראשונה בהיסטוריה
+  var pushups=pushupsStr?parseInt(pushupsStr,10):null;
+  var pullups=pullupsStr?parseInt(pullupsStr,10):null;
+  var today=new Date().toISOString().split('T')[0];
   
   var nu={
     id:id,pass:ps,name:nm,department:sDep,
-    gender:regGender,age:age,
-    barOrTime:barOrTime,scoreHistory:[score],
+    scoreHistory:[score],
+    barOrHistory:barOrTime?[{date:today,time:barOrTime}]:[],
+    pushupsHistory:(pushups!==null&&!isNaN(pushups))?[{date:today,count:pushups}]:[],
+    pullupsHistory:(pullups!==null&&!isNaN(pullups))?[{date:today,count:pullups}]:[],
     fitness:fit,role:'cadet',medical:'כשיר',
     workouts:{w1:false,w2:false,w3:false},
     streakData:{count:0,lastWeek:null},
     createdAt:new Date().toISOString()
   };
   addU(nu);cur=nu;saveCurL();clr();
-  alert2('ברוך הבא!\n\nציון בר-אור שלך: '+score+'\nרמת אימונים: '+fit);
+  hapticSuccess();
+  alert2('ברוך הבא, '+nm+'! 💪\n\nציון בר-אור: '+score+'\nרמת אימונים: '+fit+'\n\nתוכל להוסיף נתוני אימונים חדשים בכל זמן\nכדי לעקוב אחר ההתקדמות שלך.');
   go('home');
-}
-
-// משתנה לשמירת מגדר בעת הרשמה
-var regGender=null;
-function setGender(g){
-  hapticLight();
-  regGender=g;
-  document.getElementById('gPillM').classList.toggle('active',g==='M');
-  document.getElementById('gPillF').classList.toggle('active',g==='F');
 }
 function doLogout(){tOn=false;if(tInt)clearInterval(tInt);tInt=null;tSec=0;cur=null;saveCurL();clr();go('welcome')}
 
