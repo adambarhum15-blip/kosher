@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="he" dir="rtl">
 <head>
 <link rel="manifest" href="data:application/manifest+json;base64,ewogICJuYW1lIjogIteb15XXqdeoINee15fXlteV16gg16JcIteUIiwKICAic2hvcnRfbmFtZSI6ICLXm9eV16nXqCDXolwi15QiLAogICJkZXNjcmlwdGlvbiI6ICLXntei16jXm9eqINee16LXp9eRINeb15XXqdeoINec16fXldeo16Eg16fXpteZ16DXmdedIiwKICAic3RhcnRfdXJsIjogIi4vIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAib3JpZW50YXRpb24iOiAicG9ydHJhaXQiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiMwQTBGMUMiLAogICJ0aGVtZV9jb2xvciI6ICIjMTBCOTgxIiwKICAiaWNvbnMiOiBbCiAgICB7InNyYyI6ICJkYXRhOmltYWdlL3N2Zyt4bWw7YmFzZTY0LFBITjJaeUI0Yld4dWN6MGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TUM5emRtY2lJSFpwWlhkQ2IzZzlJakFnTUNBeE9USWdNVGt5SWo0OGNtVmpkQ0IzYVdSMGFEMGlNVGt5SWlCb1pXbG5hSFE5SWpFNU1pSWdabWxzYkQwaUl6RXdRams0TVNJZ2NuZzlJak15SWk4K1BIUmxlSFFnZUQwaU9UWWlJSGs5SWpFeU1DSWdabTl1ZEMxemFYcGxQU0k0TUNJZ2RHVjRkQzFoYm1Ob2IzSTlJbTFwWkdSc1pTSWdabWxzYkQwaWQyaHBkR1VpUHZDZmtxbzhMM1JsZUhRK1BDOXpkbWMrIiwgInNpemVzIjogIjE5MngxOTIiLCAidHlwZSI6ICJpbWFnZS9zdmcreG1sIn0sCiAgICB7InNyYyI6ICJkYXRhOmltYWdlL3N2Zyt4bWw7YmFzZTY0LFBITjJaeUI0Yld4dWN6MGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TUM5emRtY2lJSFpwWlhkQ2IzZzlJakFnTUNBMU1USWdOVEV5SWo0OGNtVmpkQ0IzYVdSMGFEMGlOVEV5SWlCb1pXbG5hSFE5SWpVeE1pSWdabWxzYkQwaUl6RXdRams0TVNJZ2NuZzlJamcwSWk4K1BIUmxlSFFnZUQwaU1qVTJJaUI1UFNJek1qQWlJR1p2Ym5RdGMybDZaVDBpTWpFd0lpQjBaWGgwTFdGdVkyaHZjajBpYldsa1pHeGxJaUJtYVd4c1BTSjNhR2wwWlNJKzhKK1Nxand2ZGo0OEwzTjJaejQ9IiwgInNpemVzIjogIjUxMng1MTIiLCAidHlwZSI6ICJpbWFnZS9zdmcreG1sIn0KICBdCn0=">
@@ -42,7 +41,7 @@ body{font-family:'Heebo',sans-serif;color:#fff;-webkit-font-smoothing:antialiase
 
 /* === LOGO === */
 .logo-ring{width:140px;height:140px;border-radius:50%;overflow:hidden;margin-bottom:16px;border:4px solid rgba(255,255,255,.3);box-shadow:0 8px 40px rgba(0,0,0,.6);animation:lp 3s ease-in-out infinite}
-@keyframes lp{0%,100%{box-shadow:0 8px 40px rgba(0,0,0,.6);border-color:rgba(255,255,255,.3)}50%{box-shadow:0 12px 50px var(–green-glow);border-color:rgba(16,185,129,.7)}}
+@keyframes lp{0%,100%{box-shadow:0 8px 40px rgba(0,0,0,.6);border-color:rgba(255,255,255,.3)}50%{box-shadow:0 12px 50px var(--green-glow);border-color:rgba(16,185,129,.7)}}
 .logo-ring img{width:100%;height:100%;object-fit:cover;display:block}
 
 /* === TYPO === */
@@ -50,107 +49,107 @@ body{font-family:'Heebo',sans-serif;color:#fff;-webkit-font-smoothing:antialiase
 .sub-label{color:rgba(255,255,255,.8);font-size:14px;margin-bottom:24px;text-shadow:0 1px 6px rgba(0,0,0,.6)}
 
 /* === BUTTONS === */
-.btn{width:100%;padding:15px;border-radius:var(–radius);font-size:16px;font-weight:700;cursor:pointer;border:none;transition:all .2s;font-family:inherit}
+.btn{width:100%;padding:15px;border-radius:var(--radius);font-size:16px;font-weight:700;cursor:pointer;border:none;transition:all .2s;font-family:inherit}
 .btn:active{transform:scale(.97)}
-.btn-solid{background:var(–green);color:#fff;box-shadow:0 4px 14px var(–green-glow);margin-bottom:12px}
+.btn-solid{background:var(--green);color:#fff;box-shadow:0 4px 14px var(--green-glow);margin-bottom:12px}
 .btn-solid:hover{background:#059669}
 .btn-outline{background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.4);color:#fff;backdrop-filter:blur(4px)}
 .btn-outline:hover{background:rgba(255,255,255,.2)}
-.btn-danger{background:var(–red);color:#fff;box-shadow:0 4px 14px rgba(239,68,68,.3)}
-.btn-ghost{background:transparent;color:var(–gray);border:1px solid var(–gray-bg)}
-.btn-blue{background:var(–blue);color:#fff;box-shadow:0 4px 14px rgba(59,130,246,.3);margin-bottom:12px}
+.btn-danger{background:var(--red);color:#fff;box-shadow:0 4px 14px rgba(239,68,68,.3)}
+.btn-ghost{background:transparent;color:var(--gray);border:1px solid var(--gray-bg)}
+.btn-blue{background:var(--blue);color:#fff;box-shadow:0 4px 14px rgba(59,130,246,.3);margin-bottom:12px}
 .back-link{display:inline-block;margin-top:16px;color:rgba(255,255,255,.7);font-weight:700;cursor:pointer;font-size:14px}
 
 /* === INPUTS === */
-.input{width:100%;padding:15px 16px;border-radius:var(–radius);border:1.5px solid rgba(255,255,255,.2);font-size:16px;font-family:inherit;text-align:right;background:rgba(255,255,255,.08);backdrop-filter:blur(8px);color:#fff;margin-bottom:14px;outline:none;transition:border-color .2s}
-.input:focus{border-color:var(–green);background:rgba(255,255,255,.15)}
+.input{width:100%;padding:15px 16px;border-radius:var(--radius);border:1.5px solid rgba(255,255,255,.2);font-size:16px;font-family:inherit;text-align:right;background:rgba(255,255,255,.08);backdrop-filter:blur(8px);color:#fff;margin-bottom:14px;outline:none;transition:border-color .2s}
+.input:focus{border-color:var(--green);background:rgba(255,255,255,.15)}
 .input::placeholder{color:rgba(255,255,255,.5)}
 .field-label{text-align:right;font-weight:700;margin-bottom:8px;font-size:14px;color:rgba(255,255,255,.9)}
 
 /* === CHIPS === */
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;justify-content:flex-end}
 .chip{padding:10px 18px;border-radius:24px;font-size:14px;font-weight:700;cursor:pointer;border:1.5px solid rgba(148,163,184,.5);background:rgba(15,23,42,.85);color:#fff;transition:all .2s;user-select:none;backdrop-filter:blur(10px);text-shadow:0 1px 3px rgba(0,0,0,.5)}
-.chip:hover{border-color:var(–green);background:rgba(16,185,129,.2)}
-.chip.active{background:var(–green);color:#fff;border-color:var(–green);box-shadow:0 4px 12px var(–green-glow);text-shadow:none}
+.chip:hover{border-color:var(--green);background:rgba(16,185,129,.2)}
+.chip.active{background:var(--green);color:#fff;border-color:var(--green);box-shadow:0 4px 12px var(--green-glow);text-shadow:none}
 
 /* === HOME HEADER === */
-.user-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding:16px;background:linear-gradient(135deg,var(–card),var(–card-hover));border-radius:16px;border:1px solid rgba(255,255,255,.05)}
+.user-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding:16px;background:linear-gradient(135deg,var(--card),var(--card-hover));border-radius:16px;border:1px solid rgba(255,255,255,.05)}
 .user-info-l{flex:1}
-.user-greeting{font-size:13px;color:var(–gray);margin-bottom:2px}
+.user-greeting{font-size:13px;color:var(--gray);margin-bottom:2px}
 .user-name{font-size:20px;font-weight:900;color:#fff}
-.user-meta{font-size:12px;color:var(–gray);margin-top:4px;display:flex;gap:8px;align-items:center}
-.fitness-badge{padding:3px 10px;background:var(–green);color:#fff;border-radius:10px;font-weight:700;font-size:11px}
+.user-meta{font-size:12px;color:var(--gray);margin-top:4px;display:flex;gap:8px;align-items:center}
+.fitness-badge{padding:3px 10px;background:var(--green);color:#fff;border-radius:10px;font-weight:700;font-size:11px}
 .status-pill{display:flex;align-items:center;gap:6px;padding:6px 12px;background:rgba(255,255,255,.05);border-radius:20px;font-size:12px;font-weight:700}
 .status-dot{width:10px;height:10px;border-radius:50%;box-shadow:0 0 8px currentColor}
 
 /* === STATS GRID === */
 .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
-.stat-card{background:var(–card);padding:16px;border-radius:14px;border:1px solid rgba(255,255,255,.05);text-align:center}
-.stat-value{font-size:28px;font-weight:900;color:var(–green);line-height:1}
-.stat-label{font-size:12px;color:var(–gray);margin-top:6px;font-weight:600}
-.stat-card-progress{grid-column:1/-1;background:var(–card);padding:18px;border-radius:14px;border:1px solid rgba(255,255,255,.05)}
+.stat-card{background:var(--card);padding:16px;border-radius:14px;border:1px solid rgba(255,255,255,.05);text-align:center}
+.stat-value{font-size:28px;font-weight:900;color:var(--green);line-height:1}
+.stat-label{font-size:12px;color:var(--gray);margin-top:6px;font-weight:600}
+.stat-card-progress{grid-column:1/-1;background:var(--card);padding:18px;border-radius:14px;border:1px solid rgba(255,255,255,.05)}
 .progress-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
 .progress-title{font-size:14px;font-weight:700;color:#fff}
-.progress-count{font-size:20px;font-weight:900;color:var(–green)}
+.progress-count{font-size:20px;font-weight:900;color:var(--green)}
 .progress-bg{height:10px;background:rgba(255,255,255,.08);border-radius:6px;overflow:hidden}
-.progress-fill{height:100%;background:linear-gradient(90deg,var(–green),#34d399);border-radius:6px;transition:width .5s ease;box-shadow:0 0 12px var(–green-glow)}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--green),#34d399);border-radius:6px;transition:width .5s ease;box-shadow:0 0 12px var(--green-glow)}
 
 /* === SECTION TITLE === */
-.section-title{font-size:14px;font-weight:800;margin:20px 0 12px;color:var(–gray);text-transform:uppercase;letter-spacing:1px;display:flex;align-items:center;gap:8px}
+.section-title{font-size:14px;font-weight:800;margin:20px 0 12px;color:var(--gray);text-transform:uppercase;letter-spacing:1px;display:flex;align-items:center;gap:8px}
 
 /* === WORKOUT TASK CARDS (sequential lock) === */
-.task-card{display:flex;align-items:center;gap:14px;background:var(–card);padding:18px;border-radius:var(–radius);border:1.5px solid rgba(255,255,255,.08);margin-bottom:10px;transition:all .25s;position:relative;overflow:hidden}
+.task-card{display:flex;align-items:center;gap:14px;background:var(--card);padding:18px;border-radius:var(--radius);border:1.5px solid rgba(255,255,255,.08);margin-bottom:10px;transition:all .25s;position:relative;overflow:hidden}
 .task-card.active{cursor:pointer;border-color:rgba(16,185,129,.4)}
-.task-card.active:hover{background:var(–card-hover);border-color:var(–green)}
-.task-card.done{background:linear-gradient(135deg,rgba(16,185,129,.15),rgba(16,185,129,.05));border-color:var(–green)}
+.task-card.active:hover{background:var(--card-hover);border-color:var(--green)}
+.task-card.done{background:linear-gradient(135deg,rgba(16,185,129,.15),rgba(16,185,129,.05));border-color:var(--green)}
 .task-card.locked{opacity:.4;cursor:not-allowed}
 .task-card.locked .task-action{display:none}
-.task-card.locked::after{content:“🔒”;position:absolute;left:18px;top:50%;transform:translateY(-50%);font-size:20px;opacity:.6}
-.task-num{width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;color:#fff;flex-shrink:0;border:2px solid var(–gray-bg)}
-.task-card.active .task-num{background:var(–green);border-color:var(–green);box-shadow:0 0 16px var(–green-glow)}
-.task-card.done .task-num{background:var(–green);border-color:var(–green);color:#fff}
+.task-card.locked::after{content:"🔒";position:absolute;left:18px;top:50%;transform:translateY(-50%);font-size:20px;opacity:.6}
+.task-num{width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;color:#fff;flex-shrink:0;border:2px solid var(--gray-bg)}
+.task-card.active .task-num{background:var(--green);border-color:var(--green);box-shadow:0 0 16px var(--green-glow)}
+.task-card.done .task-num{background:var(--green);border-color:var(--green);color:#fff}
 .task-info{flex:1;text-align:right}
 .task-title{font-weight:800;font-size:15px;color:#fff;margin-bottom:2px}
-.task-status{font-size:13px;color:var(–gray)}
-.task-card.done .task-status{color:var(–green);font-weight:700}
-.task-action{padding:10px 16px;background:var(–green);color:#fff;border-radius:10px;font-weight:700;font-size:13px;border:none;cursor:pointer;flex-shrink:0;font-family:inherit;box-shadow:0 4px 12px var(–green-glow)}
+.task-status{font-size:13px;color:var(--gray)}
+.task-card.done .task-status{color:var(--green);font-weight:700}
+.task-action{padding:10px 16px;background:var(--green);color:#fff;border-radius:10px;font-weight:700;font-size:13px;border:none;cursor:pointer;flex-shrink:0;font-family:inherit;box-shadow:0 4px 12px var(--green-glow)}
 .task-action:active{transform:scale(.95)}
-.task-card.done .task-action{background:rgba(255,255,255,.1);color:var(–green)}
+.task-card.done .task-action{background:rgba(255,255,255,.1);color:var(--green)}
 
 /* === MED ROW === */
 .med-row{display:flex;gap:8px;margin-bottom:12px}
-.med-btn{flex:1;padding:12px 8px;border-radius:10px;text-align:center;font-size:13px;font-weight:700;cursor:pointer;border:1.5px solid rgba(148,163,184,.4);background:var(–card);color:#fff;transition:all .2s;user-select:none}
-.med-btn:hover{border-color:var(–green);background:var(–card-hover)}
+.med-btn{flex:1;padding:12px 8px;border-radius:10px;text-align:center;font-size:13px;font-weight:700;cursor:pointer;border:1.5px solid rgba(148,163,184,.4);background:var(--card);color:#fff;transition:all .2s;user-select:none}
+.med-btn:hover{border-color:var(--green);background:var(--card-hover)}
 .med-btn.active{color:#fff;border-color:transparent;box-shadow:0 4px 12px rgba(0,0,0,.3)}
-.med-btn.active[data-status=“כשיר”]{background:var(–green)}
-.med-btn.active[data-status=“מוגבל”]{background:var(–yellow)}
-.med-btn.active[data-status=“מושבת”]{background:var(–red)}
+.med-btn.active[data-status="כשיר"]{background:var(--green)}
+.med-btn.active[data-status="מוגבל"]{background:var(--yellow)}
+.med-btn.active[data-status="מושבת"]{background:var(--red)}
 
 /* === BOTTOM NAV === */
 .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:480px;max-width:100%;background:rgba(15,23,42,.95);backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-around;padding:8px 0 16px;z-index:50}
-.nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 12px;cursor:pointer;color:var(–gray);transition:color .2s;font-size:11px;font-weight:700;flex:1;border:none;background:transparent;font-family:inherit}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 12px;cursor:pointer;color:var(--gray);transition:color .2s;font-size:11px;font-weight:700;flex:1;border:none;background:transparent;font-family:inherit}
 .nav-item svg{width:24px;height:24px;fill:currentColor}
-.nav-item.active{color:var(–green)}
-.nav-item.active svg{filter:drop-shadow(0 0 6px var(–green-glow))}
+.nav-item.active{color:var(--green)}
+.nav-item.active svg{filter:drop-shadow(0 0 6px var(--green-glow))}
 
 /* === EXERCISE CARD === */
-.exercise-card{background:var(–card);border-radius:16px;overflow:hidden;margin-bottom:16px;border:1px solid rgba(255,255,255,.05)}
+.exercise-card{background:var(--card);border-radius:16px;overflow:hidden;margin-bottom:16px;border:1px solid rgba(255,255,255,.05)}
 .exercise-img{width:100%;height:180px;background:linear-gradient(135deg,#1e293b,#334155);position:relative;overflow:hidden}
 .exercise-img img{width:100%;height:100%;object-fit:cover;display:block}
-.exercise-img::after{content:””;position:absolute;inset:0;background:linear-gradient(180deg,transparent 60%,rgba(0,0,0,.7))}
+.exercise-img::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 60%,rgba(0,0,0,.7))}
 .exercise-img-fallback{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:60px;color:rgba(255,255,255,.2);background:linear-gradient(135deg,#1e293b,#334155)}
 .exercise-content{padding:16px 18px}
 .exercise-title{font-weight:800;font-size:16px;color:#fff;margin-bottom:8px}
 .exercise-stats{display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap}
-.exercise-stat{padding:4px 10px;background:rgba(16,185,129,.15);color:var(–green);border-radius:8px;font-size:12px;font-weight:700}
-.exercise-desc{font-size:13px;color:var(–gray);line-height:1.6}
+.exercise-stat{padding:4px 10px;background:rgba(16,185,129,.15);color:var(--green);border-radius:8px;font-size:12px;font-weight:700}
+.exercise-desc{font-size:13px;color:var(--gray);line-height:1.6}
 
 /* === MUSCLE GROUP === */
-.muscle-group{background:linear-gradient(135deg,var(–card),var(–card-hover));border-radius:14px;padding:14px 18px;margin-bottom:12px;border-right:4px solid var(–green);display:flex;align-items:center;gap:12px}
+.muscle-group{background:linear-gradient(135deg,var(--card),var(--card-hover));border-radius:14px;padding:14px 18px;margin-bottom:12px;border-right:4px solid var(--green);display:flex;align-items:center;gap:12px}
 .muscle-icon{font-size:28px}
 .muscle-info{flex:1}
 .muscle-name{font-weight:800;font-size:15px;color:#fff}
-.muscle-count{font-size:12px;color:var(–gray);margin-top:2px}
+.muscle-count{font-size:12px;color:var(--gray);margin-top:2px}
 
 /* === DAILY TIP === */
 .daily-tip-card{background:linear-gradient(135deg,rgba(59,130,246,.2),rgba(16,185,129,.1));border-radius:16px;padding:20px;margin-bottom:16px;border:1px solid rgba(59,130,246,.3)}
@@ -160,53 +159,53 @@ body{font-family:'Heebo',sans-serif;color:#fff;-webkit-font-smoothing:antialiase
 .daily-tip-text{color:rgba(255,255,255,.85);font-size:14px;line-height:1.6}
 
 /* === NUTRITION CARD === */
-.meal-card{background:var(–card);border-radius:14px;padding:16px 18px;margin-bottom:10px;border:1px solid rgba(255,255,255,.05);display:flex;gap:14px;align-items:start}
+.meal-card{background:var(--card);border-radius:14px;padding:16px 18px;margin-bottom:10px;border:1px solid rgba(255,255,255,.05);display:flex;gap:14px;align-items:start}
 .meal-icon{font-size:32px;flex-shrink:0}
 .meal-content{flex:1}
-.meal-time{font-size:11px;color:var(–green);font-weight:800;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.meal-time{font-size:11px;color:var(--green);font-weight:800;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
 .meal-title{font-weight:800;color:#fff;font-size:15px;margin-bottom:6px}
-.meal-desc{font-size:13px;color:var(–gray);line-height:1.5}
+.meal-desc{font-size:13px;color:var(--gray);line-height:1.5}
 .meal-macros{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
-.macro{padding:3px 8px;background:rgba(255,255,255,.05);border-radius:6px;font-size:11px;color:var(–gray);font-weight:700}
+.macro{padding:3px 8px;background:rgba(255,255,255,.05);border-radius:6px;font-size:11px;color:var(--gray);font-weight:700}
 .macro strong{color:#fff}
 
 /* === ADMIN === */
-.admin-card{display:flex;align-items:center;gap:12px;background:var(–card);padding:14px 16px;border-radius:var(–radius);border:1px solid rgba(255,255,255,.05);margin-bottom:10px}
+.admin-card{display:flex;align-items:center;gap:12px;background:var(--card);padding:14px 16px;border-radius:var(--radius);border:1px solid rgba(255,255,255,.05);margin-bottom:10px}
 .admin-info{flex:1;text-align:right}
 .admin-name{font-weight:700;font-size:15px;color:#fff}
-.admin-meta{font-size:13px;color:var(–gray);margin-top:2px}
-.del-btn{width:32px;height:32px;border-radius:50%;border:none;background:rgba(239,68,68,.2);color:var(–red);font-size:16px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.empty-msg{text-align:center;color:var(–gray);margin-top:28px;font-size:15px}
+.admin-meta{font-size:13px;color:var(--gray);margin-top:2px}
+.del-btn{width:32px;height:32px;border-radius:50%;border:none;background:rgba(239,68,68,.2);color:var(--red);font-size:16px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.empty-msg{text-align:center;color:var(--gray);margin-top:28px;font-size:15px}
 .admin-tools{margin-top:24px;padding-top:20px;border-top:1px solid rgba(255,255,255,.08)}
-.admin-tools-title{font-size:14px;font-weight:800;color:var(–gray);margin-bottom:14px;text-transform:uppercase;letter-spacing:1px}
+.admin-tools-title{font-size:14px;font-weight:800;color:var(--gray);margin-bottom:14px;text-transform:uppercase;letter-spacing:1px}
 .admin-btn-row{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
-.icon-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:14px;border-radius:var(–radius);font-size:15px;font-weight:700;cursor:pointer;border:none;font-family:inherit;color:#fff}
+.icon-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:14px;border-radius:var(--radius);font-size:15px;font-weight:700;cursor:pointer;border:none;font-family:inherit;color:#fff}
 .icon-btn svg{width:20px;height:20px;fill:#fff;flex-shrink:0}
-.icon-btn-blue{background:var(–blue)}
+.icon-btn-blue{background:var(--blue)}
 .icon-btn-teal{background:#0D9488}
-.icon-btn-amber{background:var(–yellow)}
-.last-report{font-size:12px;color:var(–gray);text-align:center;margin-top:8px}
-.auto-reset-info{font-size:12px;color:var(–blue);text-align:center;margin-top:4px;font-weight:600}
-.badge{display:inline-block;background:var(–green);color:#fff;font-size:12px;font-weight:700;padding:2px 10px;border-radius:12px;margin-right:6px}
+.icon-btn-amber{background:var(--yellow)}
+.last-report{font-size:12px;color:var(--gray);text-align:center;margin-top:8px}
+.auto-reset-info{font-size:12px;color:var(--blue);text-align:center;margin-top:4px;font-weight:600}
+.badge{display:inline-block;background:var(--green);color:#fff;font-size:12px;font-weight:700;padding:2px 10px;border-radius:12px;margin-right:6px}
 
 /* === MODAL === */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
 .modal-overlay.show{display:flex}
-.modal-box{background:var(–card);border-radius:20px;padding:28px 24px;max-width:420px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.5);animation:mu .3s ease both;max-height:90vh;overflow-y:auto;border:1px solid rgba(255,255,255,.1)}
+.modal-box{background:var(--card);border-radius:20px;padding:28px 24px;max-width:420px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.5);animation:mu .3s ease both;max-height:90vh;overflow-y:auto;border:1px solid rgba(255,255,255,.1)}
 @keyframes mu{from{opacity:0;transform:scale(.92) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
 .modal-title{font-size:18px;font-weight:900;margin-bottom:8px;color:#fff}
-.modal-msg{font-size:14px;color:var(–gray);margin-bottom:20px;line-height:1.6;white-space:pre-line}
+.modal-msg{font-size:14px;color:var(--gray);margin-bottom:20px;line-height:1.6;white-space:pre-line}
 .modal-btns{display:flex;gap:10px;flex-wrap:wrap}
 .modal-btns .btn{flex:1;padding:12px;font-size:14px;min-width:120px}
-.email-input{width:100%;padding:14px 16px;border-radius:var(–radius);border:1.5px solid rgba(255,255,255,.2);font-size:15px;font-family:inherit;text-align:left;direction:ltr;background:rgba(255,255,255,.05);color:#fff;margin-bottom:14px;outline:none}
+.email-input{width:100%;padding:14px 16px;border-radius:var(--radius);border:1.5px solid rgba(255,255,255,.2);font-size:15px;font-family:inherit;text-align:left;direction:ltr;background:rgba(255,255,255,.05);color:#fff;margin-bottom:14px;outline:none}
 
 /* === LOGOUT === */
-.logout-btn{display:block;width:100%;text-align:center;padding:14px;border-radius:var(–radius);font-weight:700;font-size:15px;cursor:pointer;border:none;background:transparent;color:var(–red);font-family:inherit;margin-top:20px}
+.logout-btn{display:block;width:100%;text-align:center;padding:14px;border-radius:var(--radius);font-weight:700;font-size:15px;cursor:pointer;border:none;background:transparent;color:var(--red);font-family:inherit;margin-top:20px}
 
 /* === LOADING === */
-.loading{position:fixed;inset:0;background:var(–dark);z-index:300;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;transition:opacity .4s}
+.loading{position:fixed;inset:0;background:var(--dark);z-index:300;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;transition:opacity .4s}
 .loading.hide{opacity:0;pointer-events:none}
-.spinner{width:40px;height:40px;border:4px solid rgba(255,255,255,.15);border-top-color:var(–green);border-radius:50%;animation:sp .8s linear infinite}
+.spinner{width:40px;height:40px;border:4px solid rgba(255,255,255,.15);border-top-color:var(--green);border-radius:50%;animation:sp .8s linear infinite}
 @keyframes sp{to{transform:rotate(360deg)}}
 .loading-txt{color:rgba(255,255,255,.7);font-size:14px}
 .fb-dot{position:fixed;top:10px;left:10px;z-index:50;width:10px;height:10px;border-radius:50%;opacity:.8}
@@ -225,8 +224,8 @@ body{font-family:'Heebo',sans-serif;color:#fff;-webkit-font-smoothing:antialiase
 .confetti-container.show{display:block}
 .confetti-piece{position:absolute;width:10px;height:10px;top:-20px;animation:confettiFall linear forwards}
 @keyframes confettiFall{
-0%{transform:translateY(0) rotate(0deg);opacity:1}
-100%{transform:translateY(100vh) rotate(720deg);opacity:0}
+  0%{transform:translateY(0) rotate(0deg);opacity:1}
+  100%{transform:translateY(100vh) rotate(720deg);opacity:0}
 }
 .completion-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:999;display:none;align-items:center;justify-content:center;backdrop-filter:blur(8px);animation:fadeIn .3s ease both}
 .completion-overlay.show{display:flex}
@@ -235,10 +234,10 @@ body{font-family:'Heebo',sans-serif;color:#fff;-webkit-font-smoothing:antialiase
 @keyframes popIn{from{opacity:0;transform:scale(.5) rotate(-10deg)}to{opacity:1;transform:scale(1) rotate(0)}}
 .completion-emoji{font-size:80px;margin-bottom:20px;animation:bounce 1s ease-in-out infinite}
 @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-15px)}}
-.completion-title{font-size:32px;font-weight:900;color:#fff;margin-bottom:12px;text-shadow:0 4px 20px var(–green-glow)}
+.completion-title{font-size:32px;font-weight:900;color:#fff;margin-bottom:12px;text-shadow:0 4px 20px var(--green-glow)}
 .completion-subtitle{font-size:16px;color:rgba(255,255,255,.85);margin-bottom:24px}
-.completion-streak{font-size:18px;color:var(–yellow);font-weight:800;margin-bottom:28px}
-.completion-btn{padding:14px 32px;background:var(–green);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:800;cursor:pointer;font-family:inherit;box-shadow:0 8px 24px var(–green-glow)}
+.completion-streak{font-size:18px;color:var(--yellow);font-weight:800;margin-bottom:28px}
+.completion-btn{padding:14px 32px;background:var(--green);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:800;cursor:pointer;font-family:inherit;box-shadow:0 8px 24px var(--green-glow)}
 
 /* === PAGE TRANSITIONS - Slide animations === */
 @keyframes slideInRight{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
@@ -249,24 +248,25 @@ body{font-family:'Heebo',sans-serif;color:#fff;-webkit-font-smoothing:antialiase
 /* === STREAK BADGE === */
 .streak-badge{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;border-radius:12px;font-weight:800;font-size:12px;box-shadow:0 2px 8px rgba(245,158,11,.4);animation:streakPulse 2s ease-in-out infinite}
 @keyframes streakPulse{0%,100%{box-shadow:0 2px 8px rgba(245,158,11,.4)}50%{box-shadow:0 4px 16px rgba(245,158,11,.7)}}
-.motivation-text{font-size:13px;color:var(–green);font-weight:700;margin-top:6px;animation:fadeIn .5s ease both}
+.motivation-text{font-size:13px;color:var(--green);font-weight:700;margin-top:6px;animation:fadeIn .5s ease both}
 
 /* === DONUT CHARTS for admin === */
 .donut-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
-.donut-card{background:var(–card);border-radius:14px;padding:14px 10px;text-align:center;border:1px solid rgba(255,255,255,.05);box-shadow:var(–shadow)}
+.donut-card{background:var(--card);border-radius:14px;padding:14px 10px;text-align:center;border:1px solid rgba(255,255,255,.05);box-shadow:var(--shadow)}
 .donut-svg{width:80px;height:80px;display:block;margin:0 auto 8px}
 .donut-bg{fill:none;stroke:rgba(255,255,255,.08);stroke-width:8}
 .donut-fg{fill:none;stroke-width:8;stroke-linecap:round;transform:rotate(-90deg);transform-origin:center;transition:stroke-dashoffset .8s ease}
 .donut-text{font-size:18px;font-weight:900;fill:#fff;text-anchor:middle;dominant-baseline:central}
-.donut-label{font-size:11px;color:var(–gray);font-weight:700;line-height:1.3}
-.donut-card-name{font-size:14px;font-weight:800;color:var(–green);margin-top:4px}
+.donut-label{font-size:11px;color:var(--gray);font-weight:700;line-height:1.3}
+.donut-card-name{font-size:14px;font-weight:800;color:var(--green);margin-top:4px}
 
 /* === QUICK FILTER BUTTON === */
 .quick-filter-row{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
 .quick-filter-btn{padding:10px 16px;border-radius:12px;border:1.5px solid rgba(148,163,184,.4);background:rgba(15,23,42,.7);color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:6px;transition:all .2s}
-.quick-filter-btn:hover{border-color:var(–green)}
-.quick-filter-btn.active{background:var(–red);border-color:var(–red);box-shadow:0 4px 12px rgba(239,68,68,.3)}
-.quick-filter-btn.active-amber{background:var(–yellow);border-color:var(–yellow);color:#fff}
+.quick-filter-btn:hover{border-color:var(--green)}
+.quick-filter-btn.active{background:var(--red);border-color:var(--red);box-shadow:0 4px 12px rgba(239,68,68,.3)}
+.quick-filter-btn.active-amber{background:var(--yellow);border-color:var(--yellow);color:#fff}
+
 
 /* === LEADERBOARD === */
 .lb-podium{display:flex;align-items:flex-end;justify-content:center;gap:8px;margin:20px 0 28px;padding:0 10px}
@@ -277,26 +277,26 @@ body{font-family:'Heebo',sans-serif;color:#fff;-webkit-font-smoothing:antialiase
 .lb-podium-item:nth-child(3){animation-delay:.7s}
 .lb-medal{font-size:32px;margin-bottom:4px;display:block}
 .lb-name{font-weight:900;color:#fff;font-size:14px;margin-bottom:4px}
-.lb-pct{font-size:13px;color:var(–gray);margin-bottom:8px;font-weight:700}
+.lb-pct{font-size:13px;color:var(--gray);margin-bottom:8px;font-weight:700}
 .lb-bar{border-radius:14px 14px 0 0;width:100%;display:flex;align-items:flex-start;justify-content:center;padding-top:10px;color:#fff;font-size:24px;font-weight:900;box-shadow:0 -4px 16px rgba(0,0,0,.3)}
 .lb-bar-1{background:linear-gradient(180deg,#FFD700,#F59E0B);height:120px}
 .lb-bar-2{background:linear-gradient(180deg,#C0C0C0,#9CA3AF);height:90px}
 .lb-bar-3{background:linear-gradient(180deg,#CD7F32,#92400E);height:65px}
-.lb-row{display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(–card);border-radius:14px;margin-bottom:8px;border:1px solid rgba(255,255,255,.05);transition:all .3s}
-.lb-row.mine{border-color:var(–green);background:linear-gradient(135deg,rgba(16,185,129,.15),var(–card));box-shadow:0 4px 16px rgba(16,185,129,.2)}
-.lb-rank{font-size:20px;font-weight:900;color:var(–gray);width:36px;text-align:center;flex-shrink:0}
-.lb-row.mine .lb-rank{color:var(–green)}
+.lb-row{display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--card);border-radius:14px;margin-bottom:8px;border:1px solid rgba(255,255,255,.05);transition:all .3s}
+.lb-row.mine{border-color:var(--green);background:linear-gradient(135deg,rgba(16,185,129,.15),var(--card));box-shadow:0 4px 16px rgba(16,185,129,.2)}
+.lb-rank{font-size:20px;font-weight:900;color:var(--gray);width:36px;text-align:center;flex-shrink:0}
+.lb-row.mine .lb-rank{color:var(--green)}
 .lb-info{flex:1}
 .lb-row-name{font-weight:800;color:#fff;font-size:15px;margin-bottom:2px}
-.lb-row-stats{font-size:12px;color:var(–gray)}
+.lb-row-stats{font-size:12px;color:var(--gray)}
 .lb-progress-mini{width:80px;flex-shrink:0}
 .lb-mini-bg{height:6px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden}
-.lb-mini-fg{height:100%;background:linear-gradient(90deg,var(–green),#34d399);border-radius:3px;transition:width .8s ease}
-.lb-mini-pct{font-size:11px;color:var(–gray);text-align:center;margin-top:2px;font-weight:700}
-.lb-toggle{display:flex;gap:6px;background:var(–card);padding:5px;border-radius:12px;margin-bottom:18px}
-.lb-toggle-btn{flex:1;padding:9px;border:none;background:transparent;color:var(–gray);border-radius:8px;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit;transition:all .2s}
-.lb-toggle-btn.active{background:var(–green);color:#fff}
-.lb-empty{text-align:center;padding:40px 20px;color:var(–gray)}
+.lb-mini-fg{height:100%;background:linear-gradient(90deg,var(--green),#34d399);border-radius:3px;transition:width .8s ease}
+.lb-mini-pct{font-size:11px;color:var(--gray);text-align:center;margin-top:2px;font-weight:700}
+.lb-toggle{display:flex;gap:6px;background:var(--card);padding:5px;border-radius:12px;margin-bottom:18px}
+.lb-toggle-btn{flex:1;padding:9px;border:none;background:transparent;color:var(--gray);border-radius:8px;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit;transition:all .2s}
+.lb-toggle-btn.active{background:var(--green);color:#fff}
+.lb-empty{text-align:center;padding:40px 20px;color:var(--gray)}
 .lb-live-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#ef4444;margin-left:6px;animation:liveDot 1.5s ease-in-out infinite}
 @keyframes liveDot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
 
@@ -323,14 +323,14 @@ body.day-mode .section-title{color:#64748B}
 body.day-mode .sub-greeting,body.day-mode .user-greeting,body.day-mode .user-meta,body.day-mode .task-status,body.day-mode .task-desc,body.day-mode .admin-meta,body.day-mode .meal-desc,body.day-mode .progress-count,body.day-mode .lb-row-stats,body.day-mode .lb-pct,body.day-mode .empty-msg,body.day-mode .lb-empty,body.day-mode .last-report,body.day-mode .field-label{color:#64748B}
 body.day-mode .progress-bg,body.day-mode .lb-mini-bg{background:#E2E8F0}
 body.day-mode .chip{background:#fff;color:#0F172A;border-color:#CBD5E1}
-body.day-mode .chip.active{background:var(–green);color:#fff}
+body.day-mode .chip.active{background:var(--green);color:#fff}
 body.day-mode .med-btn{background:#fff;color:#0F172A;border-color:#CBD5E1}
 body.day-mode .input{background:#fff;color:#0F172A;border-color:#CBD5E1}
 body.day-mode .input::placeholder{color:#94A3B8}
 body.day-mode .modal-box{background:#fff;color:#0F172A}
 body.day-mode .modal-title{color:#0F172A}
 body.day-mode .nav-item{color:#94A3B8}
-body.day-mode .nav-item.active{color:var(–green)}
+body.day-mode .nav-item.active{color:var(--green)}
 body.day-mode .bottom-nav{background:rgba(255,255,255,.95);border-top-color:#E2E8F0}
 body.day-mode .user-header{background:linear-gradient(135deg,#fff,#F1F5F9);border:1px solid #E2E8F0}
 body.day-mode .donut-bg{stroke:#E2E8F0}
@@ -340,22 +340,22 @@ body.day-mode .donut-label{color:#64748B}
 body.day-mode .quick-filter-btn{background:#fff;color:#0F172A;border-color:#CBD5E1}
 body.day-mode .lb-toggle{background:#F1F5F9}
 body.day-mode .lb-toggle-btn{color:#64748B}
-body.day-mode .lb-toggle-btn.active{background:var(–green);color:#fff}
+body.day-mode .lb-toggle-btn.active{background:var(--green);color:#fff}
 body.day-mode .home-header,body.day-mode .user-header{border-bottom-color:#E2E8F0}
 body.day-mode .check-circle{border-color:#94A3B8}
 body.day-mode .task-card.locked{opacity:.5}
 
 /* === SETTINGS PAGE === */
-.settings-row{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;background:var(–card);border-radius:14px;margin-bottom:10px;border:1px solid rgba(255,255,255,.05)}
+.settings-row{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;background:var(--card);border-radius:14px;margin-bottom:10px;border:1px solid rgba(255,255,255,.05)}
 .settings-icon{font-size:24px;margin-left:12px}
 .settings-info{flex:1;text-align:right}
 .settings-title{font-weight:800;color:#fff;font-size:15px;margin-bottom:2px}
 body.day-mode .settings-row{background:#fff;border-color:#E2E8F0}
 body.day-mode .settings-title{color:#0F172A}
-.settings-desc{font-size:12px;color:var(–gray)}
+.settings-desc{font-size:12px;color:var(--gray)}
 body.day-mode .settings-desc{color:#64748B}
 .toggle-switch{position:relative;width:50px;height:28px;background:rgba(255,255,255,.1);border-radius:14px;cursor:pointer;transition:background .2s;flex-shrink:0;border:none}
-.toggle-switch.on{background:var(–green)}
+.toggle-switch.on{background:var(--green)}
 .toggle-knob{position:absolute;top:3px;right:3px;width:22px;height:22px;background:#fff;border-radius:50%;transition:transform .2s;box-shadow:0 2px 6px rgba(0,0,0,.3)}
 .toggle-switch.on .toggle-knob{transform:translateX(-22px)}
 body.day-mode .toggle-switch{background:#CBD5E1}
@@ -363,6 +363,7 @@ body.day-mode .toggle-switch{background:#CBD5E1}
 /* === SWIPE INDICATOR (subtle) === */
 .swipe-hint{position:absolute;top:50%;transform:translateY(-50%);font-size:24px;color:rgba(255,255,255,.15);pointer-events:none;animation:swipeHint 2s ease-in-out infinite;display:none}
 @keyframes swipeHint{0%,100%{opacity:0;transform:translateY(-50%) translateX(0)}50%{opacity:.5;transform:translateY(-50%) translateX(-10px)}}
+
 
 /* === OFFLINE INDICATOR === */
 .offline-banner{position:fixed;top:0;left:50%;transform:translateX(-50%) translateY(-100%);width:100%;max-width:480px;background:linear-gradient(135deg,#F59E0B,#D97706);color:#fff;padding:8px 12px;text-align:center;font-size:12px;font-weight:800;z-index:99;transition:transform .35s ease;display:flex;align-items:center;justify-content:center;gap:6px}
@@ -382,26 +383,26 @@ body.day-mode .toggle-switch{background:#CBD5E1}
 
 /* === COUNTDOWN === */
 .countdown-card{background:linear-gradient(135deg,#0f172a,#1e293b);border-radius:18px;padding:20px;margin-bottom:16px;border:1px solid rgba(16,185,129,.2);position:relative;overflow:hidden}
-.countdown-card::before{content:””;position:absolute;top:-50%;right:-30%;width:200px;height:200px;background:radial-gradient(circle,rgba(16,185,129,.15) 0%,transparent 70%);pointer-events:none}
-.countdown-title{font-size:12px;color:var(–green);font-weight:800;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px;position:relative}
+.countdown-card::before{content:"";position:absolute;top:-50%;right:-30%;width:200px;height:200px;background:radial-gradient(circle,rgba(16,185,129,.15) 0%,transparent 70%);pointer-events:none}
+.countdown-title{font-size:12px;color:var(--green);font-weight:800;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px;position:relative}
 .countdown-subtitle{font-size:14px;color:#fff;font-weight:700;margin-bottom:14px;position:relative}
 .countdown-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;position:relative}
 .countdown-cell{background:rgba(255,255,255,.06);border-radius:12px;padding:12px 6px;text-align:center;backdrop-filter:blur(8px)}
-.countdown-num{font-size:26px;font-weight:900;color:var(–green);font-variant-numeric:tabular-nums;line-height:1;text-shadow:0 0 12px rgba(16,185,129,.4)}
-.countdown-label{font-size:10px;color:var(–gray);font-weight:700;margin-top:4px;text-transform:uppercase;letter-spacing:.5px}
+.countdown-num{font-size:26px;font-weight:900;color:var(--green);font-variant-numeric:tabular-nums;line-height:1;text-shadow:0 0 12px rgba(16,185,129,.4)}
+.countdown-label{font-size:10px;color:var(--gray);font-weight:700;margin-top:4px;text-transform:uppercase;letter-spacing:.5px}
 
 /* === SCORE CHART === */
-.chart-card{background:var(–card);padding:18px;border-radius:16px;margin-bottom:16px;border:1px solid rgba(255,255,255,.05)}
+.chart-card{background:var(--card);padding:18px;border-radius:16px;margin-bottom:16px;border:1px solid rgba(255,255,255,.05)}
 .chart-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
 .chart-title{font-weight:800;color:#fff;font-size:15px}
 .chart-stats{display:flex;gap:10px;font-size:12px}
 .chart-stat{display:flex;flex-direction:column;align-items:center;gap:2px}
-.chart-stat-val{font-size:18px;font-weight:900;color:var(–green)}
-.chart-stat-val.declining{color:var(–red)}
-.chart-stat-lbl{font-size:10px;color:var(–gray);font-weight:700}
+.chart-stat-val{font-size:18px;font-weight:900;color:var(--green)}
+.chart-stat-val.declining{color:var(--red)}
+.chart-stat-lbl{font-size:10px;color:var(--gray);font-weight:700}
 .chart-svg{width:100%;height:140px;display:block}
-.chart-add-btn{margin-top:12px;width:100%;padding:10px;background:rgba(16,185,129,.15);color:var(–green);border:1.5px dashed var(–green);border-radius:10px;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit}
-.chart-empty{text-align:center;padding:24px 12px;color:var(–gray);font-size:13px}
+.chart-add-btn{margin-top:12px;width:100%;padding:10px;background:rgba(16,185,129,.15);color:var(--green);border:1.5px dashed var(--green);border-radius:10px;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit}
+.chart-empty{text-align:center;padding:24px 12px;color:var(--gray);font-size:13px}
 
 /* === GENDER PILLS === */
 /* gender styles removed */
@@ -418,6 +419,7 @@ body.day-mode .toggle-switch{background:#CBD5E1}
 .bc-btn-clear{background:rgba(255,255,255,.15);color:#fff}
 .bc-current{background:rgba(0,0,0,.25);padding:10px 12px;border-radius:10px;margin-bottom:10px;font-size:12px;color:rgba(255,255,255,.85);border-right:3px solid #F59E0B}
 
+
 /* === COMMANDER BROADCAST === */
 .broadcast-banner{position:relative;background:linear-gradient(135deg,#dc2626,#991b1b);border-radius:16px;padding:16px 20px;margin-bottom:16px;color:#fff;display:flex;align-items:center;gap:14px;box-shadow:0 6px 24px rgba(220,38,38,.4);animation:broadcastPulse 2s ease-in-out infinite}
 @keyframes broadcastPulse{0%,100%{box-shadow:0 6px 24px rgba(220,38,38,.4)}50%{box-shadow:0 8px 32px rgba(220,38,38,.7)}}
@@ -431,7 +433,7 @@ body.day-mode .toggle-switch{background:#CBD5E1}
 
 /* === COUNTDOWN TIMER === */
 .countdown-card{background:linear-gradient(135deg,#1e3a8a,#3730a3);border-radius:16px;padding:18px 20px;margin-bottom:16px;color:#fff;box-shadow:0 6px 24px rgba(30,58,138,.3);position:relative;overflow:hidden}
-.countdown-card::before{content:””;position:absolute;top:-30px;right:-30px;width:100px;height:100px;background:rgba(255,255,255,.05);border-radius:50%}
+.countdown-card::before{content:"";position:absolute;top:-30px;right:-30px;width:100px;height:100px;background:rgba(255,255,255,.05);border-radius:50%}
 .countdown-label{font-size:12px;font-weight:800;letter-spacing:1px;opacity:.85;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:6px}
 .countdown-target{font-size:14px;font-weight:700;margin-bottom:14px;opacity:.95}
 .countdown-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
@@ -440,15 +442,15 @@ body.day-mode .toggle-switch{background:#CBD5E1}
 .countdown-label-small{font-size:10px;font-weight:700;opacity:.85;margin-top:4px;text-transform:uppercase;letter-spacing:.5px}
 
 /* === PROGRESS CHART === */
-.chart-card{background:var(–card);border-radius:16px;padding:18px;margin-bottom:16px;border:1px solid rgba(255,255,255,.05)}
+.chart-card{background:var(--card);border-radius:16px;padding:18px;margin-bottom:16px;border:1px solid rgba(255,255,255,.05)}
 .chart-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
 .chart-title{font-size:15px;font-weight:800;color:#fff;display:flex;align-items:center;gap:6px}
 .chart-stats{display:flex;gap:12px;margin-bottom:14px;flex-wrap:wrap}
 .chart-stat{flex:1;min-width:80px;background:rgba(255,255,255,.05);padding:10px;border-radius:10px;text-align:center}
-.chart-stat-val{font-size:20px;font-weight:900;color:var(–green);line-height:1}
-.chart-stat-lbl{font-size:11px;color:var(–gray);margin-top:4px;font-weight:700}
+.chart-stat-val{font-size:20px;font-weight:900;color:var(--green);line-height:1}
+.chart-stat-lbl{font-size:11px;color:var(--gray);margin-top:4px;font-weight:700}
 .chart-canvas-wrap{height:180px;position:relative}
-.chart-empty{text-align:center;padding:30px 20px;color:var(–gray);font-size:14px}
+.chart-empty{text-align:center;padding:30px 20px;color:var(--gray);font-size:14px}
 body.day-mode .chart-card{background:#fff;border-color:#E2E8F0}
 body.day-mode .chart-title{color:#0F172A}
 body.day-mode .chart-stat{background:#F1F5F9}
@@ -461,38 +463,38 @@ body.day-mode .chart-stat-lbl{color:#64748B}
 @keyframes pulseOffline{0%,100%{opacity:1}50%{opacity:.4}}
 
 /* === BROADCAST COMPOSE (for admin) === */
-.broadcast-compose{background:var(–card);border-radius:14px;padding:16px;margin-bottom:14px;border:1px solid rgba(255,255,255,.08)}
+.broadcast-compose{background:var(--card);border-radius:14px;padding:16px;margin-bottom:14px;border:1px solid rgba(255,255,255,.08)}
 .broadcast-compose-title{font-size:14px;font-weight:800;color:#fff;margin-bottom:10px;display:flex;align-items:center;gap:6px}
 .broadcast-textarea{width:100%;padding:12px 14px;border-radius:12px;border:1.5px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);color:#fff;font-size:14px;font-family:inherit;text-align:right;outline:none;resize:vertical;min-height:60px;margin-bottom:10px;line-height:1.5}
-.broadcast-textarea:focus{border-color:var(–red)}
-.broadcast-textarea::placeholder{color:var(–gray)}
+.broadcast-textarea:focus{border-color:var(--red)}
+.broadcast-textarea::placeholder{color:var(--gray)}
 body.day-mode .broadcast-compose{background:#fff;border-color:#E2E8F0}
 body.day-mode .broadcast-compose-title{color:#0F172A}
 body.day-mode .broadcast-textarea{background:#F8FAFC;color:#0F172A;border-color:#CBD5E1}
-.send-broadcast-btn{width:100%;padding:12px;background:var(–red);color:#fff;border:none;border-radius:12px;font-weight:800;font-size:14px;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px}
+.send-broadcast-btn{width:100%;padding:12px;background:var(--red);color:#fff;border:none;border-radius:12px;font-weight:800;font-size:14px;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px}
 .send-broadcast-btn:active{transform:scale(.97)}
-.broadcast-history-item{background:rgba(220,38,38,.1);border-right:3px solid var(–red);padding:10px 14px;border-radius:8px;margin-bottom:8px;display:flex;align-items:start;gap:10px}
+.broadcast-history-item{background:rgba(220,38,38,.1);border-right:3px solid var(--red);padding:10px 14px;border-radius:8px;margin-bottom:8px;display:flex;align-items:start;gap:10px}
 .broadcast-history-text{flex:1;font-size:13px;color:#fff;line-height:1.4}
 body.day-mode .broadcast-history-text{color:#0F172A}
-.broadcast-history-time{font-size:11px;color:var(–gray);white-space:nowrap}
-.broadcast-history-del{background:transparent;border:none;color:var(–red);cursor:pointer;font-size:14px;padding:2px 6px;font-family:inherit}
+.broadcast-history-time{font-size:11px;color:var(--gray);white-space:nowrap}
+.broadcast-history-del{background:transparent;border:none;color:var(--red);cursor:pointer;font-size:14px;padding:2px 6px;font-family:inherit}
 
 /* === COUNTDOWN COMPOSE FOR ADMIN === */
-.countdown-compose{background:var(–card);border-radius:14px;padding:16px;margin-bottom:14px;border:1px solid rgba(255,255,255,.08)}
+.countdown-compose{background:var(--card);border-radius:14px;padding:16px;margin-bottom:14px;border:1px solid rgba(255,255,255,.08)}
 .countdown-compose-title{font-size:14px;font-weight:800;color:#fff;margin-bottom:10px}
 body.day-mode .countdown-compose{background:#fff;border-color:#E2E8F0}
 body.day-mode .countdown-compose-title{color:#0F172A}
 .countdown-input{width:100%;padding:12px 14px;border-radius:12px;border:1.5px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);color:#fff;font-size:14px;font-family:inherit;text-align:right;outline:none;margin-bottom:8px}
-.countdown-input:focus{border-color:var(–blue)}
-.countdown-input[type=“datetime-local”]{direction:ltr;text-align:left}
+.countdown-input:focus{border-color:var(--blue)}
+.countdown-input[type="datetime-local"]{direction:ltr;text-align:left}
 body.day-mode .countdown-input{background:#F8FAFC;color:#0F172A;border-color:#CBD5E1}
 
 </style>
 </head>
 <body>
 
-<!-- Offline indicator -->
 
+<!-- Offline indicator -->
 <div class="offline-banner" id="offlineBanner">
   <svg viewBox="0 0 24 24"><path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4z" opacity=".4"/><path d="M12 11.5l-3.5 3.5L7 13.5l5-5 5 5-1.5 1.5z"/></svg>
   <span>מצב לא מקוון — שינויים יסונכרנו כשהחיבור יחזור</span>
@@ -503,14 +505,12 @@ body.day-mode .countdown-input{background:#F8FAFC;color:#0F172A;border-color:#CB
 <div class="fb-dot" id="fbDot" style="background:var(--yellow)"></div>
 
 <!-- VIDEO BG (always rendered, only shown when needed) -->
-
 <div class="video-bg" id="vBg"><video id="bgV" autoplay muted loop playsinline webkit-playsinline preload="auto" style="background:transparent" onerror="this.style.opacity='0'"></video></div>
 <div class="video-overlay" id="vOv"></div>
 
 <div class="app" id="app">
 
   <!-- WELCOME -->
-
   <div class="page video-bg-page active" id="page-welcome" style="justify-content:center;align-items:center;text-align:center">
     <div class="logo-ring"><img id="logoImg" alt="לוגו"></div>
     <div class="main-title">כושר מחזור ע"ה</div>
@@ -520,7 +520,6 @@ body.day-mode .countdown-input{background:#F8FAFC;color:#0F172A;border-color:#CB
   </div>
 
   <!-- LOGIN -->
-
   <div class="page video-bg-page" id="page-login" style="justify-content:center;align-items:center;text-align:center">
     <div class="logo-ring" style="width:90px;height:90px"><img id="logoImg2" alt="לוגו"></div>
     <div class="main-title">כניסה</div>
@@ -531,31 +530,27 @@ body.day-mode .countdown-input{background:#F8FAFC;color:#0F172A;border-color:#CB
   </div>
 
   <!-- REGISTER -->
-
   <div class="page video-bg-page" id="page-register">
     <div style="height:20px"></div>
     <div class="main-title">הרשמה למערכת</div>
     <input class="input" id="regId" placeholder="מספר אישי" inputmode="numeric">
     <input class="input" id="regName" placeholder="שם מלא">
+    <input class="input" id="regPhone" placeholder="טלפון נייד (לקבלת הודעות בוואטסאפ)" inputmode="tel" type="tel">
     <input class="input" id="regPass" placeholder="סיסמה" type="password">
     <input class="input" id="regScore" placeholder="ציון בר-אור עדכני (מספר)" inputmode="numeric">
-
-```
-<div class="field-label" style="margin-top:6px">📊 נתוני פתיחה (אופציונלי) — בסיס למעקב אחר השיפור:</div>
-<input class="input" id="regBarOrTime" placeholder='זמן ריצת בר-אור 2 ק"מ (לדוגמה: 09:30)'>
-<input class="input" id="regPushups" placeholder="מספר שכיבות סמיכה ברצף" inputmode="numeric">
-<input class="input" id="regPullups" placeholder="מספר עליות מתח / TRX ברצף" inputmode="numeric">
-
-<div class="field-label">מחלקה:</div>
-<div class="chips" id="regChips"></div>
-<button class="btn btn-solid" onclick="doReg()">צור פרופיל חניך</button>
-<div style="text-align:center"><span class="back-link" onclick="clr();go('welcome')">ביטול</span></div>
-```
-
+    
+    <div class="field-label" style="margin-top:6px">📊 נתוני פתיחה (אופציונלי) — בסיס למעקב אחר השיפור:</div>
+    <input class="input" id="regBarOrTime" placeholder='זמן ריצת בר-אור 2 ק"מ (לדוגמה: 09:30)'>
+    <input class="input" id="regPushups" placeholder="מספר שכיבות סמיכה ברצף" inputmode="numeric">
+    <input class="input" id="regPullups" placeholder="מספר עליות מתח / TRX ברצף" inputmode="numeric">
+    
+    <div class="field-label">מחלקה:</div>
+    <div class="chips" id="regChips"></div>
+    <button class="btn btn-solid" onclick="doReg()">צור פרופיל חניך</button>
+    <div style="text-align:center"><span class="back-link" onclick="clr();go('welcome')">ביטול</span></div>
   </div>
 
   <!-- HOME (Dashboard) -->
-
   <div class="page" id="page-home">
     <div class="user-header">
       <div class="user-info-l">
@@ -569,49 +564,39 @@ body.day-mode .countdown-input{background:#F8FAFC;color:#0F172A;border-color:#CB
       <div class="status-pill"><div class="status-dot" id="hDot"></div><span id="hStatus"></span></div>
     </div>
 
-```
-<!-- הודעת מפקד (אם קיימת) -->
-<div id="broadcastHolder"></div>
-
-<!-- ספירה לאחור לסיום הקורס -->
-<div id="countdownHolder"></div>
-
-<!-- BROADCAST FROM COMMANDER -->
-<div id="broadcastContainer"></div>
-
-<!-- COURSE COUNTDOWN -->
-<div id="countdownContainer"></div>
-
-<div class="stats-grid">
-  <div class="stat-card-progress">
-    <div class="progress-row">
-      <div class="progress-title">⚡ אימונים השבוע</div>
-      <div class="progress-count" id="hCount">0/3</div>
+    <!-- BROADCAST FROM COMMANDER -->
+    <div id="broadcastContainer"></div>
+    
+    <!-- COURSE COUNTDOWN -->
+    <div id="countdownContainer"></div>
+    
+    <div class="stats-grid">
+      <div class="stat-card-progress">
+        <div class="progress-row">
+          <div class="progress-title">⚡ אימונים השבוע</div>
+          <div class="progress-count" id="hCount">0/3</div>
+        </div>
+        <div class="progress-bg"><div class="progress-fill" id="hFill"></div></div>
+        <div class="motivation-text" id="motivationMsg" style="display:none;text-align:center"></div>
+      </div>
     </div>
-    <div class="progress-bg"><div class="progress-fill" id="hFill"></div></div>
-    <div class="motivation-text" id="motivationMsg" style="display:none;text-align:center"></div>
-  </div>
-</div>
 
-<!-- כפתור מעבר ללוח מנהל - מוצג רק אם המשתמש הוא מנהל -->
-<button id="adminSwitchBtn" onclick="go('admin')" style="display:none;width:100%;padding:14px;border-radius:14px;border:none;background:linear-gradient(135deg,#3B82F6,#1e40af);color:#fff;font-size:15px;font-weight:800;font-family:inherit;cursor:pointer;margin-bottom:16px;box-shadow:0 4px 14px rgba(59,130,246,.3);display:flex;align-items:center;justify-content:center;gap:8px">
-  👑 עבור ללוח בקרה מנהל
-</button>
+    <!-- כפתור מעבר ללוח מנהל - מוצג רק אם המשתמש הוא מנהל -->
+    <button id="adminSwitchBtn" onclick="go('admin')" style="display:none;width:100%;padding:14px;border-radius:14px;border:none;background:linear-gradient(135deg,#3B82F6,#1e40af);color:#fff;font-size:15px;font-weight:800;font-family:inherit;cursor:pointer;margin-bottom:16px;box-shadow:0 4px 14px rgba(59,130,246,.3);display:flex;align-items:center;justify-content:center;gap:8px">
+      👑 עבור ללוח בקרה מנהל
+    </button>
 
-<div class="section-title">📋 משימות שבועיות</div>
-<div id="taskList"></div>
+    <div class="section-title">📋 משימות שבועיות</div>
+    <div id="taskList"></div>
 
-<div class="section-title">🏥 מצב רפואי</div>
-<div class="med-row" id="mRow"></div>
-
-<!-- PROGRESS CHART (Bar-Or scoreHistory) -->
-<div id="progressChartContainer"></div>
-```
-
+    <div class="section-title">🏥 מצב רפואי</div>
+    <div class="med-row" id="mRow"></div>
+    
+    <!-- PROGRESS CHART (Bar-Or scoreHistory) -->
+    <div id="progressChartContainer"></div>
   </div>
 
   <!-- WORKOUTS PAGE -->
-
   <div class="page" id="page-workouts">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
       <div class="main-title" style="font-size:22px;flex:1">💪 תכנית האימונים שלך</div>
@@ -621,7 +606,6 @@ body.day-mode .countdown-input{background:#F8FAFC;color:#0F172A;border-color:#CB
   </div>
 
   <!-- NUTRITION PAGE -->
-
   <div class="page" id="page-nutrition">
     <div class="main-title" style="font-size:22px;margin-bottom:8px">🥗 תזונה יומית</div>
     <div style="color:var(--gray);font-size:13px;margin-bottom:20px">תפריט מותאם לאימוני קורס קצינים</div>
@@ -629,7 +613,6 @@ body.day-mode .countdown-input{background:#F8FAFC;color:#0F172A;border-color:#CB
   </div>
 
   <!-- TIPS PAGE -->
-
   <div class="page" id="page-tips">
     <div class="main-title" style="font-size:22px;margin-bottom:8px">💡 טיפים מקצועיים</div>
     <div style="color:var(--gray);font-size:13px;margin-bottom:20px">משתנה מדי יום</div>
@@ -638,7 +621,6 @@ body.day-mode .countdown-input{background:#F8FAFC;color:#0F172A;border-color:#CB
   </div>
 
   <!-- ADMIN -->
-
   <div class="page" id="page-admin">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:10px">
       <div class="main-title" style="color:#fff;margin:0;flex:1">לוח בקרה למפקדים</div>
@@ -649,201 +631,165 @@ body.day-mode .countdown-input{background:#F8FAFC;color:#0F172A;border-color:#CB
     <div id="rBanner"></div>
     <div class="chips" id="aChips"></div>
     <div id="aList"></div>
-    <!-- שידור הודעה לחניכים -->
-    <div class="bc-editor">
-      <div class="bc-editor-title">📣 שלח הודעה לכל החניכים</div>
-      <div id="bcCurrentHolder"></div>
-      <textarea class="bc-textarea" id="bcText" placeholder="כתוב הודעה לכל החניכים... (לדוגמה: מחר ב-05:30 כולם על מדי ספורט, בוחן מסלול פלוגתי!)"></textarea>
-      <div class="bc-actions">
-        <button class="bc-btn bc-btn-clear" onclick="clearBroadcast()">🗑️ נקה הודעה קיימת</button>
-        <button class="bc-btn bc-btn-send" onclick="sendBroadcast()">📣 שלח לכולם</button>
-      </div>
+
+    <!-- BROADCAST COMPOSE -->
+    <div class="broadcast-compose">
+      <div class="broadcast-compose-title">📣 שליחת הודעה דחופה לכל החניכים</div>
+      <textarea class="broadcast-textarea" id="broadcastInput" placeholder="לדוגמה: מחר 05:30 כולם על מדי ספורט, בוחן מסלול פלוגתי!"></textarea>
+      <button class="send-broadcast-btn" onclick="sendBroadcast()">
+        <span>📢</span><span>שלח לכולם</span>
+      </button>
+      <div id="broadcastHistory" style="margin-top:14px"></div>
     </div>
-
-```
-<!-- הגדרת תאריך סיום הקורס -->
-<div style="background:linear-gradient(135deg,#0f172a,#1e293b);padding:18px;border-radius:16px;margin-bottom:16px;border:1px solid rgba(16,185,129,.2)">
-  <div style="color:#fff;font-weight:900;font-size:14px;margin-bottom:10px;display:flex;align-items:center;gap:8px">⏳ ספירה לאחור לסיום הקורס</div>
-  <input type="date" id="courseEndDate" style="width:100%;padding:12px;background:rgba(0,0,0,.3);border:1.5px solid rgba(255,255,255,.2);border-radius:10px;color:#fff;font-size:14px;font-family:inherit;direction:ltr;margin-bottom:10px;outline:none;color-scheme:dark">
-  <input type="text" id="courseEndLabel" placeholder="לדוגמה: טקס סיום קורס" style="width:100%;padding:12px;background:rgba(0,0,0,.3);border:1.5px solid rgba(255,255,255,.2);border-radius:10px;color:#fff;font-size:14px;font-family:inherit;text-align:right;margin-bottom:10px;outline:none">
-  <button onclick="saveCourseEnd()" style="width:100%;padding:11px;background:var(--green);color:#fff;border:none;border-radius:10px;font-weight:800;cursor:pointer;font-family:inherit;font-size:13px">💾 שמור</button>
-</div>
-
-<!-- BROADCAST COMPOSE -->
-<div class="broadcast-compose">
-  <div class="broadcast-compose-title">📣 שליחת הודעה דחופה לכל החניכים</div>
-  <textarea class="broadcast-textarea" id="broadcastInput" placeholder="לדוגמה: מחר 05:30 כולם על מדי ספורט, בוחן מסלול פלוגתי!"></textarea>
-  <button class="send-broadcast-btn" onclick="sendBroadcast()">
-    <span>📢</span><span>שלח לכולם</span>
-  </button>
-  <div id="broadcastHistory" style="margin-top:14px"></div>
-</div>
-
-<!-- COUNTDOWN SETUP -->
-<div class="countdown-compose">
-  <div class="countdown-compose-title">⏳ קביעת ספירה לאחור — אירוע משמעותי</div>
-  <input class="countdown-input" id="countdownTitle" placeholder="לדוגמה: בר-אור סוף קורס" maxlength="40">
-  <input class="countdown-input" type="datetime-local" id="countdownDate">
-  <button class="send-broadcast-btn" style="background:var(--blue)" onclick="setCountdown()">
-    <span>⏰</span><span>הצב ספירה לאחור</span>
-  </button>
-  <div id="countdownPreview" style="margin-top:10px;font-size:12px;color:var(--gray);text-align:center"></div>
-</div>
-
-<div class="admin-tools">
-  <div class="admin-tools-title">⚙️ כלי ניהול ודוחות</div>
-  <div class="admin-btn-row">
-    <button class="icon-btn icon-btn-blue" onclick="expDep()"><svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>ייצוא דוח מחלקה (CSV)</button>
-    <button class="icon-btn icon-btn-teal" onclick="expAll()"><svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>ייצוא דוח כל המחלקות</button>
-    <button class="icon-btn icon-btn-amber" onclick="emailModal()"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>שלח דוח למייל</button>
+    
+    <!-- COUNTDOWN SETUP -->
+    <div class="countdown-compose">
+      <div class="countdown-compose-title">⏳ קביעת ספירה לאחור — אירוע משמעותי</div>
+      <input class="countdown-input" id="countdownTitle" placeholder="לדוגמה: בר-אור סוף קורס" maxlength="40">
+      <input class="countdown-input" type="datetime-local" id="countdownDate">
+      <button class="send-broadcast-btn" style="background:var(--blue)" onclick="setCountdown()">
+        <span>⏰</span><span>הצב ספירה לאחור</span>
+      </button>
+      <div id="countdownPreview" style="margin-top:10px;font-size:12px;color:var(--gray);text-align:center"></div>
+    </div>
+    
+    <div class="admin-tools">
+      <div class="admin-tools-title">⚙️ כלי ניהול ודוחות</div>
+      <div class="admin-btn-row">
+        <button class="icon-btn icon-btn-blue" onclick="expDep()"><svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>ייצוא דוח מחלקה (CSV)</button>
+        <button class="icon-btn icon-btn-teal" onclick="expAll()"><svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>ייצוא דוח כל המחלקות</button>
+        <button class="icon-btn icon-btn-amber" onclick="emailModal()"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>שלח דוח למייל</button>
+      </div>
+      <div class="last-report" id="lrInfo"></div>
+      <div class="auto-reset-info">⏰ איפוס אוטומטי כל מוצ"ש 23:59</div>
+    </div>
+    <div style="margin-top:20px">
+      <button class="btn btn-danger" style="background:#7f1d1d" onclick="confirmFullReset()">מחיקת מסד נתונים ואיפוס</button>
+      <button class="btn btn-ghost" style="margin-top:10px" onclick="doLogout()">התנתק</button>
+    </div>
   </div>
-  <div class="last-report" id="lrInfo"></div>
-  <div class="auto-reset-info">⏰ איפוס אוטומטי כל מוצ"ש 23:59</div>
-</div>
-<div style="margin-top:20px">
-  <button class="btn btn-danger" style="background:#7f1d1d" onclick="confirmFullReset()">מחיקת מסד נתונים ואיפוס</button>
-  <button class="btn btn-ghost" style="margin-top:10px" onclick="doLogout()">התנתק</button>
-</div>
-```
 
-  </div>
+
 
   <!-- LEADERBOARD PAGE -->
-
   <div class="page" id="page-leaderboard">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
       <div class="main-title" style="font-size:22px;color:#fff;margin:0">🏆 טבלת אלופים</div>
       <span style="font-size:11px;color:var(--gray);font-weight:700">LIVE<span class="lb-live-dot"></span></span>
     </div>
     <div style="color:var(--gray);font-size:13px;margin-bottom:16px">תחרות שבועית בין המחלקות והחניכים</div>
-
-```
-<div class="lb-toggle">
-  <button class="lb-toggle-btn active" data-lb="dept" onclick="setLbView('dept')">🏅 לפי מחלקה</button>
-  <button class="lb-toggle-btn" data-lb="cadets" onclick="setLbView('cadets')">⭐ לפי חניך</button>
-</div>
-
-<div id="leaderboardContent"></div>
-
-<!-- כפתור הגדרות -->
-<div style="margin-top:30px;padding-top:20px;border-top:1px solid rgba(255,255,255,.05)">
-  <button onclick="navTo('settings')" style="width:100%;padding:14px;border-radius:14px;border:none;background:var(--card);color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px">
-    ⚙️ הגדרות והעדפות
-  </button>
-</div>
-```
-
+    
+    <div class="lb-toggle">
+      <button class="lb-toggle-btn active" data-lb="dept" onclick="setLbView('dept')">🏅 לפי מחלקה</button>
+      <button class="lb-toggle-btn" data-lb="cadets" onclick="setLbView('cadets')">⭐ לפי חניך</button>
+    </div>
+    
+    <div id="leaderboardContent"></div>
+    
+    <!-- כפתור הגדרות -->
+    <div style="margin-top:30px;padding-top:20px;border-top:1px solid rgba(255,255,255,.05)">
+      <button onclick="navTo('settings')" style="width:100%;padding:14px;border-radius:14px;border:none;background:var(--card);color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px">
+        ⚙️ הגדרות והעדפות
+      </button>
+    </div>
   </div>
 
   <!-- SETTINGS PAGE -->
-
   <div class="page" id="page-settings">
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
       <button onclick="navTo('leaderboard')" style="background:transparent;border:none;color:var(--green);font-size:24px;cursor:pointer;font-family:inherit;padding:0">→</button>
       <div class="main-title" style="font-size:22px;color:#fff;margin:0">⚙️ הגדרות</div>
     </div>
-
-```
-<div class="settings-row">
-  <div class="settings-icon">☀️</div>
-  <div class="settings-info">
-    <div class="settings-title">מצב יום</div>
-    <div class="settings-desc">צבעים בהירים לקריאה בשמש</div>
-  </div>
-  <button class="toggle-switch" id="dayModeToggle" onclick="toggleDayMode()"><div class="toggle-knob"></div></button>
-</div>
-
-<div class="settings-row">
-  <div class="settings-icon">📳</div>
-  <div class="settings-info">
-    <div class="settings-title">רטט</div>
-    <div class="settings-desc">פידבק מגע בלחיצות</div>
-  </div>
-  <button class="toggle-switch on" id="hapticToggle" onclick="toggleHaptic()"><div class="toggle-knob"></div></button>
-</div>
-
-<div class="settings-row">
-  <div class="settings-icon">📱</div>
-  <div class="settings-info">
-    <div class="settings-title">התקן את האפליקציה</div>
-    <div class="settings-desc">הוסף למסך הבית של הטלפון</div>
-  </div>
-  <button onclick="triggerInstall()" style="padding:10px 16px;background:var(--green);color:#fff;border:none;border-radius:10px;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit">התקן</button>
-</div>
-
-<div class="settings-row">
-  <div class="settings-icon">↔️</div>
-  <div class="settings-info">
-    <div class="settings-title">החלקה למעבר מסכים</div>
-    <div class="settings-desc">החלק ימינה/שמאלה כדי לעבור בין הלשוניות</div>
-  </div>
-  <button class="toggle-switch on" id="swipeToggle" onclick="toggleSwipe()"><div class="toggle-knob"></div></button>
-</div>
-
-<div style="margin-top:20px;padding:16px;background:var(--card);border-radius:14px;text-align:center;color:var(--gray);font-size:12px">
-  גרסה 2.0 • כושר מחזור ע"ה
-</div>
-
-<button class="logout-btn" onclick="doLogout()" style="margin-top:20px">התנתק ממערכת</button>
-```
-
+    
+    <div class="settings-row">
+      <div class="settings-icon">☀️</div>
+      <div class="settings-info">
+        <div class="settings-title">מצב יום</div>
+        <div class="settings-desc">צבעים בהירים לקריאה בשמש</div>
+      </div>
+      <button class="toggle-switch" id="dayModeToggle" onclick="toggleDayMode()"><div class="toggle-knob"></div></button>
+    </div>
+    
+    <div class="settings-row">
+      <div class="settings-icon">📳</div>
+      <div class="settings-info">
+        <div class="settings-title">רטט</div>
+        <div class="settings-desc">פידבק מגע בלחיצות</div>
+      </div>
+      <button class="toggle-switch on" id="hapticToggle" onclick="toggleHaptic()"><div class="toggle-knob"></div></button>
+    </div>
+    
+    <div class="settings-row">
+      <div class="settings-icon">📱</div>
+      <div class="settings-info">
+        <div class="settings-title">התקן את האפליקציה</div>
+        <div class="settings-desc">הוסף למסך הבית של הטלפון</div>
+      </div>
+      <button onclick="triggerInstall()" style="padding:10px 16px;background:var(--green);color:#fff;border:none;border-radius:10px;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit">התקן</button>
+    </div>
+    
+    <div class="settings-row">
+      <div class="settings-icon">↔️</div>
+      <div class="settings-info">
+        <div class="settings-title">החלקה למעבר מסכים</div>
+        <div class="settings-desc">החלק ימינה/שמאלה כדי לעבור בין הלשוניות</div>
+      </div>
+      <button class="toggle-switch on" id="swipeToggle" onclick="toggleSwipe()"><div class="toggle-knob"></div></button>
+    </div>
+    
+    <div style="margin-top:20px;padding:16px;background:var(--card);border-radius:14px;text-align:center;color:var(--gray);font-size:12px">
+      גרסה 2.0 • כושר מחזור ע"ה
+    </div>
+    
+    <button class="logout-btn" onclick="doLogout()" style="margin-top:20px">התנתק ממערכת</button>
   </div>
 
   <!-- TIMER & TOOLS PAGE -->
-
   <div class="page" id="page-timer">
     <div class="main-title" style="font-size:22px;margin-bottom:8px;color:#fff">⏱️ טיימר וכלים</div>
     <div style="color:var(--gray);font-size:13px;margin-bottom:20px">שעון עצר לאימונים ועוד</div>
-
-```
-<div class="timer-card" style="margin-bottom:20px">
-  <div class="timer-display" id="tDisp2">00:00</div>
-  <div class="timer-btns">
-    <button class="timer-btn timer-btn-go" id="tBtn2" onclick="tToggle2()">הפעל טיימר</button>
-    <button class="timer-btn timer-btn-reset" onclick="tReset2()">איפוס</button>
-  </div>
-</div>
-
-<!-- שעוני מנוחה מהירים -->
-<div style="font-size:14px;font-weight:800;color:var(--gray);margin:16px 0 12px;text-transform:uppercase;letter-spacing:1px">⚡ טיימר מנוחה מהיר</div>
-<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px">
-  <button class="quick-filter-btn" style="justify-content:center" onclick="quickRest(30)">30ש'</button>
-  <button class="quick-filter-btn" style="justify-content:center" onclick="quickRest(60)">60ש'</button>
-  <button class="quick-filter-btn" style="justify-content:center" onclick="quickRest(90)">90ש'</button>
-  <button class="quick-filter-btn" style="justify-content:center" onclick="quickRest(120)">2 דקות</button>
-  <button class="quick-filter-btn" style="justify-content:center" onclick="quickRest(180)">3 דקות</button>
-  <button class="quick-filter-btn" style="justify-content:center" onclick="quickRest(300)">5 דקות</button>
-</div>
-
-<div id="restCountdown" style="display:none;background:linear-gradient(135deg,#1e40af,#3b82f6);padding:24px;border-radius:16px;text-align:center;margin-bottom:16px">
-  <div style="color:rgba(255,255,255,.8);font-size:14px;font-weight:700;margin-bottom:8px">מנוחה</div>
-  <div id="restTime" style="font-size:48px;font-weight:900;color:#fff;font-variant-numeric:tabular-nums"></div>
-  <button onclick="cancelRest()" style="margin-top:12px;padding:8px 20px;background:rgba(255,255,255,.2);color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-family:inherit">ביטול</button>
-</div>
-```
-
+    
+    <div class="timer-card" style="margin-bottom:20px">
+      <div class="timer-display" id="tDisp2">00:00</div>
+      <div class="timer-btns">
+        <button class="timer-btn timer-btn-go" id="tBtn2" onclick="tToggle2()">הפעל טיימר</button>
+        <button class="timer-btn timer-btn-reset" onclick="tReset2()">איפוס</button>
+      </div>
+    </div>
+    
+    <!-- שעוני מנוחה מהירים -->
+    <div style="font-size:14px;font-weight:800;color:var(--gray);margin:16px 0 12px;text-transform:uppercase;letter-spacing:1px">⚡ טיימר מנוחה מהיר</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px">
+      <button class="quick-filter-btn" style="justify-content:center" onclick="quickRest(30)">30ש'</button>
+      <button class="quick-filter-btn" style="justify-content:center" onclick="quickRest(60)">60ש'</button>
+      <button class="quick-filter-btn" style="justify-content:center" onclick="quickRest(90)">90ש'</button>
+      <button class="quick-filter-btn" style="justify-content:center" onclick="quickRest(120)">2 דקות</button>
+      <button class="quick-filter-btn" style="justify-content:center" onclick="quickRest(180)">3 דקות</button>
+      <button class="quick-filter-btn" style="justify-content:center" onclick="quickRest(300)">5 דקות</button>
+    </div>
+    
+    <div id="restCountdown" style="display:none;background:linear-gradient(135deg,#1e40af,#3b82f6);padding:24px;border-radius:16px;text-align:center;margin-bottom:16px">
+      <div style="color:rgba(255,255,255,.8);font-size:14px;font-weight:700;margin-bottom:8px">מנוחה</div>
+      <div id="restTime" style="font-size:48px;font-weight:900;color:#fff;font-variant-numeric:tabular-nums"></div>
+      <button onclick="cancelRest()" style="margin-top:12px;padding:8px 20px;background:rgba(255,255,255,.2);color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-family:inherit">ביטול</button>
+    </div>
   </div>
 
   <!-- KNOWLEDGE HUB PAGE (tabs for workouts/nutrition/tips) -->
-
   <div class="page" id="page-knowledge">
     <div class="main-title" style="font-size:22px;margin-bottom:14px;color:#fff">💡 ידע מקצועי</div>
-
-```
-<!-- Knowledge tabs -->
-<div style="display:flex;gap:8px;margin-bottom:20px;background:var(--card);padding:6px;border-radius:14px">
-  <button class="knowledge-tab active" data-tab="workouts" onclick="setKnowledgeTab('workouts')" style="flex:1;padding:10px;border:none;background:var(--green);color:#fff;border-radius:10px;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit;transition:all .2s">💪 אימונים</button>
-  <button class="knowledge-tab" data-tab="nutrition" onclick="setKnowledgeTab('nutrition')" style="flex:1;padding:10px;border:none;background:transparent;color:var(--gray);border-radius:10px;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit;transition:all .2s">🥗 תזונה</button>
-  <button class="knowledge-tab" data-tab="tips" onclick="setKnowledgeTab('tips')" style="flex:1;padding:10px;border:none;background:transparent;color:var(--gray);border-radius:10px;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit;transition:all .2s">💡 טיפים</button>
-</div>
-
-<div id="knowledgeContent"></div>
-```
-
+    
+    <!-- Knowledge tabs -->
+    <div style="display:flex;gap:8px;margin-bottom:20px;background:var(--card);padding:6px;border-radius:14px">
+      <button class="knowledge-tab active" data-tab="workouts" onclick="setKnowledgeTab('workouts')" style="flex:1;padding:10px;border:none;background:var(--green);color:#fff;border-radius:10px;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit;transition:all .2s">💪 אימונים</button>
+      <button class="knowledge-tab" data-tab="nutrition" onclick="setKnowledgeTab('nutrition')" style="flex:1;padding:10px;border:none;background:transparent;color:var(--gray);border-radius:10px;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit;transition:all .2s">🥗 תזונה</button>
+      <button class="knowledge-tab" data-tab="tips" onclick="setKnowledgeTab('tips')" style="flex:1;padding:10px;border:none;background:transparent;color:var(--gray);border-radius:10px;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit;transition:all .2s">💡 טיפים</button>
+    </div>
+    
+    <div id="knowledgeContent"></div>
   </div>
 
   <!-- BOTTOM NAV (4 tabs with leaderboard) -->
-
   <div class="bottom-nav" id="bottomNav" style="display:none;visibility:hidden">
     <button class="nav-item active" data-page="home" onclick="navTo('home')">
       <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
@@ -864,8 +810,8 @@ body.day-mode .countdown-input{background:#F8FAFC;color:#0F172A;border-color:#CB
   </div>
 </div>
 
-<!-- Completion celebration overlay -->
 
+<!-- Completion celebration overlay -->
 <div class="completion-overlay" id="completionOverlay">
   <div class="completion-card">
     <div class="completion-emoji">🏆</div>
@@ -877,8 +823,8 @@ body.day-mode .countdown-input{background:#F8FAFC;color:#0F172A;border-color:#CB
 </div>
 <div class="confetti-container" id="confettiContainer"></div>
 
-<!-- PWA Install Prompt -->
 
+<!-- PWA Install Prompt -->
 <div class="install-prompt" id="installPrompt">
   <div class="install-icon">📱</div>
   <div class="install-text">
@@ -1476,140 +1422,14 @@ function fmtBarOrTime(s){
 }
 
 
-
 // ============================================================
-// === BROADCAST SYSTEM (Commander → Cadets) ===
+// === BROADCAST + COUNTDOWN SYSTEM (active versions are below initFB) ===
+// === Old duplicate versions were removed to fix bugs ===
 // ============================================================
-function sendBroadcast(){
-  hapticLight();
-  var text=(document.getElementById('bcText').value||'').trim();
-  if(!text)return alert2('כתוב הודעה לפני השליחה');
-  if(text.length>500)return alert2('ההודעה ארוכה מדי (מקס׳ 500 תווים)');
-  var bc={text:text,sentAt:new Date().toISOString(),sentBy:cur?cur.name:'מפקד'};
-  if(fbOK&&db){
-    try{db.collection('settings').doc('broadcast').set(bc).catch(function(){})}catch(e){}
-  }
-  try{localStorage.setItem('broadcast_msg',JSON.stringify(bc))}catch(e){}
-  document.getElementById('bcText').value='';
-  hapticSuccess();
-  alert2('ההודעה נשלחה לכל החניכים! 📣');
-  rAdmin();
-}
 
-function clearBroadcast(){
-  hapticLight();
-  confirm2('מחיקת הודעה','להסיר את הודעת השידור הנוכחית?',function(){
-    if(fbOK&&db){
-      try{db.collection('settings').doc('broadcast').delete().catch(function(){})}catch(e){}
-    }
-    try{localStorage.removeItem('broadcast_msg')}catch(e){}
-    rAdmin();
-    alert2('ההודעה הוסרה.');
-  },'מחק');
-}
-
-function getBroadcast(){
-  try{
-    var s=localStorage.getItem('broadcast_msg');
-    if(s)return JSON.parse(s);
-  }catch(e){}
-  return null;
-}
-
-function dismissBroadcastMsg(){
-  hapticLight();
-  var bc=getBroadcast();
-  if(bc){try{localStorage.setItem('broadcast_dismissed_at',bc.sentAt)}catch(e){}}
-  rHome();
-}
-
-function renderBroadcastBanner(){
-  var holder=document.getElementById('broadcastHolder');
-  if(!holder)return;
-  var bc=getBroadcast();
-  if(!bc){holder.innerHTML='';return}
-  var dismissedAt=localStorage.getItem('broadcast_dismissed_at');
-  if(dismissedAt===bc.sentAt){holder.innerHTML='';return}
-  var sentDate=new Date(bc.sentAt);
-  var ago=formatTimeAgo(sentDate);
-  holder.innerHTML='<div class="broadcast-banner">'+
-    '<div class="broadcast-header"><span class="broadcast-icon">📣</span>הודעת מפקד</div>'+
-    '<div class="broadcast-text">'+escapeHtml(bc.text)+'</div>'+
-    '<div class="broadcast-meta">'+escapeHtml(bc.sentBy||'מפקד')+' • '+ago+'</div>'+
-    '<button class="broadcast-dismiss" onclick="dismissBroadcastMsg()">קראתי</button>'+
-  '</div>';
-}
-
-function formatTimeAgo(d){
-  var diff=Math.floor((Date.now()-d.getTime())/1000);
-  if(diff<60)return 'לפני רגע';
-  if(diff<3600)return 'לפני '+Math.floor(diff/60)+' דקות';
-  if(diff<86400)return 'לפני '+Math.floor(diff/3600)+' שעות';
-  return 'לפני '+Math.floor(diff/86400)+' ימים';
-}
-
-function escapeHtml(s){
-  return String(s).replace(/[&<>"\']/g,function(c){
-    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
-  });
-}
-
-// ============================================================
-// === COURSE COUNTDOWN ===
-// ============================================================
-function saveCourseEnd(){
-  hapticLight();
-  var date=document.getElementById('courseEndDate').value;
-  var label=(document.getElementById('courseEndLabel').value||'').trim()||'סיום קורס';
-  if(!date)return alert2('בחר תאריך');
-  var data={date:date,label:label};
-  if(fbOK&&db){try{db.collection('settings').doc('countdown').set(data).catch(function(){})}catch(e){}}
-  try{localStorage.setItem('course_end',JSON.stringify(data))}catch(e){}
-  alert2('תאריך נשמר! החניכים יראו ספירה לאחור.');
-}
-
-function getCourseEnd(){
-  try{var s=localStorage.getItem('course_end');if(s)return JSON.parse(s)}catch(e){}
-  return null;
-}
-
-function renderCountdown(){
-  var holder=document.getElementById('countdownHolder');
-  if(!holder)return;
-  var ce=getCourseEnd();
-  if(!ce){holder.innerHTML='';return}
-  var target=new Date(ce.date+'T23:59:59');
-  var diff=target.getTime()-Date.now();
-  if(diff<=0){
-    holder.innerHTML='<div class="countdown-card"><div class="countdown-title">🎓 הקורס הסתיים</div><div class="countdown-subtitle">'+escapeHtml(ce.label)+'</div></div>';
-    return;
-  }
-  var days=Math.floor(diff/86400000);
-  var hours=Math.floor((diff%86400000)/3600000);
-  var mins=Math.floor((diff%3600000)/60000);
-  var secs=Math.floor((diff%60000)/1000);
-  holder.innerHTML='<div class="countdown-card">'+
-    '<div class="countdown-title">⏳ ספירה לאחור</div>'+
-    '<div class="countdown-subtitle">'+escapeHtml(ce.label)+'</div>'+
-    '<div class="countdown-grid">'+
-      '<div class="countdown-cell"><div class="countdown-num">'+days+'</div><div class="countdown-label">ימים</div></div>'+
-      '<div class="countdown-cell"><div class="countdown-num">'+pad2(hours)+'</div><div class="countdown-label">שעות</div></div>'+
-      '<div class="countdown-cell"><div class="countdown-num">'+pad2(mins)+'</div><div class="countdown-label">דקות</div></div>'+
-      '<div class="countdown-cell"><div class="countdown-num">'+pad2(secs)+'</div><div class="countdown-label">שניות</div></div>'+
-    '</div>'+
-  '</div>';
-}
 function pad2(n){return String(n).padStart(2,'0')}
 
-// טיימר שמתעדכן כל שנייה כשהדף הבית פעיל
-var countdownInterval=null;
-function startCountdownTimer(){
-  if(countdownInterval)clearInterval(countdownInterval);
-  countdownInterval=setInterval(function(){
-    var ap=document.querySelector('.page.active');
-    if(ap&&ap.id==='page-home'&&getCourseEnd()){renderCountdown()}
-  },1000);
-}
+
 
 // ============================================================
 // === (renderScoreChart removed — replaced by renderProgressChart) ===
@@ -1627,63 +1447,19 @@ function saveNewScore(){
 }
 
 // ============================================================
-// === OFFLINE INDICATOR ===
-// ============================================================
-function updateOnlineStatus(){
-  var b=document.getElementById('offlineBanner');
-  if(!b)return;
-  if(navigator.onLine){
-    b.classList.remove('show');
-  }else{
-    b.classList.add('show');
-  }
-}
-window.addEventListener('online',function(){updateOnlineStatus();hapticSuccess()});
-window.addEventListener('offline',updateOnlineStatus);
-
-// ============================================================
 // === FIREBASE BROADCAST/SETTINGS LISTENER ===
+// === Old listenForSettings removed — replaced by subscribeBroadcasts() and loadCountdown() in active code below ===
 // ============================================================
 function listenForSettings(){
-  if(!fbOK||!db)return;
-  // הקשבה לשידורי מנהל
-  db.collection('settings').doc('broadcast').onSnapshot(function(doc){
-    if(doc.exists){
-      try{localStorage.setItem('broadcast_msg',JSON.stringify(doc.data()))}catch(e){}
-    }else{
-      try{localStorage.removeItem('broadcast_msg')}catch(e){}
-    }
-    var ap=document.querySelector('.page.active');
-    if(ap&&ap.id==='page-home')renderBroadcastBanner();
-    if(ap&&ap.id==='page-admin')renderCurrentBroadcast();
-  },function(){});
-  // הקשבה לתאריך סיום קורס
-  db.collection('settings').doc('countdown').onSnapshot(function(doc){
-    if(doc.exists){
-      try{localStorage.setItem('course_end',JSON.stringify(doc.data()))}catch(e){}
-    }
-    var ap=document.querySelector('.page.active');
-    if(ap&&ap.id==='page-home')renderCountdown();
-    if(ap&&ap.id==='page-admin')loadCourseEndIntoForm();
-  },function(){});
+  // No-op (kept for backward compatibility with any existing callers)
+  // The new active broadcast system uses subscribeBroadcasts() called from loadFB()
+  // The new active countdown system uses loadCountdown() called from loadFB()
 }
 
-function renderCurrentBroadcast(){
-  var h=document.getElementById('bcCurrentHolder');
-  if(!h)return;
-  var bc=getBroadcast();
-  if(!bc){h.innerHTML='';return}
-  h.innerHTML='<div class="bc-current"><b>הודעה פעילה:</b><br>'+escapeHtml(bc.text)+'<br><small style="opacity:.7">'+formatTimeAgo(new Date(bc.sentAt))+'</small></div>';
-}
 
-function loadCourseEndIntoForm(){
-  var ce=getCourseEnd();
-  if(!ce)return;
-  var dateEl=document.getElementById('courseEndDate');
-  var lblEl=document.getElementById('courseEndLabel');
-  if(dateEl&&!dateEl.value)dateEl.value=ce.date;
-  if(lblEl&&!lblEl.value)lblEl.value=ce.label;
-}
+
+
+
 
 
 
@@ -1736,33 +1512,140 @@ function loadBroadcastsLocal(){
 
 function sendBroadcast(){
   var inp=document.getElementById('broadcastInput');
+  if(!inp){alert2('שגיאה: שדה הקלט לא נמצא');return}
   var text=(inp.value||'').trim();
-  if(!text){alert2('אנא הזן הודעה לשליחה');return}
-  if(text.length>200){alert2('ההודעה ארוכה מדי (מקסימום 200 תווים)');return}
+  if(!text){
+    hapticHeavy();
+    inp.focus();
+    return alert2('יש להזין הודעה לפני השליחה');
+  }
+  if(text.length>500){return alert2('ההודעה ארוכה מדי (מקסימום 500 תווים)')}
+  
   hapticHeavy();
   var bc={
     text:text,
     time:Date.now(),
     sender:cur?cur.name:'מפקד'
   };
+  
+  // Save broadcast to Firebase / localStorage
+  var saveAndShowWA=function(){
+    inp.value='';
+    renderBroadcastHistory();
+    // Now offer to send via WhatsApp
+    showWhatsAppBroadcast(text);
+  };
+  
   if(fbOK&&db){
     try{
       db.collection('broadcasts').add(bc).then(function(){
-        inp.value='';
-        alert2('ההודעה נשלחה לכל החניכים! 📢');
+        saveAndShowWA();
       }).catch(function(e){
-        alert2('שמירת ההודעה נכשלה: '+e.message);
+        // Even if Firebase fails, save locally and show WhatsApp option
+        bc._id='local_'+Date.now();
+        currentBroadcasts.unshift(bc);
+        try{localStorage.setItem('broadcasts_cache',JSON.stringify(currentBroadcasts))}catch(e){}
+        saveAndShowWA();
       });
-    }catch(e){alert2('שגיאה: '+e.message)}
+    }catch(e){
+      bc._id='local_'+Date.now();
+      currentBroadcasts.unshift(bc);
+      try{localStorage.setItem('broadcasts_cache',JSON.stringify(currentBroadcasts))}catch(e){}
+      saveAndShowWA();
+    }
   }else{
     // local fallback
     bc._id='local_'+Date.now();
     currentBroadcasts.unshift(bc);
     try{localStorage.setItem('broadcasts_cache',JSON.stringify(currentBroadcasts))}catch(e){}
-    inp.value='';
-    renderBroadcastHistory();
-    alert2('ההודעה נשמרה (מצב לא מקוון)');
+    saveAndShowWA();
   }
+}
+
+// === WhatsApp broadcast — opens chooser to send to all cadets via WhatsApp ===
+function showWhatsAppBroadcast(text){
+  // Get all cadets with phone numbers
+  var cadetsWithPhone=users.filter(function(u){return u.id!==ADMIN_ID&&u.phone&&/^05\d{8}$/.test(u.phone)});
+  
+  document.getElementById('mT').textContent='📱 שליחה דרך WhatsApp';
+  
+  var msgHtml='ההודעה נשמרה במערכת ✓\n\n';
+  if(cadetsWithPhone.length===0){
+    msgHtml+='אין חניכים רשומים עם מספרי טלפון תקינים.\nההודעה תופיע באפליקציה לכל מי שייכנס.';
+    document.getElementById('mM').textContent=msgHtml;
+    document.getElementById('mE').innerHTML='';
+    document.getElementById('mB').innerHTML='<button class="btn btn-solid" onclick="clsM()">הבנתי</button>';
+    document.getElementById('modal').classList.add('show');
+    return;
+  }
+  
+  msgHtml+='נמצאו '+cadetsWithPhone.length+' חניכים עם נייד.\nבחר איך לשלוח:';
+  document.getElementById('mM').textContent=msgHtml;
+  
+  // Group by department for cleaner sending
+  var byDept={};
+  cadetsWithPhone.forEach(function(u){
+    if(!byDept[u.department])byDept[u.department]=[];
+    byDept[u.department].push(u);
+  });
+  
+  var sigText='\n\n— '+(cur?cur.name:'מפקד')+' • כושר ע"ה';
+  var fullMsg=text+sigText;
+  var encodedMsg=encodeURIComponent(fullMsg);
+  
+  // Build dept buttons
+  var deptHtml='<div style="max-height:200px;overflow-y:auto;text-align:right;margin-bottom:10px">';
+  Object.keys(byDept).forEach(function(dep){
+    var phones=byDept[dep].map(function(u){return u.phone}).filter(Boolean);
+    deptHtml+='<button onclick="sendWAToList(\''+phones.join(',')+'\',\''+encodedMsg+'\')" style="display:block;width:100%;padding:10px 12px;margin-bottom:6px;background:#25D366;color:#fff;border:none;border-radius:10px;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit;text-align:right">📱 '+dep+' ('+phones.length+' חניכים)</button>';
+  });
+  deptHtml+='</div>';
+  
+  // Add "Copy all phones" + "Open WhatsApp Web group" options
+  var allPhones=cadetsWithPhone.map(function(u){return u.phone}).join(',');
+  deptHtml+='<button onclick="copyPhonesAndOpen(\''+allPhones+'\',\''+encodedMsg+'\')" style="display:block;width:100%;padding:12px;background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;border:none;border-radius:10px;font-weight:900;font-size:14px;cursor:pointer;font-family:inherit;margin-bottom:8px">📋 העתק את כל המספרים + פתח WhatsApp Web</button>';
+  
+  document.getElementById('mE').innerHTML=deptHtml;
+  document.getElementById('mB').innerHTML='<button class="btn btn-ghost" onclick="clsM()">סגור</button>';
+  document.getElementById('modal').classList.add('show');
+}
+
+// Open WhatsApp with first phone, others copied to clipboard
+function sendWAToList(phonesStr,encodedMsg){
+  hapticLight();
+  var phones=phonesStr.split(',');
+  if(phones.length===0)return;
+  // Convert first phone to international format (Israel: +972)
+  var firstPhone=phones[0];
+  if(firstPhone.startsWith('0'))firstPhone='972'+firstPhone.substring(1);
+  // Open WhatsApp with the first phone — opens a chat window
+  window.open('https://wa.me/'+firstPhone+'?text='+encodedMsg,'_blank');
+  // Copy the full list to clipboard for follow-up sending
+  if(phones.length>1){
+    var allPhonesIntl=phones.map(function(p){return p.startsWith('0')?'972'+p.substring(1):p}).join(', ');
+    try{
+      navigator.clipboard.writeText(allPhonesIntl);
+      setTimeout(function(){alert2('✓ נפתח WhatsApp עם החניך הראשון.\n\nכל '+phones.length+' המספרים הועתקו ללוח. ניתן להדביק ולהמשיך.')},500);
+    }catch(e){}
+  }
+}
+
+function copyPhonesAndOpen(phonesStr,encodedMsg){
+  hapticHeavy();
+  var phones=phonesStr.split(',');
+  // Convert all to international format
+  var phonesIntl=phones.map(function(p){return p.startsWith('0')?'972'+p.substring(1):p}).join('\n');
+  try{
+    navigator.clipboard.writeText(phonesIntl);
+  }catch(e){}
+  // Open WhatsApp Web for the first phone
+  if(phones.length>0){
+    var firstPhone=phones[0].startsWith('0')?'972'+phones[0].substring(1):phones[0];
+    window.open('https://web.whatsapp.com/send?phone='+firstPhone+'&text='+encodedMsg,'_blank');
+  }
+  setTimeout(function(){
+    alert2('✓ '+phones.length+' מספרים הועתקו ללוח.\n\nWhatsApp Web נפתח. ניתן להדביק את הרשימה ולשלוח.');
+  },500);
 }
 
 function deleteBroadcast(id){
@@ -2342,7 +2225,7 @@ function go(id){
 function navTo(id){go(id)}
 
 function clr(){
-  ['loginId','loginPass','regId','regName','regPass','regScore','regBarOrTime','regPushups','regPullups'].forEach(function(i){var e=document.getElementById(i);if(e)e.value=''});
+  ['loginId','loginPass','regId','regName','regPhone','regPass','regScore','regBarOrTime','regPushups','regPullups'].forEach(function(i){var e=document.getElementById(i);if(e)e.value=''});
   sDep=DEPS[0];
 }
 function alert2(m){document.getElementById('mT').textContent='';document.getElementById('mM').textContent=m;document.getElementById('mE').innerHTML='';document.getElementById('mB').innerHTML='<button class="btn btn-solid" onclick="clsM()">אישור</button>';document.getElementById('modal').classList.add('show')}
@@ -2402,13 +2285,20 @@ function doLogin(){
 function doReg(){
   var id=(document.getElementById('regId').value||'').trim();
   var nm=(document.getElementById('regName').value||'').trim();
+  var phoneRaw=(document.getElementById('regPhone').value||'').trim();
   var ps=document.getElementById('regPass').value||'';
   var scoreStr=(document.getElementById('regScore').value||'').trim();
   var barOrTime=(document.getElementById('regBarOrTime').value||'').trim();
   var pushupsStr=(document.getElementById('regPushups').value||'').trim();
   var pullupsStr=(document.getElementById('regPullups').value||'').trim();
   
-  if(!id||!nm||!ps||!scoreStr)return alert2('אנא מלא את כל השדות הבסיסיים: מספר אישי, שם, סיסמה וציון בר-אור');
+  if(!id||!nm||!ps||!scoreStr||!phoneRaw)return alert2('אנא מלא את כל השדות:\n• מספר אישי\n• שם\n• טלפון נייד\n• סיסמה\n• ציון בר-אור');
+  
+  // נירמול וולידציה של מספר טלפון ישראלי
+  var phoneClean=phoneRaw.replace(/[^0-9+]/g,'');
+  if(phoneClean.startsWith('+972')){phoneClean='0'+phoneClean.substring(4)}
+  if(phoneClean.startsWith('972')){phoneClean='0'+phoneClean.substring(3)}
+  if(!/^05\d{8}$/.test(phoneClean))return alert2('מספר טלפון לא תקין.\n\nאנא הזן מספר נייד ישראלי בפורמט:\n050-1234567 או 0501234567');
   
   if(users.find(function(u){return u.id===id}))return alert2('מספר אישי כבר רשום!');
   var nl=nm.toLowerCase();
@@ -2426,7 +2316,7 @@ function doReg(){
   var today=new Date().toISOString().split('T')[0];
   
   var nu={
-    id:id,pass:ps,name:nm,department:sDep,
+    id:id,pass:ps,name:nm,phone:phoneClean,department:sDep,
     scoreHistory:[score],
     barOrHistory:barOrTime?[{date:today,time:barOrTime}]:[],
     pushupsHistory:(pushups!==null&&!isNaN(pushups))?[{date:today,count:pushups}]:[],
@@ -2957,6 +2847,5 @@ setInterval(chkAutoReset,60000);
 updateOnlineStatus();
 initFB();
 </script>
-
 </body>
 </html>
