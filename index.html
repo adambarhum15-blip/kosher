@@ -119,7 +119,30 @@ body{font-family:'Heebo',sans-serif;color:#fff;-webkit-font-smoothing:antialiase
 .task-action:active{transform:scale(.95)}
 .task-card.done .task-action{background:rgba(255,255,255,.1);color:var(–green)}
 
+/* === WORKOUT COUNTERS (Strength / Aerobic) === */
+.workout-counter{display:flex;align-items:center;gap:14px;background:var(–card);padding:16px 18px;border-radius:var(–radius);border:1.5px solid rgba(255,255,255,.08);margin-bottom:10px;transition:all .25s}
+.workout-counter.has-count{border-color:rgba(16,185,129,.4);background:linear-gradient(135deg,rgba(16,185,129,.08),var(–card))}
+.workout-counter-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.1)}
+.workout-counter.has-count .workout-counter-icon{background:rgba(16,185,129,.15);border-color:var(–green)}
+.workout-counter-info{flex:1;text-align:right;min-width:0}
+.workout-counter-title{font-weight:800;font-size:15px;color:#fff;margin-bottom:2px}
+.workout-counter-sub{font-size:12px;color:var(–gray)}
+.workout-counter-controls{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.workout-btn{width:36px;height:36px;border-radius:10px;border:none;color:#fff;font-size:20px;font-weight:900;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;line-height:1;transition:all .15s;-webkit-tap-highlight-color:transparent}
+.workout-btn:active{transform:scale(.88)}
+.workout-btn-plus{background:var(–green);box-shadow:0 4px 12px var(–green-glow)}
+.workout-btn-plus:hover{background:#059669}
+.workout-btn-minus{background:rgba(239,68,68,.2);color:var(–red);border:1.5px solid rgba(239,68,68,.3)}
+.workout-btn-minus:hover{background:rgba(239,68,68,.3)}
+.workout-btn-minus:disabled{opacity:.3;cursor:not-allowed;background:rgba(255,255,255,.05);color:var(–gray);border-color:rgba(255,255,255,.08)}
+.workout-count-display{min-width:32px;text-align:center;font-size:24px;font-weight:900;color:var(–green);font-variant-numeric:tabular-nums;line-height:1}
+.workout-counter.has-count .workout-counter-title{color:var(–green)}
+body.day-mode .workout-counter{background:#fff;border-color:#E2E8F0}
+body.day-mode .workout-counter-title{color:#0F172A}
+body.day-mode .workout-counter.has-count{background:linear-gradient(135deg,#ECFDF5,#fff);border-color:#A7F3D0}
+
 /* === MED ROW === */
+
 .med-row{display:flex;gap:8px;margin-bottom:12px}
 .med-btn{flex:1;padding:12px 8px;border-radius:10px;text-align:center;font-size:13px;font-weight:700;cursor:pointer;border:1.5px solid rgba(148,163,184,.4);background:var(–card);color:#fff;transition:all .2s;user-select:none}
 .med-btn:hover{border-color:var(–green);background:var(–card-hover)}
@@ -1118,8 +1141,7 @@ function calcDeptStats(){
     if(!deptUsers.length)return {name:dep,total:0,done:0,pct:0,fitPct:0,avgWorkouts:0};
     var totalWorkouts=0,totalCompleted=0,fit=0;
     deptUsers.forEach(function(u){
-      var w=u.workouts||{w1:false,w2:false,w3:false};
-      var done=Object.values(w).filter(function(v){return v===true}).length;
+      var done=totalWorkouts(u);if(done>3)done=3;
       totalCompleted+=done;
       totalWorkouts+=3;
       if((u.medical||'כשיר')==='כשיר')fit++;
@@ -1144,8 +1166,7 @@ function calcDeptStats(){
 
 function calcCadetStats(){
   var cadets=users.filter(function(u){return u.id!==ADMIN_ID}).map(function(u){
-    var w=u.workouts||{w1:false,w2:false,w3:false};
-    var done=Object.values(w).filter(function(v){return v===true}).length;
+    var done=totalWorkouts(u);if(done>3)done=3;
     var streak=(u.streakData&&u.streakData.count)?u.streakData.count:0;
     return {
       id:u.id,
@@ -2369,7 +2390,7 @@ function doReg(){
     pushupsHistory:(pushups!==null&&!isNaN(pushups))?[{date:today,count:pushups}]:[],
     pullupsHistory:(pullups!==null&&!isNaN(pullups))?[{date:today,count:pullups}]:[],
     fitness:fit,role:'cadet',medical:'כשיר',
-    workouts:{w1:false,w2:false,w3:false},
+    workouts:{w1:false,w2:false,w3:false},workoutCounts:{koach:0,aerobic:0},
     streakData:{count:0,lastWeek:null},
     createdAt:new Date().toISOString()
   };
@@ -2577,29 +2598,50 @@ function cancelRest(){
 
 // === SEQUENTIAL WORKOUTS ===
 // אימון 2 נפתח רק אחרי שאימון 1 הושלם, וכן הלאה
-function getNextWorkoutId(workouts){
-  if(!workouts.w1)return 'w1';
-  if(!workouts.w2)return 'w2';
-  if(!workouts.w3)return 'w3';
-  return null; // all done
+// === Workout counter system (strength + aerobic) ===
+// המערכת מחזיקה שני מונים: workoutCounts.koach (כוח) ו-workoutCounts.aerobic (אירובי)
+// כל אחד יכול לעלות עד 3 ולרדת חזרה ל-0. מטרה שבועית: סך 3 (בכל שילוב).
+
+function getWorkoutCounts(user){
+  // תאימות לאחור: אם יש workouts:{w1,w2,w3} ישנים — ממירים ל-counts
+  if(!user.workoutCounts){
+    if(user.workouts){
+      var done=Object.values(user.workouts).filter(function(v){return v===true}).length;
+      // נחלק בשווה: חצי לכוח, חצי לאירובי
+      user.workoutCounts={koach:Math.ceil(done/2),aerobic:Math.floor(done/2)};
+    }else{
+      user.workoutCounts={koach:0,aerobic:0};
+    }
+  }
+  return user.workoutCounts;
 }
 
-function markWorkoutDone(wid){
+function totalWorkouts(user){
+  var c=getWorkoutCounts(user);
+  return (c.koach||0)+(c.aerobic||0);
+}
+
+function adjustWorkout(type,delta){
   if(!cur)return;
-  if(!cur.workouts)cur.workouts={w1:false,w2:false,w3:false};
-  var nextId=getNextWorkoutId(cur.workouts);
-  if(wid!==nextId){
+  var c=getWorkoutCounts(cur);
+  var newVal=(c[type]||0)+delta;
+  if(newVal<0||newVal>3){
     hapticHeavy();
-    return alert2('עליך להשלים את האימונים בסדר. סיים אימון '+(nextId==='w1'?'1':nextId==='w2'?'2':'3')+' קודם.');
+    return; // out of range
   }
-  cur.workouts[wid]=true;
-  // Haptic feedback for confirmation
+  c[type]=newVal;
+  cur.workoutCounts=c;
+  // לתאימות עם דוחות ישנים — מעדכנים גם את workouts הישן
+  var total=totalWorkouts(cur);
+  cur.workouts={
+    w1:total>=1,
+    w2:total>=2,
+    w3:total>=3
+  };
   hapticHeavy();
   
-  // Check if completed all 3 workouts
-  var dn=Object.values(cur.workouts).filter(function(v){return v===true}).length;
-  if(dn===3){
-    // 🎉 Update streak and show celebration
+  // 🎉 הגיע ל-3 לראשונה השבוע? חגיגה
+  if(delta>0 && total===3){
     var streakCount=updateStreak(cur);
     saveU(cur);saveCurL();rHome();
     setTimeout(function(){showCompletion(streakCount)},400);
@@ -2608,15 +2650,20 @@ function markWorkoutDone(wid){
   }
 }
 
+function incrementWorkout(type){adjustWorkout(type,1)}
+function decrementWorkout(type){adjustWorkout(type,-1)}
+
 function setMed(s){if(!cur)return;hapticLight();cur.medical=s;saveU(cur);saveCurL();rHome()}
 
 // === RENDER HOME (Dashboard) ===
 function rHome(){
   if(!cur)return;
+  // חישוב סך אימונים השבוע — כוח + אירובי
+  var counts=getWorkoutCounts(cur);
+  var dn=totalWorkouts(cur);
+  if(dn>3)dn=3; // התקדמות מקסימלית להציג
   var w=cur.workouts||{w1:false,w2:false,w3:false};
-  var dn=Object.values(w).filter(function(v){return v===true}).length;
   var med=cur.medical||'כשיר';
-  var nextId=getNextWorkoutId(w);
   
   // Build name with streak badge if applicable
   var nameHtml=cur.name;
@@ -2644,24 +2691,29 @@ function rHome(){
   // הצגת כפתור "עבור ללוח מנהל" אם המשתמש הוא מנהל
   document.getElementById('adminSwitchBtn').style.display=(cur.role==='admin')?'flex':'none';
   
-  // Render task list with sequential lock
-  var tasks=[
-    {id:'w1',num:1,title:'אימון ראשון השבוע'},
-    {id:'w2',num:2,title:'אימון שני השבוע'},
-    {id:'w3',num:3,title:'אימון שלישי השבוע'}
+  // ביצועי האימונים השבועיים — שני מונים (כוח + אירובי)
+  var counts=getWorkoutCounts(cur);
+  var workoutTypes=[
+    {key:'koach',title:'אימון כוח',sub:'מתח, סמיכה, מקבילים, סקוואט',icon:'💪'},
+    {key:'aerobic',title:'אימון אירובי',sub:'ריצה, אופניים, שחייה, אינטרוולים',icon:'🏃'}
   ];
   
-  document.getElementById('taskList').innerHTML=tasks.map(function(t){
-    var done=w[t.id]||false;
-    var isNext=(t.id===nextId);
-    var locked=!done&&!isNext;
-    var statusText=done?'✓ בוצע':(isNext?'מוכן לביצוע - לחץ לסימון':'נעול - השלם את האימון הקודם');
-    var actionBtn=done?'<button class="task-action">בוצע ✓</button>':(isNext?'<button class="task-action" onclick="markWorkoutDone(\''+t.id+'\')">ביצעתי אימון '+t.num+'</button>':'');
-    var cls=done?'done':(isNext?'active':'locked');
-    return '<div class="task-card '+cls+'">'+
-      '<div class="task-num">'+t.num+'</div>'+
-      '<div class="task-info"><div class="task-title">'+t.title+'</div><div class="task-status">'+statusText+'</div></div>'+
-      actionBtn+
+  document.getElementById('taskList').innerHTML=workoutTypes.map(function(t){
+    var n=counts[t.key]||0;
+    var has=n>0;
+    var minusDisabled=n<=0?'disabled':'';
+    var plusDisabled=n>=3?'disabled':'';
+    return '<div class="workout-counter'+(has?' has-count':'')+'">'+
+      '<div class="workout-counter-icon">'+t.icon+'</div>'+
+      '<div class="workout-counter-info">'+
+        '<div class="workout-counter-title">'+t.title+'</div>'+
+        '<div class="workout-counter-sub">'+t.sub+'</div>'+
+      '</div>'+
+      '<div class="workout-counter-controls">'+
+        '<button class="workout-btn workout-btn-minus" '+minusDisabled+' onclick="decrementWorkout(\''+t.key+'\')" aria-label="הפחת">−</button>'+
+        '<div class="workout-count-display">'+n+'</div>'+
+        '<button class="workout-btn workout-btn-plus" '+plusDisabled+' onclick="incrementWorkout(\''+t.key+'\')" aria-label="הוסף">+</button>'+
+      '</div>'+
     '</div>';
   }).join('');
   
@@ -2765,14 +2817,13 @@ function calcStats(){
   if(!cd.length)return {total:0,fitPct:0,donePct:0,topDept:'—',topDeptPct:0};
   var total=cd.length;
   var fit=cd.filter(function(u){return (u.medical||'כשיר')==='כשיר'}).length;
-  var done=cd.filter(function(u){var w=u.workouts||{};return Object.values(w).filter(function(v){return v===true}).length===3}).length;
+  var done=cd.filter(function(u){return totalWorkouts(u)>=3}).length;
   // best department
   var byDept={};
   cd.forEach(function(u){
     if(!byDept[u.department])byDept[u.department]={total:0,done:0};
     byDept[u.department].total++;
-    var w=u.workouts||{};
-    if(Object.values(w).filter(function(v){return v===true}).length===3)byDept[u.department].done++;
+    if(totalWorkouts(u)>=3)byDept[u.department].done++;
   });
   var topDept='—',topPct=0;
   Object.keys(byDept).forEach(function(d){
@@ -2835,7 +2886,7 @@ function rAdmin(){
   var al=document.getElementById('aList');
   if(!fl.length){al.innerHTML='<div class="empty-msg">אין נתונים למחלקה זו.</div>'}
   else{al.innerHTML=fl.map(function(u){
-    var dn=u.workouts?Object.values(u.workouts).filter(function(v){return v===true}).length:0;
+    var dn=totalWorkouts(u);if(dn>3)dn=3;
     var med=u.medical||'כשיר';
     var isAdmin=u.role==='admin';
     var adminBadge=isAdmin?'<span style="display:inline-block;padding:2px 8px;background:var(--blue);color:#fff;border-radius:8px;font-size:10px;font-weight:800;margin-right:6px">👑 מנהל</span>':'';
@@ -2877,7 +2928,21 @@ function togglePromote(id,nm,makeAdmin){
 }
 
 function getCd(dep){return users.filter(function(u){return u.id!==ADMIN_ID&&(!dep||u.department===dep)})}
-function bCSV(cd,t){var csv='\uFEFF דוח כושר - '+t+' - '+sDate()+'\n\nמחלקה,מס,שם,רמה,ציון,א1,א2,א3,סה"כ,רפואי\n';cd.forEach(function(u){var w=u.workouts||{};var d=Object.values(w).filter(function(v){return v===true}).length;var sc=u.scoreHistory&&u.scoreHistory.length?u.scoreHistory[u.scoreHistory.length-1]:'—';csv+=u.department+','+u.id+','+u.name+','+(u.fitness||'—')+','+sc+','+(w.w1?'V':'X')+','+(w.w2?'V':'X')+','+(w.w3?'V':'X')+','+d+'/3,'+(u.medical||'כשיר')+'\n'});return csv}
+function bCSV(cd,t){
+  var csv='\uFEFF דוח כושר - '+t+' - '+sDate()+'\n\nמחלקה,מס,שם,רמה,ציון,אימוני כוח,אימוני אירובי,סה"כ,רפואי\n';
+  cd.forEach(function(u){
+    var c=u.workoutCounts||{koach:0,aerobic:0};
+    // תאימות לאחור: אם אין counts אבל יש workouts ישנים
+    if(!u.workoutCounts&&u.workouts){
+      var oldDone=Object.values(u.workouts).filter(function(v){return v===true}).length;
+      c={koach:Math.ceil(oldDone/2),aerobic:Math.floor(oldDone/2)};
+    }
+    var total=(c.koach||0)+(c.aerobic||0);
+    var sc=u.scoreHistory&&u.scoreHistory.length?u.scoreHistory[u.scoreHistory.length-1]:'—';
+    csv+=u.department+','+u.id+','+u.name+','+(u.fitness||'—')+','+sc+','+(c.koach||0)+','+(c.aerobic||0)+','+total+'/3,'+(u.medical||'כשיר')+'\n';
+  });
+  return csv;
+}
 function dlCSV(csv,fn){var b=new Blob([csv],{type:'text/csv;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=fn;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(u)}
 function expDep(){var c=getCd(aFil);if(!c.length)return alert2('אין חניכים');dlCSV(bCSV(c,'מחלקת '+aFil),'דוח_'+aFil+'_'+sDate().replace(/\//g,'-')+'.csv');alert2('הדוח יורד')}
 function expAll(){var c=getCd();if(!c.length)return alert2('אין חניכים');dlCSV(bCSV(c,'כל'),'דוח_'+sDate().replace(/\//g,'-')+'.csv');alert2('הדוח יורד')}
@@ -2886,7 +2951,7 @@ function sendEmail(){var em=(document.getElementById('eIn').value||'').trim();if
 
 function chkSatBanner(){if(!cur||cur.role!=='admin'||new Date().getDay()!==6)return;var b=document.getElementById('rBanner');if(!b)return;b.innerHTML='<div class="report-banner"><div class="report-banner-title">📋 היום מוצ"ש</div><div class="report-banner-sub">האימונים יתאפסו ב-23:59</div><div class="report-banner-btns"><button class="report-banner-btn report-banner-btn-primary" onclick="expAll()">ייצא דוח</button></div></div>'}
 
-function chkAutoReset(){var n=new Date();if(n.getDay()!==6||n.getHours()!==23||n.getMinutes()<59)return;var d=new Date();var wk=d.getFullYear()+'-W'+Math.ceil(d.getDate()/7);if(localStorage.getItem('last_auto_reset_week')===wk)return;users=users.map(function(u){if(u.role==='cadet')return Object.assign({},u,{workouts:{w1:false,w2:false,w3:false}});return u});if(fbOK&&db){var b=db.batch();users.forEach(function(u){b.set(db.collection('users').doc(u.id),u)});b.commit().catch(function(){})}try{localStorage.setItem('users_db',JSON.stringify(users));localStorage.setItem('last_auto_reset_week',wk)}catch(e){}if(cur&&cur.role==='cadet'){cur.workouts={w1:false,w2:false,w3:false};saveCurL()}}
+function chkAutoReset(){var n=new Date();if(n.getDay()!==6||n.getHours()!==23||n.getMinutes()<59)return;var d=new Date();var wk=d.getFullYear()+'-W'+Math.ceil(d.getDate()/7);if(localStorage.getItem('last_auto_reset_week')===wk)return;users=users.map(function(u){if(u.role==='cadet')return Object.assign({},u,{workouts:{w1:false,w2:false,w3:false},workoutCounts:{koach:0,aerobic:0}});return u});if(fbOK&&db){var b=db.batch();users.forEach(function(u){b.set(db.collection('users').doc(u.id),u)});b.commit().catch(function(){})}try{localStorage.setItem('users_db',JSON.stringify(users));localStorage.setItem('last_auto_reset_week',wk)}catch(e){}if(cur&&cur.role==='cadet'){cur.workouts={w1:false,w2:false,w3:false};cur.workoutCounts={koach:0,aerobic:0};saveCurL()}}
 
 function confirmFullReset(){confirm2('איפוס מערכת','כל החניכים יימחקו לצמיתות!',function(){delAllCadets();cur=null;clr();go('welcome');alert2('המערכת אופסה.')},'מחק הכל')}
 
