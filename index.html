@@ -141,6 +141,37 @@ body.day-mode .workout-counter{background:#fff;border-color:#E2E8F0}
 body.day-mode .workout-counter-title{color:#0F172A}
 body.day-mode .workout-counter.has-count{background:linear-gradient(135deg,#ECFDF5,#fff);border-color:#A7F3D0}
 
+/* === ACTIVE WORKOUT TIMER === */
+.workout-timer-card{background:linear-gradient(135deg,var(–card),var(–card-hover));border-radius:16px;padding:18px;margin-bottom:16px;border:1.5px solid rgba(16,185,129,.2);position:relative;overflow:hidden}
+.workout-timer-card.running{border-color:var(–green);box-shadow:0 0 24px rgba(16,185,129,.25);animation:wtPulse 2s ease-in-out infinite}
+@keyframes wtPulse{0%,100%{box-shadow:0 0 16px rgba(16,185,129,.2)}50%{box-shadow:0 0 28px rgba(16,185,129,.45)}}
+.wt-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.wt-title{font-size:14px;font-weight:800;color:#fff;display:flex;align-items:center;gap:8px}
+.wt-title-emoji{font-size:18px}
+.wt-status{font-size:11px;font-weight:800;padding:4px 10px;border-radius:10px;background:rgba(148,163,184,.2);color:var(–gray);text-transform:uppercase;letter-spacing:.5px}
+.wt-status.live{background:rgba(239,68,68,.15);color:#ef4444}
+.wt-status.live::before{content:’’;display:inline-block;width:6px;height:6px;border-radius:50%;background:#ef4444;margin-left:6px;animation:wtBlink 1s ease-in-out infinite}
+@keyframes wtBlink{0%,100%{opacity:1}50%{opacity:.3}}
+.wt-time{font-size:42px;font-weight:900;color:var(–green);font-variant-numeric:tabular-nums;text-align:center;letter-spacing:2px;margin-bottom:14px;text-shadow:0 0 16px rgba(16,185,129,.3);line-height:1}
+.workout-timer-card.idle .wt-time{color:var(–gray);text-shadow:none}
+.wt-type-picker{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.wt-type-btn{padding:12px 8px;border-radius:12px;border:1.5px solid rgba(148,163,184,.3);background:rgba(255,255,255,.04);color:#fff;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .15s;-webkit-tap-highlight-color:transparent}
+.wt-type-btn:active{transform:scale(.96)}
+.wt-type-btn.selected{background:var(–green);border-color:var(–green);color:#fff;box-shadow:0 4px 12px var(–green-glow)}
+.wt-actions{display:flex;gap:8px}
+.wt-action{flex:1;padding:14px;border-radius:12px;border:none;font-weight:900;font-size:14px;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:6px;-webkit-tap-highlight-color:transparent;transition:all .15s}
+.wt-action:active{transform:scale(.97)}
+.wt-action-start{background:var(–green);color:#fff;box-shadow:0 4px 14px var(–green-glow)}
+.wt-action-start:disabled{opacity:.5;cursor:not-allowed;box-shadow:none}
+.wt-action-stop{background:#ef4444;color:#fff;box-shadow:0 4px 14px rgba(239,68,68,.3)}
+.wt-action-cancel{background:rgba(148,163,184,.18);color:var(–gray);border:1.5px solid rgba(148,163,184,.3)}
+.wt-history{margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,.06);font-size:12px;color:var(–gray);text-align:center}
+.wt-history strong{color:var(–green);font-weight:800}
+body.day-mode .workout-timer-card{background:linear-gradient(135deg,#fff,#F8FAFC);border-color:#A7F3D0}
+body.day-mode .wt-title{color:#0F172A}
+body.day-mode .wt-type-btn{background:#F8FAFC;color:#0F172A;border-color:#CBD5E1}
+body.day-mode .wt-status{background:#E2E8F0;color:#64748B}
+
 /* === MED ROW === */
 
 .med-row{display:flex;gap:8px;margin-bottom:12px}
@@ -620,6 +651,9 @@ body.day-mode .countdown-input{background:#F8FAFC;color:#0F172A;border-color:#CB
 
 <div class="section-title">📋 משימות שבועיות</div>
 <div id="taskList"></div>
+
+<div class="section-title">⏱️ מדידת זמן אימון</div>
+<div id="workoutTimerCard"></div>
 
 <div class="section-title">🏥 מצב רפואי</div>
 <div class="med-row" id="mRow"></div>
@@ -2621,6 +2655,214 @@ function totalWorkouts(user){
   return (c.koach||0)+(c.aerobic||0);
 }
 
+// ============================================================
+// === WORKOUT SESSION TIMER (per-workout duration tracking) ===
+// ============================================================
+var activeWorkout=null; // {type:'koach'|'aerobic', startedAt:ms}
+var activeWorkoutTimer=null;
+var pendingWorkoutType='koach'; // pre-selection before starting
+
+function fmtDuration(secs){
+  var s=Math.floor(secs);
+  var h=Math.floor(s/3600);
+  var m=Math.floor((s%3600)/60);
+  var sec=s%60;
+  if(h>0)return h+':'+String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0');
+  return String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0');
+}
+
+function fmtMinutesShort(secs){
+  if(!secs||secs<0)return '0 דק׳';
+  var m=Math.round(secs/60);
+  if(m<60)return m+' דק׳';
+  var h=Math.floor(m/60),rem=m%60;
+  return h+'ש '+rem+'ד';
+}
+
+function selectWorkoutType(t){
+  if(activeWorkout)return; // can't change while running
+  hapticLight();
+  pendingWorkoutType=t;
+  rHome();
+}
+
+function startWorkoutSession(){
+  if(!cur||activeWorkout)return;
+  hapticHeavy();
+  activeWorkout={type:pendingWorkoutType,startedAt:Date.now()};
+  // Persist so it survives page reload / app close
+  try{localStorage.setItem('active_workout',JSON.stringify(activeWorkout))}catch(e){}
+  startWorkoutTimerTick();
+  rHome();
+}
+
+function startWorkoutTimerTick(){
+  if(activeWorkoutTimer)clearInterval(activeWorkoutTimer);
+  activeWorkoutTimer=setInterval(function(){
+    var el=document.getElementById('wtTime');
+    if(el&&activeWorkout){
+      var elapsed=(Date.now()-activeWorkout.startedAt)/1000;
+      el.textContent=fmtDuration(elapsed);
+    }
+  },1000);
+}
+
+function stopWorkoutSession(){
+  if(!cur||!activeWorkout)return;
+  var elapsed=(Date.now()-activeWorkout.startedAt)/1000;
+  if(elapsed<30){
+    hapticHeavy();
+    return confirm2(
+      'אימון קצר מאוד',
+      'האימון נמשך פחות מ-30 שניות.\nבטוח שתרצה לסיים ולשמור?',
+      function(){doSaveWorkoutSession(elapsed)},
+      'סיים בכל זאת'
+    );
+  }
+  doSaveWorkoutSession(elapsed);
+}
+
+function doSaveWorkoutSession(elapsed){
+  hapticSuccess();
+  var session={
+    type:activeWorkout.type,
+    durationSec:Math.round(elapsed),
+    date:new Date().toISOString()
+  };
+  if(!cur.workoutSessions)cur.workoutSessions=[];
+  cur.workoutSessions.push(session);
+  
+  // Auto-increment the matching workout counter (max 3)
+  var counts=getWorkoutCounts(cur);
+  if((counts[session.type]||0)<3){
+    counts[session.type]=(counts[session.type]||0)+1;
+    cur.workoutCounts=counts;
+    var total=totalWorkouts(cur);
+    cur.workouts={w1:total>=1,w2:total>=2,w3:total>=3};
+  }
+  
+  saveU(cur);saveCurL();
+  
+  // Clear active state
+  activeWorkout=null;
+  if(activeWorkoutTimer){clearInterval(activeWorkoutTimer);activeWorkoutTimer=null}
+  try{localStorage.removeItem('active_workout')}catch(e){}
+  
+  var typeLabel=session.type==='koach'?'אימון כוח':'אימון אירובי';
+  var totalNow=totalWorkouts(cur);
+  
+  // Trigger 3/3 celebration if applicable
+  if(totalNow===3 && counts[session.type]===((cur.workoutCounts||{})[session.type])){
+    rHome();
+    setTimeout(function(){
+      showCompletion(updateStreak(cur));
+    },300);
+  }else{
+    rHome();
+    setTimeout(function(){
+      alert2('🏁 אימון הושלם!\n\nסוג: '+typeLabel+'\nמשך: '+fmtDuration(elapsed)+'\n\nנשמר ביומן האימונים שלך.');
+    },200);
+  }
+}
+
+function cancelWorkoutSession(){
+  if(!activeWorkout)return;
+  confirm2(
+    'ביטול אימון',
+    'האם לבטל את האימון?\nהזמן לא יישמר.',
+    function(){
+      hapticHeavy();
+      activeWorkout=null;
+      if(activeWorkoutTimer){clearInterval(activeWorkoutTimer);activeWorkoutTimer=null}
+      try{localStorage.removeItem('active_workout')}catch(e){}
+      rHome();
+    },
+    'בטל אימון'
+  );
+}
+
+function restoreActiveWorkout(){
+  // אם המשתמש סגר את הדף באמצע אימון — נשחזר
+  try{
+    var saved=localStorage.getItem('active_workout');
+    if(saved){
+      activeWorkout=JSON.parse(saved);
+      // אם עברו יותר מ-4 שעות, נמחק (כנראה שכחו לסגור)
+      if(Date.now()-activeWorkout.startedAt>4*3600*1000){
+        activeWorkout=null;
+        localStorage.removeItem('active_workout');
+        return;
+      }
+      pendingWorkoutType=activeWorkout.type;
+      startWorkoutTimerTick();
+    }
+  }catch(e){activeWorkout=null}
+}
+
+function renderWorkoutTimer(){
+  var c=document.getElementById('workoutTimerCard');
+  if(!c||!cur)return;
+  
+  var running=!!activeWorkout;
+  var elapsed=running?(Date.now()-activeWorkout.startedAt)/1000:0;
+  
+  // Stats: total time per type this week
+  var sessions=cur.workoutSessions||[];
+  var weekAgo=Date.now()-7*86400000;
+  var thisWeek=sessions.filter(function(s){return new Date(s.date).getTime()>=weekAgo});
+  var koachSec=0,aerobicSec=0;
+  thisWeek.forEach(function(s){
+    if(s.type==='koach')koachSec+=s.durationSec;
+    else if(s.type==='aerobic')aerobicSec+=s.durationSec;
+  });
+  
+  var html='<div class="workout-timer-card '+(running?'running':'idle')+'">';
+  
+  // Header
+  html+='<div class="wt-header">';
+  html+='<div class="wt-title"><span class="wt-title-emoji">⏱️</span><span>'+(running?'אימון פעיל':'התחל אימון חדש')+'</span></div>';
+  html+='<div class="wt-status'+(running?' live':'')+'">'+(running?'בעיצומו':'מוכן')+'</div>';
+  html+='</div>';
+  
+  // Time display
+  html+='<div class="wt-time" id="wtTime">'+fmtDuration(elapsed)+'</div>';
+  
+  if(running){
+    var typeLabel=activeWorkout.type==='koach'?'💪 אימון כוח':'🏃 אימון אירובי';
+    html+='<div style="text-align:center;color:var(--green);font-weight:800;font-size:13px;margin-bottom:12px">'+typeLabel+'</div>';
+    html+='<div class="wt-actions">';
+    html+='<button class="wt-action wt-action-cancel" onclick="cancelWorkoutSession()">בטל</button>';
+    html+='<button class="wt-action wt-action-stop" onclick="stopWorkoutSession()">⏹ סיים ושמור</button>';
+    html+='</div>';
+  }else{
+    // Type picker
+    html+='<div class="wt-type-picker">';
+    var types=[{key:'koach',label:'💪 כוח'},{key:'aerobic',label:'🏃 אירובי'}];
+    types.forEach(function(t){
+      var sel=pendingWorkoutType===t.key;
+      html+='<button class="wt-type-btn'+(sel?' selected':'')+'" onclick="selectWorkoutType(\''+t.key+'\')">'+t.label+'</button>';
+    });
+    html+='</div>';
+    
+    html+='<div class="wt-actions">';
+    html+='<button class="wt-action wt-action-start" onclick="startWorkoutSession()">▶ התחל אימון</button>';
+    html+='</div>';
+  }
+  
+  // Stats footer
+  if(thisWeek.length>0){
+    html+='<div class="wt-history">';
+    html+='השבוע: <strong>'+thisWeek.length+'</strong> אימונים • ';
+    if(koachSec>0)html+='💪 <strong>'+fmtMinutesShort(koachSec)+'</strong>';
+    if(koachSec>0&&aerobicSec>0)html+=' • ';
+    if(aerobicSec>0)html+='🏃 <strong>'+fmtMinutesShort(aerobicSec)+'</strong>';
+    html+='</div>';
+  }
+  
+  html+='</div>';
+  c.innerHTML=html;
+}
+
 function adjustWorkout(type,delta){
   if(!cur)return;
   var c=getWorkoutCounts(cur);
@@ -2718,6 +2960,8 @@ function rHome(){
   }).join('');
   
   document.getElementById('mRow').innerHTML=['כשיר','מוגבל','מושבת'].map(function(s){return '<div class="med-btn'+(med===s?' active':'')+'" data-status="'+s+'" onclick="setMed(\''+s+'\')">'+s+'</div>'}).join('');
+  // Render the workout session timer
+  renderWorkoutTimer();
   // Render broadcast banner, countdown, and progress chart
   renderBroadcastBanner();
   renderCountdown();
@@ -2929,17 +3173,35 @@ function togglePromote(id,nm,makeAdmin){
 
 function getCd(dep){return users.filter(function(u){return u.id!==ADMIN_ID&&(!dep||u.department===dep)})}
 function bCSV(cd,t){
-  var csv='\uFEFF דוח כושר - '+t+' - '+sDate()+'\n\nמחלקה,מס,שם,רמה,ציון,אימוני כוח,אימוני אירובי,סה"כ,רפואי\n';
+  var csv='\uFEFF דוח כושר - '+t+' - '+sDate()+'\n\n';
+  csv+='מחלקה,מס׳ אישי,שם,טלפון,רמה,ציון בר-אור,אימוני כוח,אימוני אירובי,סה"כ אימונים,זמן כוח שבועי (דק׳),זמן אירובי שבועי (דק׳),סה"כ זמן (דק׳),ממוצע משך אימון (דק׳),מצב רפואי\n';
+  var weekAgo=Date.now()-7*86400000;
   cd.forEach(function(u){
     var c=u.workoutCounts||{koach:0,aerobic:0};
-    // תאימות לאחור: אם אין counts אבל יש workouts ישנים
+    // תאימות לאחור
     if(!u.workoutCounts&&u.workouts){
       var oldDone=Object.values(u.workouts).filter(function(v){return v===true}).length;
       c={koach:Math.ceil(oldDone/2),aerobic:Math.floor(oldDone/2)};
     }
     var total=(c.koach||0)+(c.aerobic||0);
     var sc=u.scoreHistory&&u.scoreHistory.length?u.scoreHistory[u.scoreHistory.length-1]:'—';
-    csv+=u.department+','+u.id+','+u.name+','+(u.fitness||'—')+','+sc+','+(c.koach||0)+','+(c.aerobic||0)+','+total+'/3,'+(u.medical||'כשיר')+'\n';
+    
+    // Calculate session durations for this week
+    var sessions=u.workoutSessions||[];
+    var weekSessions=sessions.filter(function(s){return new Date(s.date).getTime()>=weekAgo});
+    var koachSec=0,aerobicSec=0;
+    weekSessions.forEach(function(s){
+      if(s.type==='koach')koachSec+=s.durationSec;
+      else if(s.type==='aerobic')aerobicSec+=s.durationSec;
+    });
+    var koachMin=Math.round(koachSec/60);
+    var aerobicMin=Math.round(aerobicSec/60);
+    var totalMin=koachMin+aerobicMin;
+    var avgMin=weekSessions.length>0?Math.round(totalMin/weekSessions.length):0;
+    
+    var phone=u.phone||'—';
+    var safeName=String(u.name||'').replace(/,/g,' ');
+    csv+=u.department+','+u.id+','+safeName+','+phone+','+(u.fitness||'—')+','+sc+','+(c.koach||0)+','+(c.aerobic||0)+','+total+'/3,'+koachMin+','+aerobicMin+','+totalMin+','+avgMin+','+(u.medical||'כשיר')+'\n';
   });
   return csv;
 }
@@ -2951,12 +3213,20 @@ function sendEmail(){var em=(document.getElementById('eIn').value||'').trim();if
 
 function chkSatBanner(){if(!cur||cur.role!=='admin'||new Date().getDay()!==6)return;var b=document.getElementById('rBanner');if(!b)return;b.innerHTML='<div class="report-banner"><div class="report-banner-title">📋 היום מוצ"ש</div><div class="report-banner-sub">האימונים יתאפסו ב-23:59</div><div class="report-banner-btns"><button class="report-banner-btn report-banner-btn-primary" onclick="expAll()">ייצא דוח</button></div></div>'}
 
-function chkAutoReset(){var n=new Date();if(n.getDay()!==6||n.getHours()!==23||n.getMinutes()<59)return;var d=new Date();var wk=d.getFullYear()+'-W'+Math.ceil(d.getDate()/7);if(localStorage.getItem('last_auto_reset_week')===wk)return;users=users.map(function(u){if(u.role==='cadet')return Object.assign({},u,{workouts:{w1:false,w2:false,w3:false},workoutCounts:{koach:0,aerobic:0}});return u});if(fbOK&&db){var b=db.batch();users.forEach(function(u){b.set(db.collection('users').doc(u.id),u)});b.commit().catch(function(){})}try{localStorage.setItem('users_db',JSON.stringify(users));localStorage.setItem('last_auto_reset_week',wk)}catch(e){}if(cur&&cur.role==='cadet'){cur.workouts={w1:false,w2:false,w3:false};cur.workoutCounts={koach:0,aerobic:0};saveCurL()}}
+function chkAutoReset(){var n=new Date();if(n.getDay()!==6||n.getHours()!==23||n.getMinutes()<59)return;var d=new Date();var wk=d.getFullYear()+'-W'+Math.ceil(d.getDate()/7);if(localStorage.getItem('last_auto_reset_week')===wk)return;users=users.map(function(u){
+    if(u.role==='cadet'){
+      var twoWeeksAgo=Date.now()-14*86400000;
+      var keepSessions=(u.workoutSessions||[]).filter(function(s){return new Date(s.date).getTime()>=twoWeeksAgo});
+      return Object.assign({},u,{workouts:{w1:false,w2:false,w3:false},workoutCounts:{koach:0,aerobic:0},workoutSessions:keepSessions});
+    }
+    return u;
+  });if(fbOK&&db){var b=db.batch();users.forEach(function(u){b.set(db.collection('users').doc(u.id),u)});b.commit().catch(function(){})}try{localStorage.setItem('users_db',JSON.stringify(users));localStorage.setItem('last_auto_reset_week',wk)}catch(e){}if(cur&&cur.role==='cadet'){cur.workouts={w1:false,w2:false,w3:false};cur.workoutCounts={koach:0,aerobic:0};saveCurL()}}
 
 function confirmFullReset(){confirm2('איפוס מערכת','כל החניכים יימחקו לצמיתות!',function(){delAllCadets();cur=null;clr();go('welcome');alert2('המערכת אופסה.')},'מחק הכל')}
 
 setInterval(chkAutoReset,60000);
 updateOnlineStatus();
+restoreActiveWorkout();
 initFB();
 </script>
 
